@@ -15,7 +15,7 @@ class NewRouter
 
     public function executeController($controllerParam = null, $methodParam = null)
     {
-        // Evitar rutas tipo index.php o vacías
+
         if ($controllerParam === 'index.php' || empty($controllerParam)) {
             $controllerParam = $this->defaultController;
         }
@@ -29,7 +29,6 @@ class NewRouter
         $controllerName = $this->getControllerName($controllerName);
         $controller = $this->configFactory->get($controllerName);
 
-        // Si no se encuentra el controlador, usar el por defecto
         if ($controller === null) {
             $controller = $this->configFactory->get($this->defaultController);
         }
@@ -41,7 +40,6 @@ class NewRouter
     {
         $method = $this->getMethodName($controller, $methodName);
 
-        // Seguridad extra: si el método no existe, usar el predeterminado
         if (!method_exists($controller, $method)) {
             $method = $this->defaultMethod;
         }
@@ -51,7 +49,6 @@ class NewRouter
 
     private function getControllerName($controllerName)
     {
-        // Ejemplo: ?controller=login -> LoginController
         if (!empty($controllerName)) {
             return ucfirst(strtolower($controllerName)) . 'Controller';
         }

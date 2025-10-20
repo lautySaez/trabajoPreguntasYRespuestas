@@ -11,16 +11,13 @@ class LoginController
         }
     }
 
-    // ✅ Nuevo método: inicioSesion (alias de loginPage)
     public function inicioSesion()
     {
         $this->loginPage();
     }
 
-    // ✅ Página principal (login)
     public function loginPage()
     {
-        // Si ya hay sesión, mostrar el home directamente
         if (isset($_SESSION["usuario"])) {
             $usuario = $_SESSION["usuario"];
             include("views/home.php");
@@ -30,7 +27,6 @@ class LoginController
         include("views/inicioSesion.php");
     }
 
-    // ✅ Procesar login
     public function login()
     {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -52,13 +48,11 @@ class LoginController
         include("views/inicioSesion.php");
     }
 
-    // ✅ Formulario de registro
     public function registro()
     {
         include("views/registro.php");
     }
 
-    // ✅ Procesar registro
     public function registrarUsuario()
     {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -113,7 +107,6 @@ class LoginController
         include("views/registro.php");
     }
 
-    // ✅ Página principal para usuarios logueados
     public function home()
     {
         if (!isset($_SESSION["usuario"])) {
@@ -125,7 +118,6 @@ class LoginController
         include("views/home.php");
     }
 
-    // ✅ Cerrar sesión
     public function logout()
     {
         session_destroy();

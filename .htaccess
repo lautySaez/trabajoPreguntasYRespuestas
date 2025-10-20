@@ -7,17 +7,13 @@ Options -Indexes
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # ⚠️ Importante: el nombre exacto de tu carpeta dentro de htdocs
     RewriteBase /trabajoPreguntasYRespuestas/
 
-    # Si el archivo o directorio existe, no hacer rewrite
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
 
-    # Reescritura de rutas: controller/method/params
     RewriteRule ^([^/]+)/([^/]+)/?(.*)$ index.php?controller=$1&method=$2&params=$3 [L,QSA]
 
-    # Reescritura de controller solo
     RewriteRule ^([^/]+)/?$ index.php?controller=$1 [L,QSA]
 </IfModule>
 

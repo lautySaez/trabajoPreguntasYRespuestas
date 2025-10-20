@@ -15,7 +15,6 @@ class ConfigFactory
     {
         $this->config = parse_ini_file("config/config.ini");
 
-        // Crear conexión
         $this->conexion = new MyConexion(
             $this->config["server"],
             $this->config["user"],
@@ -23,13 +22,10 @@ class ConfigFactory
             $this->config["database"]
         );
 
-        // Modelos
         $usuarioModel = new Usuario($this->conexion->getConexion());
 
-        // Controladores
         $this->objetos["LoginController"] = new LoginController($usuarioModel);
 
-        // Router
         $this->objetos["router"] = new NewRouter($this, "LoginController", "inicioSesion");
 
     }
