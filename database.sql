@@ -4,7 +4,7 @@ USE preguntas_respuestas;
 CREATE TABLE usuarios (
                           id INT AUTO_INCREMENT PRIMARY KEY,
                           nombre VARCHAR(100) NOT NULL,
-                          anio_nacimiento YEAR,
+                          fecha_nacimiento DATE NOT NULL,
                           sexo ENUM('Masculino', 'Femenino', 'Prefiero no cargarlo') DEFAULT 'Prefiero no cargarlo',
                           pais VARCHAR(100),
                           ciudad VARCHAR(100),
@@ -16,7 +16,7 @@ CREATE TABLE usuarios (
                           fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO usuarios (nombre, anio_nacimiento, sexo, pais, ciudad, email, password, nombre_usuario, rol)
+INSERT INTO usuarios (nombre, fecha_nacimiento, sexo, pais, ciudad, email, password, nombre_usuario, rol)
 VALUES (
            'Administrador General',
            1990,

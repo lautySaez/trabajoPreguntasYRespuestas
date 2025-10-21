@@ -80,7 +80,7 @@ class LoginController
     {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $nombre = trim($_POST["nombre"]);
-            $anio_nacimiento = $_POST["anio_nacimiento"];
+            $fecha_nacimiento = $_POST["fecha_nacimiento"];
             $sexo = $_POST["sexo"];
             $pais = trim($_POST["pais"]);
             $ciudad = trim($_POST["ciudad"]);
@@ -106,9 +106,22 @@ class LoginController
                 move_uploaded_file($_FILES["foto_perfil"]["tmp_name"], $foto_perfil);
             }
 
+            if (strlen($password) < 4 || strlen($password) > 10) {
+                $error = "La contraseña debe tener entre 4 y 10 caracteres.";
+                include("views/registro.php");
+                return;
+            }
+
+            $edad = date_diff(date_create($fecha_nacimiento), date_create('today'))->y;
+            if ($edad < 10 || $edad > 100) {
+                $error = "La fecha de nacimiento no es válida.";
+                include("views/registro.php");
+                return;
+            }
+
             $exito = $this->usuarioModel->registrarUsuario(
                 $nombre,
-                $anio_nacimiento,
+                $fecha_nacimiento,
                 $sexo,
                 $pais,
                 $ciudad,

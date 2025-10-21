@@ -14,8 +14,8 @@
     </div>
 
     <div class="form-group">
-        <label>Año de nacimiento:</label>
-        <input type="number" name="anio_nacimiento" min="1900" max="<?= date("Y") ?>">
+        <label>Fecha de nacimiento:</label>
+        <input type="date" name="fecha_nacimiento" max="<?= date('Y-m-d') ?>" required>
     </div>
 
     <div class="form-group">

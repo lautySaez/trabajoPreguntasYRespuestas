@@ -8,7 +8,7 @@ class Usuario
         $this->conexion = $conexion;
     }
 
-    public function registrarUsuario($nombre, $anio_nacimiento, $sexo, $pais, $ciudad, $email, $password, $nombre_usuario, $foto_perfil = null)
+    public function registrarUsuario($nombre, $fecha_nacimiento, $sexo, $pais, $ciudad, $email, $password, $nombre_usuario, $foto_perfil = null)
     {
         $query = "SELECT * FROM usuarios WHERE email = ? OR nombre_usuario = ?";
         $stmt = $this->conexion->prepare($query);
@@ -17,16 +17,17 @@ class Usuario
         $resultado = $stmt->get_result();
 
         if ($resultado->num_rows > 0) {
-            return false; // Usuario o email ya existen
+            return false;
         }
 
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
         $rol = "jugador"; // 🔒 Por defecto todos los nuevos usuarios son jugadores
 
-        $query = "INSERT INTO usuarios (nombre, anio_nacimiento, sexo, pais, ciudad, email, password, nombre_usuario, rol, foto_perfil)
+        $query = "INSERT INTO usuarios (nombre, fecha_nacimiento, sexo, pais, ciudad, email, password, nombre_usuario, rol, foto_perfil)
                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->conexion->prepare($query);
-        $stmt->bind_param("sissssssss", $nombre, $anio_nacimiento, $sexo, $pais, $ciudad, $email, $passwordHash, $nombre_usuario, $rol, $foto_perfil);
+        $stmt->bind_param("ssssssssss", $nombre, $fecha_nacimiento, $sexo, $pais, $ciudad, $email, $passwordHash, $nombre_usuario, $rol, $foto_perfil);
+
         return $stmt->execute();
     }
 
