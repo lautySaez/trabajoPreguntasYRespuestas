@@ -20,8 +20,20 @@ class LoginController
     {
         if (isset($_SESSION["usuario"])) {
             $usuario = $_SESSION["usuario"];
-            include("views/home.php");
-            return;
+            $rol = $usuario["rol"];
+
+            switch ($rol) {
+                case "admin":
+                    include("views/homeAdmin.php");
+                    return;
+                case "editor":
+                    include("views/homeEditor.php");
+                    return;
+                case "jugador":
+                default:
+                    include("views/home.php");
+                    return;
+            }
         }
 
         include("views/inicioSesion.php");
@@ -37,9 +49,20 @@ class LoginController
 
             if ($usuario) {
                 $_SESSION["usuario"] = $usuario;
-                $usuario = $_SESSION["usuario"];
-                include("views/home.php");
-                return;
+                $rol = $usuario["rol"];
+
+                switch ($rol) {
+                    case "admin":
+                        $this->homeAdmin();
+                        return;
+                    case "editor":
+                        $this->homeEditor();
+                        return;
+                    case "jugador":
+                    default:
+                        $this->home();
+                        return;
+                }
             } else {
                 $error = "Usuario o contraseña incorrectos.";
             }
@@ -113,9 +136,28 @@ class LoginController
             include("views/inicioSesion.php");
             return;
         }
-
         $usuario = $_SESSION["usuario"];
         include("views/home.php");
+    }
+
+    public function homeAdmin()
+    {
+        if (!isset($_SESSION["usuario"]) || $_SESSION["usuario"]["rol"] !== "admin") {
+            include("views/inicioSesion.php");
+            return;
+        }
+        $usuario = $_SESSION["usuario"];
+        include("views/homeAdmin.php");
+    }
+
+    public function homeEditor()
+    {
+        if (!isset($_SESSION["usuario"]) || $_SESSION["usuario"]["rol"] !== "editor") {
+            include("views/inicioSesion.php");
+            return;
+        }
+        $usuario = $_SESSION["usuario"];
+        include("views/homeEditor.php");
     }
 
     public function logout()

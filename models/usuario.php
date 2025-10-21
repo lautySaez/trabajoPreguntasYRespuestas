@@ -17,15 +17,16 @@ class Usuario
         $resultado = $stmt->get_result();
 
         if ($resultado->num_rows > 0) {
-            return false;
+            return false; // Usuario o email ya existen
         }
 
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+        $rol = "jugador"; // 🔒 Por defecto todos los nuevos usuarios son jugadores
 
-        $query = "INSERT INTO usuarios (nombre, anio_nacimiento, sexo, pais, ciudad, email, password, nombre_usuario, foto_perfil)
-                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO usuarios (nombre, anio_nacimiento, sexo, pais, ciudad, email, password, nombre_usuario, rol, foto_perfil)
+                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->conexion->prepare($query);
-        $stmt->bind_param("sisssssss", $nombre, $anio_nacimiento, $sexo, $pais, $ciudad, $email, $passwordHash, $nombre_usuario, $foto_perfil);
+        $stmt->bind_param("sissssssss", $nombre, $anio_nacimiento, $sexo, $pais, $ciudad, $email, $passwordHash, $nombre_usuario, $rol, $foto_perfil);
         return $stmt->execute();
     }
 
@@ -47,4 +48,3 @@ class Usuario
         return false;
     }
 }
-

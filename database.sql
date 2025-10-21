@@ -12,7 +12,7 @@ CREATE TABLE usuarios (
                           password VARCHAR(255) NOT NULL,
                           nombre_usuario VARCHAR(50) UNIQUE NOT NULL,
                           foto_perfil VARCHAR(255) DEFAULT NULL,
-                          rol ENUM('usuario', 'admin', 'editor') DEFAULT 'usuario',
+                          rol ENUM('jugador', 'admin', 'editor') DEFAULT 'jugador',
                           fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -24,22 +24,7 @@ VALUES (
            'Argentina',
            'Buenos Aires',
            'admin@admin.com',
-           '$2y$10$sGNoYVw8RJX7iGrwWrKnzeyGxY2k6aJbZZPyAvHEZ1uTRPgeMFmQG',
+           '$2y$10$ZI6Bft2VF/7ibKP5Hc1n.OMpBpwsO6J7sVC3tsN0UFUoYdPqL0ZqK',
            'admin',
            'admin'
        );
-
-INSERT INTO usuarios (nombre, anio_nacimiento, sexo, pais, ciudad, email, password, nombre_usuario, rol)
-VALUES (
-           'Lautaro Saez',
-           2001,
-           'Masculino',
-           'Argentina',
-           'Buenos Aires',
-           'lauty01saez@gmail.com',
-           '$2y$10$sGNoYVw8RJX7iGrwWrKnzeyGxY2k6aJbZZPyAvHEZ1uTRPgeMFmQG',
-           'Lauty01',
-           'editor'
-       );
-
-
