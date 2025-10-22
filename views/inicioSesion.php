@@ -18,9 +18,6 @@
 
 <p>¿No tienes cuenta?
     <a href="index.php?controller=LoginController&method=registro">Registrarse</a>
-
-    Regístrate aquí
-    </a>
 </p>
 
 <?php include("views/partials/footer.php"); ?>
