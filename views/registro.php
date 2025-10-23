@@ -75,30 +75,70 @@
 
 <p>¿Ya tienes cuenta? <a href="index.php?controller=LoginController&method=index">Inicia sesión</a></p>
 
-<script>
-    // Inicializa el mapa centrado en Argentina
-    var map = L.map('map').setView([-34.61, -58.38], 5);
+    <script>
+        // Crear el mapa centrado en Argentina
+        var map = L.map('map').setView([-34.61, -58.38], 5);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
-    }).addTo(map);
+        // Capa base de OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
 
-    var marker = L.marker([-34.61, -58.38], {draggable: true}).addTo(map);
+        // Marcador inicial
+        var marker = L.marker([-34.61, -58.38], { draggable: true }).addTo(map);
 
-    function updateCoordinates(lat, lng) {
-        document.getElementById('latitud').value = lat;
-        document.getElementById('longitud').value = lng;
-    }
+        // Actualiza coordenadas y obtiene la provincia
+        function updateCoordinates(lat, lng) {
+            document.getElementById('latitud').value = lat;
+            document.getElementById('longitud').value = lng;
+            getProvince(lat, lng);
+        }
 
-    marker.on('dragend', function (e) {
-        var coords = e.target.getLatLng();
-        updateCoordinates(coords.lat, coords.lng);
-    });
+        // Obtiene la provincia con Nominatim
+        function getProvince(lat, lng) {
+            fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=es`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.address) {
+                        const address = data.address;
+                        const country = address.country || '';
+                        let provincia = address.state || address.region || '';
 
-    map.on('click', function (e) {
-        marker.setLatLng(e.latlng);
-        updateCoordinates(e.latlng.lat, e.latlng.lng);
-    });
-</script>
+                        // 🔹 Ajuste especial para Capital Federal
+                        if (provincia.toLowerCase().includes('buenos aires')) {
+                            if (
+                                (address.city && address.city.toLowerCase().includes('buenos aires')) ||
+                                provincia.toLowerCase().includes('autónoma') ||
+                                provincia.toLowerCase().includes('autonoma')
+                            ) {
+                                provincia = 'Capital Federal';
+                            } else {
+                                provincia = 'Provincia de Buenos Aires';
+                            }
+                        }
+
+                        document.querySelector('input[name="pais"]').value = country;
+                        document.querySelector('input[name="ciudad"]').value = provincia;
+
+                        console.log("📍 Provincia detectada:", provincia);
+                    }
+                })
+                .catch(err => console.error('Error al obtener la ubicación:', err));
+        }
+
+        // Eventos del mapa
+        marker.on('dragend', e => {
+            const coords = e.target.getLatLng();
+            updateCoordinates(coords.lat, coords.lng);
+        });
+
+        map.on('click', e => {
+            marker.setLatLng(e.latlng);
+            updateCoordinates(e.latlng.lat, e.latlng.lng);
+        });
+
+        // Inicializar con Buenos Aires
+        updateCoordinates(-34.61, -58.38);
+    </script>
 
 <?php include("views/partials/footer.php"); ?>
