@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Preguntas y Respuestas</title>
-    <link rel="stylesheet" href="<?= URL_BASE ?>public/estilos.css">
+    <link rel="stylesheet" href="public/estilos.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script> <!--MapaInteractivo-->
 </head>
 <body>
 <header>
