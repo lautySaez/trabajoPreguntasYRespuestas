@@ -42,6 +42,7 @@ class LoginController
             $this->redirectHomePorRol($rol);
             return;
         }
+
         include("views/inicioSesion.php");
     }
 
@@ -192,8 +193,6 @@ class LoginController
             include("views/registro.php");
             return;
         }
-
-        // Si no es POST, solo mostramos el registro vacío
         include("views/registro.php");
     }
 
@@ -216,21 +215,9 @@ class LoginController
                 );
 
                 if ($exito) {
-                    $mensaje = "Registro validado correctamente. Ahora puedes iniciar sesión.";
-                    switch ($validarUsuario["rol"]) {
-                        case "Administrador":
-                            $this->homeAdmin();
-                            return;
-                        case "Editor":
-                            $this->homeEditor();
-                            return;
-                        case "Jugador":
-                        default:
-                            $this->home();
-                            return;
-                    }
-                    include("views/validarRegistroUsuario.php");
-                    return;
+                    // Redirigir al método elegirAvatar con el nombre de usuario
+                    header("Location: index.php?controller=LoginController&method=elegirAvatar&usuario=" . urlencode($nombre_usuario));
+                    exit();
                 } else {
                     $error = "El usuario o el email ya existen.";
                 }
@@ -241,7 +228,33 @@ class LoginController
         include("views/validarRegistroUsuario.php");
     }
 
+    public function elegirAvatar()
+    {
+        // Validación: si no viene nombre de usuario, redirigir a registro
+        $nombre_usuario = $_GET["usuario"] ?? null;
+        if (!$nombre_usuario) {
+            header("Location: index.php?controller=LoginController&method=registro");
+            exit();
+        }
 
+        include("views/elegir_avatar.php");
+    }
+
+    public function guardarAvatar()
+    {
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $nombre_usuario = $_POST["nombre_usuario"];
+            $foto_perfil = $_POST["foto_perfil"] ?? null;
+
+            if ($foto_perfil) {
+                $this->usuarioModel->actualizarAvatar($nombre_usuario, $foto_perfil);
+            }
+
+            // Redirigir al login
+            header("Location: index.php?controller=LoginController&method=inicioSesion");
+            exit();
+        }
+    }
 
     public function home()
     {
@@ -249,6 +262,7 @@ class LoginController
             include("views/inicioSesion.php");
             return;
         }
+        $usuario = $_SESSION["usuario"];
         include("views/home.php");
     }
 
@@ -258,6 +272,7 @@ class LoginController
             include("views/inicioSesion.php");
             return;
         }
+        $usuario = $_SESSION["usuario"];
         include("views/homeAdmin.php");
     }
 
@@ -267,6 +282,7 @@ class LoginController
             include("views/inicioSesion.php");
             return;
         }
+        $usuario = $_SESSION["usuario"];
         include("views/homeEditor.php");
     }
 

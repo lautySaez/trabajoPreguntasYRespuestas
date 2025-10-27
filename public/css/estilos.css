@@ -17,32 +17,222 @@ body {
 header {
     background: rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(8px);
-    text-align: center;
-    padding: 25px 0 20px;
+    padding: 15px 30px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 1000;
 }
 
-header h1 {
-    font-size: 1.9rem;
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 60px;
+    min-height: 60px;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100%;
+    flex: 1;
+}
+
+.logo-section h1 {
+    font-size: 1.6rem;
     font-weight: 700;
     color: #fff;
-    margin-bottom: 8px;
+    margin: 0;
+    line-height: 1;
+    white-space: nowrap;
 }
 
-nav {
-    margin-top: 10px;
+/* Estilos del usuario */
+.user-section {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    flex-shrink: 0;
 }
 
-nav a {
-    color: #ffffff;
-    text-decoration: none;
-    margin: 0 12px;
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    height: 45px;
+    white-space: nowrap;
+    max-width: 300px;
+}
+
+.user-info:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+.user-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.user-avatar-placeholder {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.user-icon {
+    font-size: 16px;
+    filter: grayscale(1) brightness(2);
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.user-name {
     font-weight: 600;
-    transition: color 0.3s ease;
+    color: #fff;
+    font-size: 12px;
+    line-height: 1.1;
 }
 
-nav a:hover {
-    color: #FFD700;
+.user-email {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.1;
+}
+
+.dropdown-arrow {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 10px;
+    transition: transform 0.3s ease;
+}
+
+.user-info:hover .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+/* Menú desplegable */
+.user-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #fff;
+    min-width: 200px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 1001;
+    margin-top: 8px;
+}
+
+.user-dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 18px;
+    color: #333;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    margin: 6px;
+}
+
+.dropdown-item:hover {
+    background: #f8f9fa;
+    color: #4a90e2;
+}
+
+.dropdown-item.logout:hover {
+    background: #ffeaea;
+    color: #e74c3c;
+}
+
+.dropdown-item .icon {
+    font-size: 16px;
+}
+
+.dropdown-item span {
+    font-weight: 500;
+}
+
+/* Responsive para header */
+@media (max-width: 1024px) {
+    .logo-section h1 {
+        font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        padding: 12px 15px;
+    }
+    
+    .header-container {
+        height: 50px;
+    }
+    
+    .logo-section h1 {
+        font-size: 1.2rem;
+    }
+    
+    .user-details {
+        display: none;
+    }
+    
+    .user-dropdown {
+        min-width: 180px;
+    }
+    
+    .user-info {
+        height: 40px;
+        padding: 6px 10px;
+        gap: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-section h1 {
+        font-size: 1rem;
+    }
+    
+    .header-container {
+        height: 45px;
+    }
+    
+    .user-info {
+        height: 35px;
+        padding: 4px 8px;
+    }
 }
 
 main {
@@ -161,13 +351,131 @@ a:hover {
     text-decoration: underline;
 }
 
-footer {
-    background: #3B82F6;
+/* Footer compacto */
+.compact-footer {
+    background: linear-gradient(135deg, #3B82F6 0%, #2563eb 100%);
     color: white;
-    text-align: center;
-    padding: 15px;
+    margin-top: auto;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px 30px;
+}
+
+.footer-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-line:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.footer-left, .footer-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.app-name {
+    font-size: 20px !important;
+    font-weight: 700;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.university {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.developers {
+    display: flex;
+    gap: 15px;
+}
+
+.developers span {
     font-size: 0.9rem;
-    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.2);
+    padding: 4px 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.developers span:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+}
+
+.footer-left span, .footer-right span {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+}
+
+/* Responsive para footer compacto */
+@media (max-width: 768px) {
+    .footer-container {
+        padding: 15px 20px;
+    }
+    
+    .footer-line {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+        padding: 10px 0;
+    }
+    
+    .footer-left, .footer-right {
+        justify-content: center;
+        gap: 15px;
+    }
+    
+    .developers {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .developers span {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-container {
+        padding: 12px 15px;
+    }
+    
+    .footer-left, .footer-right {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .app-name {
+        font-size: 1rem;
+    }
+    
+    .university {
+        font-size: 0.8rem;
+        padding: 3px 8px;
+    }
+    
+    .developers span {
+        font-size: 0.8rem;
+    }
 }
 
 @media (max-width: 992px) {
