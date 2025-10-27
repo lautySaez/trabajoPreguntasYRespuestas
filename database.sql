@@ -31,7 +31,8 @@ INSERT INTO
         nombre_usuario,
         rol,
         estado_registro,
-        token_verificacion
+        token_verificacion,
+        foto_perfil
     )
 VALUES
     (
@@ -45,5 +46,6 @@ VALUES
         'admin',
         'Administrador',
         'Activo',
+        NULL,
         NULL
     )

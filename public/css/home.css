@@ -1,40 +1,271 @@
-.foto-perfil {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 4px solid #4CAF50;
-    box-shadow: 0 0 15px rgba(76, 175, 80, 0.4);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    display: block;
-    margin: 20px auto; /* centra la imagen */
-}
+/* Estilos específicos solo para la página home */
 
-.foto-perfil:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 25px rgba(76, 175, 80, 0.6);
-}
-
+/* Contenedor principal */
 .home-container {
     text-align: center;
-    margin-top: 40px;
-    color: #fff; /* ajusta según tu fondo */
-    font-family: 'Poppins', sans-serif;
+
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 0 20px;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.boton-partida {
-    display: inline-block;
-    background: #4CAF50;
+.welcome-section, .error-section {
+    max-width: 1200px;
+}
+
+.welcome-section h2 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.welcome-section p {
+    font-size: 1.3rem;
+
+    opacity: 0.9;
+    line-height: 1.6;
+}
+
+/* Estilos para la sección del mapa */
+.map-section {
+    margin: 10px 0;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.map-section h3 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    color: #FFD700;
+    font-weight: 600;
+}
+
+.map-description {
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+    opacity: 0.8;
     color: #fff;
-    text-decoration: none;
-    padding: 12px 25px;
-    border-radius: 25px;
+}
+
+.map-container {
+    position: relative;
+
+}
+
+.mapa-home {
+    height: 400px;
+    width: 100%;
+    border-radius: 15px;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 1;
+    background: #333;
+}
+
+/* Estilos específicos para Leaflet - Compatible con Edge */
+.mapa-home .leaflet-container {
+    height: 100% !important;
+    width: 100% !important;
+    border-radius: 13px;
+    background: #2c3e50;
+    position: relative !important;
+    overflow: hidden;
+    /* Mejoras para Edge */
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+}
+
+.mapa-home .leaflet-control-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.mapa-home .leaflet-popup-content-wrapper {
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 3px 14px rgba(0,0,0,0.4);
+}
+
+.mapa-home .leaflet-popup-tip {
+    background: rgba(255, 255, 255, 0.95);
+}
+
+/* Correcciones específicas para Microsoft Edge */
+.mapa-home .leaflet-tile {
+    filter: none !important;
+    image-rendering: auto;
+    image-rendering: crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+}
+
+.mapa-home .leaflet-tile-container {
+    opacity: 1 !important;
+}
+
+.mapa-home .leaflet-zoom-animated {
+    transform-origin: 0 0;
+}
+
+/* Asegurar que el mapa sea visible en Edge */
+#mapa-contrincantes {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Panel de información del mapa */
+.map-info-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-top: 20px;
-    font-size: 16px;
+    padding: 15px 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    backdrop-filter: blur(5px);
+}
+
+.online-players {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    font-size: 1rem;
+}
+
+.indicator-online {
+    width: 12px;
+    height: 12px;
+    background: #4CAF50;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(76, 175, 80, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+}
+
+.map-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-find-nearby, .btn-refresh-map {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #4a90e2, #357abd);
+    color: white;
+    font-size: 0.9rem;
+    cursor: pointer;
     transition: all 0.3s ease;
 }
 
-.boton-partida:hover {
-    background: #45a049;
-    transform: scale(1.05);
+.btn-find-nearby:hover, .btn-refresh-map:hover {
+    background: linear-gradient(135deg, #357abd, #4a90e2);
+    transform: translateY(-2px);
+}
+
+.boton-partida, .boton-login {
+    display: inline-block;
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: #fff;
+    text-decoration: none;
+    padding: 18px 40px;
+    border-radius: 50px;
+    font-size: 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+    border: none;
+    cursor: pointer;
+}
+
+.boton-partida:hover, .boton-login:hover {
+    background: linear-gradient(135deg, #45a049, #4CAF50);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+}
+
+.error-section p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    color: #ffcccb;
+}
+
+.boton-login {
+    background: linear-gradient(135deg, #4a90e2, #357abd);
+    box-shadow: 0 6px 20px rgba(74, 144, 226, 0.3);
+}
+
+.boton-login:hover {
+    background: linear-gradient(135deg, #357abd, #4a90e2);
+    box-shadow: 0 8px 25px rgba(74, 144, 226, 0.4);
+}
+
+/* Responsive específico para home */
+@media (max-width: 768px) {
+    .welcome-section h2 {
+        font-size: 2rem;
+    }
+    
+    .welcome-section p {
+        font-size: 1rem;
+    }
+    
+    .map-section {
+        margin: 30px 0;
+        padding: 20px;
+    }
+    
+    .map-section h3 {
+        font-size: 1.5rem;
+    }
+    
+    .mapa-home {
+        height: 300px;
+    }
+    
+    .map-info-panel {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .map-controls {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .btn-find-nearby, .btn-refresh-map {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .mapa-home {
+        height: 250px;
+    }
+    
+    .map-section {
+        padding: 15px;
+    }
 }
