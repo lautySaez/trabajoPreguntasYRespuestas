@@ -19,23 +19,10 @@ class LoginController
     public function loginPage()
     {
         if (isset($_SESSION["usuario"])) {
-            $usuario = $_SESSION["usuario"];
-            $rol = $usuario["rol"];
-
-            switch ($rol) {
-                case "admin":
-                    include("views/homeAdmin.php");
-                    return;
-                case "editor":
-                    include("views/homeEditor.php");
-                    return;
-                case "jugador":
-                default:
-                    include("views/home.php");
-                    return;
-            }
+            $rol = $_SESSION["usuario"]["rol"];
+            $this->redirectHomePorRol($rol);
+            return;
         }
-
         include("views/inicioSesion.php");
     }
 
@@ -49,26 +36,30 @@ class LoginController
 
             if ($usuario) {
                 $_SESSION["usuario"] = $usuario;
-                $rol = $usuario["rol"];
-
-                switch ($rol) {
-                    case "admin":
-                        $this->homeAdmin();
-                        return;
-                    case "editor":
-                        $this->homeEditor();
-                        return;
-                    case "jugador":
-                    default:
-                        $this->home();
-                        return;
-                }
+                $this->redirectHomePorRol($usuario["rol"]);
+                return;
             } else {
                 $error = "Usuario o contraseña incorrectos.";
             }
         }
 
         include("views/inicioSesion.php");
+    }
+
+    private function redirectHomePorRol($rol)
+    {
+        switch ($rol) {
+            case "admin":
+                $this->homeAdmin();
+                break;
+            case "editor":
+                $this->homeEditor();
+                break;
+            case "jugador":
+            default:
+                $this->home();
+                break;
+        }
     }
 
     public function registro()
@@ -95,17 +86,6 @@ class LoginController
                 return;
             }
 
-            $foto_perfil = null;
-            if (!empty($_FILES["foto_perfil"]["name"])) {
-                $uploadDir = "uploads/";
-                if (!file_exists($uploadDir)) {
-                    mkdir($uploadDir, 0777, true);
-                }
-
-                $foto_perfil = $uploadDir . basename($_FILES["foto_perfil"]["name"]);
-                move_uploaded_file($_FILES["foto_perfil"]["tmp_name"], $foto_perfil);
-            }
-
             if (strlen($password) < 4 || strlen($password) > 10) {
                 $error = "La contraseña debe tener entre 4 y 10 caracteres.";
                 include("views/registro.php");
@@ -118,6 +98,8 @@ class LoginController
                 include("views/registro.php");
                 return;
             }
+
+            $foto_perfil = null;
 
             $exito = $this->usuarioModel->registrarUsuario(
                 $nombre,
@@ -132,9 +114,8 @@ class LoginController
             );
 
             if ($exito) {
-                $mensaje = "Usuario registrado correctamente. Ahora puedes iniciar sesión.";
-                include("views/inicioSesion.php");
-                return;
+                header("Location: index.php?controller=LoginController&method=elegirAvatar&usuario=" . urlencode($nombre_usuario));
+                exit();
             } else {
                 $error = "El usuario o el email ya existen.";
             }
@@ -143,13 +124,40 @@ class LoginController
         include("views/registro.php");
     }
 
+    public function elegirAvatar()
+    {
+        // Validación: si no viene nombre de usuario, redirigir a registro
+        $nombre_usuario = $_GET["usuario"] ?? null;
+        if (!$nombre_usuario) {
+            header("Location: index.php?controller=LoginController&method=registro");
+            exit();
+        }
+
+        include("views/elegir_avatar.php");
+    }
+
+    public function guardarAvatar()
+    {
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $nombre_usuario = $_POST["nombre_usuario"];
+            $foto_perfil = $_POST["foto_perfil"] ?? null;
+
+            if ($foto_perfil) {
+                $this->usuarioModel->actualizarAvatar($nombre_usuario, $foto_perfil);
+            }
+
+            // Redirigir al login
+            header("Location: index.php?controller=LoginController&method=inicioSesion");
+            exit();
+        }
+    }
+
     public function home()
     {
         if (!isset($_SESSION["usuario"])) {
             include("views/inicioSesion.php");
             return;
         }
-        $usuario = $_SESSION["usuario"];
         include("views/home.php");
     }
 
@@ -159,7 +167,6 @@ class LoginController
             include("views/inicioSesion.php");
             return;
         }
-        $usuario = $_SESSION["usuario"];
         include("views/homeAdmin.php");
     }
 
@@ -169,7 +176,6 @@ class LoginController
             include("views/inicioSesion.php");
             return;
         }
-        $usuario = $_SESSION["usuario"];
         include("views/homeEditor.php");
     }
 

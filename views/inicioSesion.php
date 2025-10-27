@@ -1,5 +1,7 @@
 <?php include("views/partials/header.php"); ?>
 
+<link rel="stylesheet" href="public/css/inicioSesion.css">
+
 <h2>Iniciar Sesión</h2>
 
 <?php if (isset($error)): ?>
@@ -19,6 +21,8 @@
 <p>¿No tienes cuenta?
     <a href="index.php?controller=LoginController&method=registro">Registrarse</a>
 </p>
+
+<script src="public/js/inicioSesion.js" defer></script>
 
 <?php include("views/partials/footer.php"); ?>
 
