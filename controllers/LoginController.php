@@ -38,8 +38,10 @@ class LoginController
                     include("views/home.php");
                     return;
             }
+            $rol = $_SESSION["usuario"]["rol"];
+            $this->redirectHomePorRol($rol);
+            return;
         }
-
         include("views/inicioSesion.php");
     }
 
@@ -79,6 +81,22 @@ class LoginController
         }
 
         include("views/inicioSesion.php");
+    }
+
+    private function redirectHomePorRol($rol)
+    {
+        switch ($rol) {
+            case "admin":
+                $this->homeAdmin();
+                break;
+            case "editor":
+                $this->homeEditor();
+                break;
+            case "jugador":
+            default:
+                $this->home();
+                break;
+        }
     }
 
     public function registro()
@@ -231,7 +249,6 @@ class LoginController
             include("views/inicioSesion.php");
             return;
         }
-        $usuario = $_SESSION["usuario"];
         include("views/home.php");
     }
 
@@ -241,7 +258,6 @@ class LoginController
             include("views/inicioSesion.php");
             return;
         }
-        $usuario = $_SESSION["usuario"];
         include("views/homeAdmin.php");
     }
 
@@ -251,7 +267,6 @@ class LoginController
             include("views/inicioSesion.php");
             return;
         }
-        $usuario = $_SESSION["usuario"];
         include("views/homeEditor.php");
     }
 
