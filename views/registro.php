@@ -29,9 +29,12 @@
         </select>
     </div>
 
-    <div id="map" style="height: 150px; border-radius: 8px; margin-bottom: 20px;"></div>
-    <input type="hidden" name="latitud" id="latitud">
-    <input type="hidden" name="longitud" id="longitud">
+    <div class="form-group full-width">
+        <label>Selecciona tu ubicación en el mapa:</label>
+        <div id="map" style="height: 200px; border-radius: 8px; margin-top: 8px;"></div>
+        <input type="hidden" name="latitud" id="latitud">
+        <input type="hidden" name="longitud" id="longitud">
+    </div>
 
     <div class="form-group">
         <label>País:</label>
@@ -63,22 +66,22 @@
         <input type="password" name="repassword" required>
     </div>
 
-    <!-- Eliminado campo de foto_perfil, ahora se elige luego -->
-
-    <div class="form-group full-width" style="text-align:center;">
+    <div class="form-group terminos-linea">
         <label>
             <input type="checkbox" id="aceptarTerminos"> Acepto los
             <a href="#" id="verTerminos">Términos y Condiciones</a>
         </label>
     </div>
 
-    <div class="form-group full-width">
+    <div class="form-group full-width centered">
         <button type="submit" id="btnRegistrarme" disabled>Registrarme</button>
     </div>
-
+    <div class="form-group full-width centered">
+        <p style="text-align: center;width: 100%;">¿Ya tienes cuenta? <a href="index.php?controller=LoginController&method=index">Inicia sesión</a></p>
+    </div>
 </form>
 
-<p>¿Ya tienes cuenta? <a href="index.php?controller=LoginController&method=inicioSesion">Inicia sesión</a></p>
+
 
 <div id="modalTerminos" class="modal">
     <div class="modal-content">
