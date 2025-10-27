@@ -80,7 +80,6 @@ class LoginController
             $repassword = $_POST["repassword"];
             $nombre_usuario = trim($_POST["nombre_usuario"]);
 
-            // Validaciones
             if ($password !== $repassword) {
                 $error = "Las contraseñas no coinciden.";
                 include("views/registro.php");
