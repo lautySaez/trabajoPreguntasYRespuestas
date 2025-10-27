@@ -1,7 +1,7 @@
 <?php include("views/partials/header.php"); ?>
 <?php
 require_once("helper/VerificacionDeRoles.php");
-verificarRol("admin");
+verificarRol("Administrador");
 ?>
     <h1>Panel del Administrador</h1>
 
