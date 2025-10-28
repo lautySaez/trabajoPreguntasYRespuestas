@@ -11,7 +11,7 @@ for ($i = 1; $i <= 16; $i++) {
 }
 ?>
 
-<h2>Elige tu avatar, <?= htmlspecialchars($nombre_usuario) ?> 🎮</h2>
+<h2>Elige tu avatar <?= htmlspecialchars($nombre_usuario) ?> 🎮</h2>
 <p class="mensaje-usuario">Selecciona uno para continuar al inicio de sesión</p>
 
 <form action="index.php?controller=LoginController&method=guardarAvatar" method="POST">
