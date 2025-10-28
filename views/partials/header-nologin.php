@@ -10,12 +10,18 @@
 </head>
 <body>
 <header>
-    <div class="header-container">
-        <div class="logo-section">
-            <h1>AciertaYa - Juego de Preguntas</h1>
-        </div>
-    </div>
-    
+    <h1>Juego de Preguntas y Respuestas</h1>
+    <?php
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    ?>
+    <?php if (isset($_SESSION["usuario"])): ?>
+        <nav>
+            <a href="index.php?controller=LoginController&method=home">Inicio</a>
+            <a href="index.php?controller=LoginController&method=logout">Cerrar sesión</a>
+        </nav>
+    <?php endif; ?>
 </header>
 <hr>
 <main>
