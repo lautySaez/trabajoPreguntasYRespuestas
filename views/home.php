@@ -2,7 +2,7 @@
 
 <link rel="stylesheet" href="public/css/home.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-<!-- Fallback CSS para Edge -->
+
 <style>
     /* Forzar visualización del mapa en Edge */
     #mapa-contrincantes {
@@ -44,7 +44,7 @@ $usuario = $_SESSION["usuario"] ?? null;
                 </div>
             </div>
             
-            <a href="index.php?controller=partida&method=mostrarReglas" class="boton-partida">Iniciar una Partida</a>
+            <a href="index.php?controller=partida&method=mostrarModo" class="boton-partida">Iniciar una Partida</a>
         </div>
     <?php else: ?>
         <div class="error-section">
@@ -54,7 +54,6 @@ $usuario = $_SESSION["usuario"] ?? null;
     <?php endif; ?>
 </div>
 
-    <!-- Carga sincrónica de Leaflet para compatibilidad con Edge -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" type="text/javascript"></script>
     <script type="text/javascript">
         // Función de inicialización específica para Edge

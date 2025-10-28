@@ -1,0 +1,93 @@
+body {
+    background: linear-gradient(135deg, #3a0ca3, #4361ee, #4895ef);
+    font-family: "Poppins", sans-serif;
+    color: #2575fc;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.modo-container {
+    max-width: 600px;
+    margin: 120px auto;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 50px 40px;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    animation: fadeInUp 0.8s ease both;
+}
+
+.modo-container h2 {
+    font-size: 2.2em;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.modo-container p {
+    font-size: 1.1em;
+    margin-bottom: 40px;
+    color: #f0f0f0;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+}
+
+.modo-boton {
+    display: block;
+    width: 80%;
+    margin: 20px auto;
+    padding: 18px 0;
+    border-radius: 14px;
+    border: none;
+    color: #000;
+    font-weight: 700;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+}
+
+.modo-boton[value="bot"] {
+    background: linear-gradient(45deg, #f1c40f, #f39c12);
+}
+.modo-boton[value="jugador"] {
+    background: linear-gradient(45deg, #2ecc71, #27ae60);
+}
+
+.modo-boton:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+}
+
+.modo-boton:active {
+    transform: scale(0.97);
+}
+
+.volver {
+    display: inline-block;
+    margin-top: 40px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 10px 25px;
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.volver:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.05);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

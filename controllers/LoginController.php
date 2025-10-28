@@ -288,8 +288,7 @@ class LoginController
                 $_SESSION['usuario']['foto_perfil'] = $foto_perfil;
             }
 
-            // Redirigir al perfil actualizado
-            header("Location: index.php?controller=LoginController&method=perfil");
+            header("Location: index.php?controller=LoginController&method=home");
             exit();
         }
     }
@@ -381,5 +380,10 @@ class LoginController
     {
         session_destroy();
         include("views/inicioSesion.php");
+    }
+
+    public function iniciarNuevaPartida()
+    {
+
     }
 }
