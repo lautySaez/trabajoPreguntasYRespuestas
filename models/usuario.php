@@ -85,4 +85,56 @@ class Usuario
             }
         }
     }
+
+    public function actualizarPerfil($id, $nombre_usuario, $email, $password = null, $foto_perfil = null)
+    {
+        $campos = [];
+        $params = [];
+
+        $campos[] = "nombre_usuario = ?";
+        $params[] = $nombre_usuario;
+
+        $campos[] = "email = ?";
+        $params[] = $email;
+
+        if ($password) {
+            $campos[] = "password = ?";
+            $params[] = password_hash($password, PASSWORD_DEFAULT);
+        }
+
+        if ($foto_perfil) {
+            $campos[] = "foto_perfil = ?";
+            $params[] = $foto_perfil;
+        }
+
+        $params[] = $id;
+
+        $sql = "UPDATE usuarios SET " . implode(", ", $campos) . " WHERE id = ?";
+
+        $stmt = $this->conexion->prepare($sql);
+        if (!$stmt) {
+            die("Error al preparar: " . $this->conexion->error);
+        }
+
+        $tipos = str_repeat("s", count($params) - 1) . "i";
+        $stmt->bind_param($tipos, ...$params);
+
+        if (!$stmt->execute()) {
+            die("Error al ejecutar: " . $stmt->error);
+        }
+
+        return true;
+    }
+
+
+    public function obtenerPorId($id)
+    {
+        $sql = "SELECT * FROM usuarios WHERE id = ?";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $resultado = $stmt->get_result();
+        return $resultado->fetch_assoc();
+    }
+
 }

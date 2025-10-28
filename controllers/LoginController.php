@@ -183,8 +183,8 @@ class LoginController
                     $mail->send();
 
                     $mensaje = "Usuario registrado correctamente. Ahora puedes iniciar sesión.";
-                    include("views/validarRegistroUsuario.php");
-                    return;
+                    header("Location: index.php?controller=login&method=inicioSesion");
+                    exit();
                 } else {
                     $error = "El usuario o el email ya existen.";
                 }
@@ -230,28 +230,42 @@ class LoginController
 
     public function elegirAvatar()
     {
-        // Validación: si no viene nombre de usuario, redirigir a registro
-        $nombre_usuario = $_GET["usuario"] ?? null;
-        if (!$nombre_usuario) {
-            header("Location: index.php?controller=LoginController&method=registro");
+        $usuario = $_SESSION['usuario'] ?? null;
+
+        if (!$usuario) {
+            // Si no hay usuario logueado, redirigir al login
+            header("Location: index.php?controller=LoginController&method=inicioSesion");
             exit();
         }
 
+        // Pasamos los datos del usuario a la vista
+        $nombre_usuario = $usuario['nombre_usuario'];
         include("views/elegir_avatar.php");
     }
+
 
     public function guardarAvatar()
     {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            $nombre_usuario = $_POST["nombre_usuario"];
-            $foto_perfil = $_POST["foto_perfil"] ?? null;
+            $usuario = $_SESSION['usuario'] ?? null;
+
+            if (!$usuario) {
+                header("Location: index.php?controller=LoginController&method=inicioSesion");
+                exit();
+            }
+
+            $nombre_usuario = $usuario['nombre_usuario'];
+            $foto_perfil = $_POST['foto_perfil'] ?? null;
 
             if ($foto_perfil) {
                 $this->usuarioModel->actualizarAvatar($nombre_usuario, $foto_perfil);
+
+                // Actualizamos la sesión para reflejar el nuevo avatar
+                $_SESSION['usuario']['foto_perfil'] = $foto_perfil;
             }
 
-            // Redirigir al login
-            header("Location: index.php?controller=LoginController&method=inicioSesion");
+            // Redirigir al perfil actualizado
+            header("Location: index.php?controller=LoginController&method=perfil");
             exit();
         }
     }
@@ -284,6 +298,59 @@ class LoginController
         }
         $usuario = $_SESSION["usuario"];
         include("views/homeEditor.php");
+    }
+
+    public function perfil()
+    {
+        $usuario = $_SESSION['usuario'];
+        include("views/perfil.php");
+    }
+
+    public function actualizarPerfil()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $usuarioSesion = $_SESSION['usuario'] ?? null;
+            if (!$usuarioSesion) {
+                header("Location: index.php?controller=LoginController&method=inicioSesion");
+                exit;
+            }
+
+            $id = $_POST['id'] ?? $usuarioSesion['id'];
+
+            $nombre_usuario = trim($_POST['nombre_usuario']);
+            $email = trim($_POST['email']);
+            $password = $_POST['password'] ?? null;
+            $repassword = $_POST['repassword'] ?? null;
+
+            $foto_perfil = $_FILES['foto_perfil']['name'] ?? null;
+            $ruta_avatar = null;
+
+            if ($foto_perfil) {
+                $uploadDir = "uploads/";
+                if (!file_exists($uploadDir)) mkdir($uploadDir, 0777, true);
+                $ruta_avatar = $uploadDir . basename($foto_perfil);
+                move_uploaded_file($_FILES['foto_perfil']['tmp_name'], $ruta_avatar);
+            }
+
+            if ($password && $password !== $repassword) {
+                $_SESSION['error'] = "Las contraseñas no coinciden.";
+                header("Location: index.php?controller=LoginController&method=perfil");
+                exit;
+            }
+
+            $this->usuarioModel->actualizarPerfil(
+                $id,
+                $nombre_usuario,
+                $email,
+                $password,
+                $ruta_avatar
+            );
+
+            $_SESSION['usuario'] = $this->usuarioModel->obtenerPorId($id);
+
+            header("Location: index.php?controller=LoginController&method=home");
+            exit;
+        }
     }
 
     public function logout()
