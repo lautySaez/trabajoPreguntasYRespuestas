@@ -1,0 +1,191 @@
+body {
+    background: linear-gradient(135deg, #3a0ca3, #4361ee, #4895ef);
+    font-family: "Poppins", sans-serif;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.ruleta-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+}
+
+.ruleta-container {
+    position: relative;
+}
+
+h2 {
+    font-size: 2.2em;
+    margin-bottom: 40px;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    animation: fadeInDown 1s ease both;
+}
+
+.ruleta-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: zoomIn 0.8s ease both;
+}
+
+#ruleta {
+    border: 10px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.4),
+    inset 0 0 20px rgba(255, 255, 255, 0.2);
+    transition: transform 0.3s ease;
+}
+
+#ruleta:hover {
+    transform: scale(1.02);
+}
+
+.flecha {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 30px solid #ffcc00;
+    filter: drop-shadow(0 0 8px rgba(255, 204, 0, 0.8));
+    z-index: 10;
+    animation: bounce 1.5s infinite ease-in-out;
+}
+
+#boton-girar {
+    display: block;
+    margin: 50px auto 0 auto;
+    background: linear-gradient(45deg, #ffd60a, #ffcc00);
+    color: #000;
+    border: none;
+    padding: 14px 40px;
+    font-size: 1.3em;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    font-weight: 700;
+    box-shadow: 0 5px 20px rgba(255, 204, 0, 0.3);
+}
+
+#boton-girar:hover {
+    background: linear-gradient(45deg, #ffe066, #ffdf40);
+    transform: scale(1.1);
+    box-shadow: 0 0 25px rgba(255, 204, 0, 0.6);
+}
+
+#boton-girar:disabled {
+    background: gray;
+    color: #eee;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+#resultado {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(6px);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+}
+
+.resultado-activo {
+    display: flex;
+    animation: fadeInOverlay 0.5s ease forwards;
+}
+
+.resultado-card {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(15px);
+    border-radius: 18px;
+    padding: 45px 70px;
+    box-shadow: 0 0 50px rgba(255, 255, 255, 0.2);
+    text-align: center;
+    animation: popIn 0.7s ease forwards;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+#categoria-elegida {
+    font-size: 1.8em;
+    font-weight: 800;
+    margin-bottom: 25px;
+    color: #ffea00;
+    text-shadow: 0 0 10px rgba(255, 234, 0, 0.7);
+}
+
+.boton-iniciar {
+    background: linear-gradient(45deg, #ffd60a, #ffcc00);
+    color: #000;
+    text-decoration: none;
+    padding: 14px 45px;
+    border-radius: 12px;
+    font-weight: 700;
+    transition: 0.3s ease;
+    display: inline-block;
+    box-shadow: 0 5px 15px rgba(255, 204, 0, 0.4);
+}
+
+.boton-iniciar:hover {
+    background: linear-gradient(45deg, #fff04d, #ffdf40);
+    transform: scale(1.08);
+    box-shadow: 0 0 25px rgba(255, 255, 0, 0.6);
+}
+
+@keyframes fadeInOverlay {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translate(-50%, 0); }
+    50% { transform: translate(-50%, -6px); }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
