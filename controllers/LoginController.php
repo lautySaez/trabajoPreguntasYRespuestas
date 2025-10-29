@@ -286,7 +286,17 @@ class LoginController
             include("views/inicioSesion.php");
             return;
         }
+
         $usuario = $_SESSION["usuario"];
+
+        require_once("models/usuario.php");
+        require_once("helper/MyConexion.php");
+        $conexion = new MyConexion("localhost", "root", "", "preguntas_respuestas");
+        $conn = $conexion->getConexion();
+
+        $modelUsuario = new Usuario($conn);
+        $usuarios = $modelUsuario->obtenerTodosLosUsuarios();
+
         include("views/homeAdmin.php");
     }
 
