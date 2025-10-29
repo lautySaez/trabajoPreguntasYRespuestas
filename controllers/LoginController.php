@@ -1,7 +1,31 @@
 <?php
-require 'vendor/autoload.php';
+// Intentar cargar PHPMailer desde diferentes ubicaciones
+$autoload_paths = [
+    __DIR__ . '/../vendor/autoload.php',
+    __DIR__ . '/../../vendor/autoload.php',
+    dirname(__DIR__) . '/vendor/autoload.php',
+    getcwd() . '/vendor/autoload.php'
+];
+
+$autoload_loaded = false;
+foreach ($autoload_paths as $path) {
+    if (file_exists($path)) {
+        require_once $path;
+        $autoload_loaded = true;
+        break;
+    }
+}
+
+if (!$autoload_loaded) {
+    // Fallback: cargar PHPMailer directamente
+    require_once __DIR__ . '/../vendor/phpmailer/phpmailer/src/PHPMailer.php';
+    require_once __DIR__ . '/../vendor/phpmailer/phpmailer/src/SMTP.php';
+    require_once __DIR__ . '/../vendor/phpmailer/phpmailer/src/Exception.php';
+}
 
 use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 
 class LoginController
 {
@@ -87,13 +111,13 @@ class LoginController
     private function redirectHomePorRol($rol)
     {
         switch ($rol) {
-            case "admin":
+            case "Administrador":
                 $this->homeAdmin();
                 break;
-            case "editor":
+            case "Editor":
                 $this->homeEditor();
                 break;
-            case "jugador":
+            case "Jugador":
             default:
                 $this->home();
                 break;
@@ -264,8 +288,7 @@ class LoginController
                 $_SESSION['usuario']['foto_perfil'] = $foto_perfil;
             }
 
-            // Redirigir al perfil actualizado
-            header("Location: index.php?controller=LoginController&method=perfil");
+            header("Location: index.php?controller=LoginController&method=home");
             exit();
         }
     }
@@ -367,5 +390,10 @@ class LoginController
     {
         session_destroy();
         include("views/inicioSesion.php");
+    }
+
+    public function iniciarNuevaPartida()
+    {
+
     }
 }

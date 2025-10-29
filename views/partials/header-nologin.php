@@ -11,11 +11,6 @@
 <body>
 <header>
     <h1>Juego de Preguntas y Respuestas</h1>
-    <?php
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
-    ?>
 </header>
 <hr>
 <main>
