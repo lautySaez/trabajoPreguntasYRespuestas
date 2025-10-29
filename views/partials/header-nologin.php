@@ -16,12 +16,6 @@
         session_start();
     }
     ?>
-    <?php if (isset($_SESSION["usuario"])): ?>
-        <nav>
-            <a href="index.php?controller=LoginController&method=home">Inicio</a>
-            <a href="index.php?controller=LoginController&method=logout">Cerrar sesión</a>
-        </nav>
-    <?php endif; ?>
 </header>
 <hr>
 <main>

@@ -126,7 +126,6 @@ class Usuario
         return true;
     }
 
-
     public function obtenerPorId($id)
     {
         $sql = "SELECT * FROM usuarios WHERE id = ?";
@@ -135,6 +134,26 @@ class Usuario
         $stmt->execute();
         $resultado = $stmt->get_result();
         return $resultado->fetch_assoc();
+    }
+
+    public function obtenerTodosLosUsuarios()
+    {
+    $conexion = new MyConexion("localhost", "root", "", "preguntas_respuestas");
+    $conn = $conexion->getConexion();
+
+    $sql = "SELECT foto_perfil, nombre_usuario, email, estado_registro FROM usuarios";
+    $resultado = $conn->query($sql);
+
+    if (!$resultado) {
+        die("Error en la consulta: " . $conn->error);
+    }
+    
+    $usuarios = [];
+    while ($fila = $resultado->fetch_assoc()) {
+        $usuarios[] = $fila;
+    }
+
+    return $usuarios;
     }
 
 }
