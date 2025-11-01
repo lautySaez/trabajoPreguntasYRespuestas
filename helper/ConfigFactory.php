@@ -5,6 +5,7 @@ include_once("helper/NewRouter.php");
 include_once("controllers/LoginController.php");
 include_once("controllers/PartidaController.php");
 include_once("models/usuario.php");
+include_once("controllers/UsuarioController.php");
 
 class ConfigFactory
 {
@@ -26,7 +27,7 @@ class ConfigFactory
         $usuarioModel = new Usuario($this->conexion->getConexion());
 
         $this->objetos["LoginController"] = new LoginController($usuarioModel);
-
+        $this->objetos["UsuarioController"] = new UsuarioController($usuarioModel);
         $this->objetos["PartidaController"] = new PartidaController();
 
         $this->objetos["router"] = new NewRouter($this, "LoginController", "inicioSesion");

@@ -42,7 +42,7 @@
             </div>
             
             <div class="user-dropdown" id="userDropdown">
-                <a href="index.php?controller=LoginController&method=perfil" class="dropdown-item">
+                <a href="index.php?controller=UsuarioController&method=perfil" class="dropdown-item">
                     <i class="icon">⚙</i>
                     <span>Perfil</span>
                 </a>

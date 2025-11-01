@@ -132,7 +132,7 @@ INSERT INTO preguntas (categoria_id, pregunta, respuesta_1, respuesta_2, respues
 (1, '¿Qué jugador es conocido como "His Airness"?', 'Magic Johnson', 'Larry Bird', 'Michael Jordan', 'Shaquille O Neal', 3),
 (1, '¿En qué ciudad están los Lakers actualmente?', 'Minneapolis', 'Los Ángeles', 'Oakland', 'Sacramento', 2),
 (1, '¿Cuál es la línea de tres puntos en la NBA?', '6.75 metros', '7.24 metros', '7.50 metros', '8.00 metros', 2),
-1, '¿Cuántos Grand Slams hay en el tenis?', '3', '4', '5', '6', 2),
+(1, '¿Cuántos Grand Slams hay en el tenis?', '3', '4', '5', '6', 2),
 (1, '¿Cuál es el torneo más antiguo de tenis?', 'US Open', 'Roland Garros', 'Wimbledon', 'Australian Open', 3),
 (1, '¿En qué superficie se juega Roland Garros?', 'Césped', 'Polvo de ladrillo', 'Cemento', 'Sintético', 2),
 (1, '¿Cuántos sets debe ganar un hombre para ganar un Grand Slam?', '2 de 3', '3 de 5', '4 de 7', '5 de 9', 2),
@@ -453,7 +453,7 @@ INSERT INTO preguntas (categoria_id, pregunta, respuesta_1, respuesta_2, respues
 (4, '¿Qué catalizador acelera las reacciones biológicas?', 'Enzimas', 'Hormonas', 'Vitaminas', 'Minerales', 1),
 (4, '¿Cuál es la fórmula del metano?', 'CH₄', 'C₂H₄', 'C₂H₆', 'CH₂', 1),
 (4, '¿Qué proceso separa mezclas por diferencia de puntos de ebullición?', 'Filtración', 'Destilación', 'Decantación', 'Cristalización', 2),
-(4, '¿Cuál es la masa atómica aproximada del carbono?', '6', '12', '14', '16', 2);
+(4, '¿Cuál es la masa atómica aproximada del carbono?', '6', '12', '14', '16', 2),
 (4, '¿Cuántos huesos tiene el cuerpo humano adulto?', '198', '206', '214', '220', 2),
 (4, '¿Cuál es la unidad básica de la vida?', 'Tejido', 'Célula', 'Órgano', 'Átomo', 2),
 (4, '¿Qué orgánulo contiene el ADN en las células eucariotas?', 'Mitocondria', 'Núcleo', 'Ribosoma', 'Retículo endoplasmático', 2),
