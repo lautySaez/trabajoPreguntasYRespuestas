@@ -1,12 +1,14 @@
 <?php include("views/partials/header.php"); ?>
 
+    <link rel="stylesheet" href="public/css/registro.css">
+
 <h2>Registro de nuevo usuario</h2>
 
 <?php if (isset($error)): ?>
     <p style="color:red; text-align:center;"><?= htmlspecialchars($error) ?></p>
 <?php endif; ?>
 
-<form action="index.php?controller=LoginController&method=registrarUsuario" method="POST" enctype="multipart/form-data">
+<form id="formRegistro" action="index.php?controller=LoginController&method=registrarUsuario" method="POST">
 
     <div class="form-group">
         <label>Nombre completo:</label>
@@ -25,6 +27,13 @@
             <option>Femenino</option>
             <option>Prefiero no cargarlo</option>
         </select>
+    </div>
+
+    <div class="form-group full-width">
+        <label>Selecciona tu ubicación en el mapa:</label>
+        <div id="map" style="height: 200px; border-radius: 8px; margin-top: 8px;"></div>
+        <input type="hidden" name="latitud" id="latitud">
+        <input type="hidden" name="longitud" id="longitud">
     </div>
 
     <div class="form-group">
@@ -57,17 +66,42 @@
         <input type="password" name="repassword" required>
     </div>
 
-    <div class="form-group">
-        <label>Foto de perfil:</label>
-        <input type="file" name="foto_perfil">
+    <div class="form-group terminos-linea">
+        <label>
+            <input type="checkbox" id="aceptarTerminos"> Acepto los
+            <a href="#" id="verTerminos">Términos y Condiciones</a>
+        </label>
     </div>
 
-    <div class="form-group full-width">
-        <button type="submit">Registrarme</button>
+    <div class="form-group full-width centered">
+        <button type="submit" id="btnRegistrarme" disabled>Registrarme</button>
     </div>
-
+    <div class="form-group full-width centered">
+        <p style="text-align: center;width: 100%;">¿Ya tienes cuenta? <a href="index.php?controller=LoginController&method=index">Inicia sesión</a></p>
+    </div>
 </form>
 
-<p>¿Ya tienes cuenta? <a href="index.php?controller=LoginController&method=index">Inicia sesión</a></p>
+
+
+<div id="modalTerminos" class="modal">
+    <div class="modal-content">
+        <h2>Términos y Condiciones</h2>
+        <p>
+            Al registrarte en esta aplicación, aceptas las políticas de uso, privacidad y condiciones del sistema de juego.
+            La información proporcionada será utilizada únicamente con fines de autenticación y estadísticas del juego.
+        </p>
+        <p>
+            No se compartirán tus datos con terceros sin tu consentimiento. Puedes eliminar tu cuenta en cualquier momento.
+            El uso continuo implica la aceptación de futuras actualizaciones en los términos.
+        </p>
+        <div class="modal-buttons">
+            <button id="btnAceptar">Aceptar</button>
+            <button id="btnCerrar">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+    <script src="public/js/registro.js" defer></script>
+
 
 <?php include("views/partials/footer.php"); ?>

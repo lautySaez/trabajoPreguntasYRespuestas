@@ -50,6 +50,9 @@ class NewRouter
     private function getControllerName($controllerName)
     {
         if (!empty($controllerName)) {
+            if (substr($controllerName, -10) === 'Controller') {
+                return $controllerName;
+            }
             return ucfirst(strtolower($controllerName)) . 'Controller';
         }
         return $this->defaultController;
@@ -63,5 +66,3 @@ class NewRouter
         return $this->defaultMethod;
     }
 }
-
-
