@@ -41,7 +41,7 @@ if (isset($_SESSION["usuario"])) {
 
         <div class="form-group">
             <label>Avatar actual:</label><br>
-            <a href="index.php?controller=LoginController&method=elegirAvatar">
+            <a href="index.php?controller=UsuarioController&method=elegirAvatar">
                 <img src="<?= htmlspecialchars($usuario['foto_perfil'] ?: 'public/img/default_avatar.JPG') ?>" class="perfil-avatar" title="Cambiar avatar">
             </a>
         </div>

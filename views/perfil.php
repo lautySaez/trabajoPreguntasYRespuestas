@@ -14,19 +14,14 @@ if (isset($_SESSION["usuario"])) {
 ?>
 
 <div class="perfil-container">
-    <h2>Mi Perfil</h2>
+    <div class="perfil-card">
+        <div class="avatar-container">
+            <img src="<?= htmlspecialchars($usuario['foto_perfil'] ?: 'public/img/default_avatar.JPG') ?>" class="perfil-avatar" alt="Avatar">
+        </div>
 
-    <?php if (!empty($_SESSION['error'])): ?>
-        <div class="error"><?= htmlspecialchars($_SESSION['error']) ?></div>
-        <?php unset($_SESSION['error']); ?>
-    <?php endif; ?>
-
-    <div class="perfil-info">
-        <img src="<?= htmlspecialchars($usuario['foto_perfil'] ?: 'public/img/default_avatar.JPG') ?>" class="perfil-avatar" alt="Avatar">
-
-        <p><strong>Nombre de usuario:</strong> <?= htmlspecialchars($usuario['nombre_usuario']) ?></p>
-        <p><strong>Email:</strong> <?= htmlspecialchars($usuario['email']) ?></p>
-        <p><strong>Contraseña:</strong> ******</p>
+        <h2><?= htmlspecialchars($usuario['nombre_usuario']) ?></h2>
+        <p class="email"><?= htmlspecialchars($usuario['email']) ?></p>
+        <p class="password">******</p>
 
         <button id="abrirModal" class="boton-partida">Configurar perfil</button>
     </div>
@@ -40,7 +35,7 @@ if (isset($_SESSION["usuario"])) {
 
         <form id="formConfirmar" action="index.php?controller=UsuarioController&method=confirmarPassword" method="POST">
             <input type="password" name="password_actual" placeholder="Contraseña actual" required autocomplete="current-password">
-            <div style="margin-top:12px;">
+            <div class="modal-buttons">
                 <button type="submit" class="boton-partida">Continuar</button>
                 <button type="button" class="boton-secundario" id="cancelarModal">Cancelar</button>
             </div>
@@ -49,5 +44,4 @@ if (isset($_SESSION["usuario"])) {
 </div>
 
 <script src="public/js/perfil.js" type="text/javascript"></script>
-
 <?php include("views/partials/footer.php"); ?>

@@ -107,4 +107,35 @@ class UsuarioController
             exit;
         }
     }
+
+    public function elegirAvatar()
+    {
+        if (empty($_SESSION['permitir_configuracion'])) {
+            header("Location: index.php?controller=UsuarioController&method=perfil");
+            exit;
+        }
+
+        $usuario = $_SESSION['usuario'];
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $avatar = $_POST['foto_perfil'] ?? null;
+            if ($avatar) {
+                // Actualizamos solo el avatar, manteniendo los demás campos
+                $this->usuarioModel->actualizarPerfil(
+                    $usuario['id'],
+                    $usuario['nombre_usuario'],
+                    $usuario['email'],
+                    null,
+                    $avatar
+                );
+                $_SESSION['usuario'] = $this->usuarioModel->obtenerPorId($usuario['id']);
+            }
+
+            header("Location: index.php?controller=UsuarioController&method=configurarPerfil");
+            exit;
+        }
+
+        include("views/elegir_avatar.php");
+    }
+
 }
