@@ -1,5 +1,5 @@
 <?php
-// Intentar cargar PHPMailer desde diferentes ubicaciones
+
 $autoload_paths = [
     __DIR__ . '/../vendor/autoload.php',
     __DIR__ . '/../../vendor/autoload.php',
@@ -17,7 +17,6 @@ foreach ($autoload_paths as $path) {
 }
 
 if (!$autoload_loaded) {
-    // Fallback: cargar PHPMailer directamente
     require_once __DIR__ . '/../vendor/phpmailer/phpmailer/src/PHPMailer.php';
     require_once __DIR__ . '/../vendor/phpmailer/phpmailer/src/SMTP.php';
     require_once __DIR__ . '/../vendor/phpmailer/phpmailer/src/Exception.php';
@@ -157,7 +156,6 @@ class LoginController
                 }
             }
 
-            // Si no hay errores, procesamos el registro
             if (!$error) {
                 $foto_perfil = null;
                 if (!empty($_FILES["foto_perfil"]["name"])) {
@@ -188,14 +186,13 @@ class LoginController
 
 
                     $mail->isSMTP();
-                    $mail->Host       = 'smtp.gmail.com'; // Servidor SMTP
+                    $mail->Host       = 'smtp.gmail.com';
                     $mail->SMTPAuth   = true;
-                    $mail->Username   = 'aciertayaa@gmail.com'; // Tu correo Gmail
-                    $mail->Password   = 'egnq wplg anyu plah'; // Contraseña o App Password
+                    $mail->Username   = 'aciertayaa@gmail.com';
+                    $mail->Password   = 'egnq wplg anyu plah';
                     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                     $mail->Port       = 587;
 
-                    // Remitente y destinatario
                     $mail->setFrom('aciertayaa@gmail.com', 'AciertaYa');
                     $mail->addAddress($email, 'Destinatario');
 
@@ -239,7 +236,6 @@ class LoginController
                 );
 
                 if ($exito) {
-                    // Redirigir al método elegirAvatar con el nombre de usuario
                     header("Location: index.php?controller=LoginController&method=elegirAvatar&usuario=" . urlencode($nombre_usuario));
                     exit();
                 } else {
@@ -257,12 +253,10 @@ class LoginController
         $usuario = $_SESSION['usuario'] ?? null;
 
         if (!$usuario) {
-            // Si no hay usuario logueado, redirigir al login
             header("Location: index.php?controller=LoginController&method=inicioSesion");
             exit();
         }
 
-        // Pasamos los datos del usuario a la vista
         $nombre_usuario = $usuario['nombre_usuario'];
         include("views/elegir_avatar.php");
     }
@@ -284,7 +278,6 @@ class LoginController
             if ($foto_perfil) {
                 $this->usuarioModel->actualizarAvatar($nombre_usuario, $foto_perfil);
 
-                // Actualizamos la sesión para reflejar el nuevo avatar
                 $_SESSION['usuario']['foto_perfil'] = $foto_perfil;
             }
 
@@ -331,59 +324,6 @@ class LoginController
         }
         $usuario = $_SESSION["usuario"];
         include("views/homeEditor.php");
-    }
-
-    public function perfil()
-    {
-        $usuario = $_SESSION['usuario'];
-        include("views/perfil.php");
-    }
-
-    public function actualizarPerfil()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $usuarioSesion = $_SESSION['usuario'] ?? null;
-            if (!$usuarioSesion) {
-                header("Location: index.php?controller=LoginController&method=inicioSesion");
-                exit;
-            }
-
-            $id = $_POST['id'] ?? $usuarioSesion['id'];
-
-            $nombre_usuario = trim($_POST['nombre_usuario']);
-            $email = trim($_POST['email']);
-            $password = $_POST['password'] ?? null;
-            $repassword = $_POST['repassword'] ?? null;
-
-            $foto_perfil = $_FILES['foto_perfil']['name'] ?? null;
-            $ruta_avatar = null;
-
-            if ($foto_perfil) {
-                $uploadDir = "uploads/";
-                if (!file_exists($uploadDir)) mkdir($uploadDir, 0777, true);
-                $ruta_avatar = $uploadDir . basename($foto_perfil);
-                move_uploaded_file($_FILES['foto_perfil']['tmp_name'], $ruta_avatar);
-            }
-
-            if ($password && $password !== $repassword) {
-                $_SESSION['error'] = "Las contraseñas no coinciden.";
-                header("Location: index.php?controller=LoginController&method=perfil");
-                exit;
-            }
-
-            $this->usuarioModel->actualizarPerfil(
-                $id,
-                $nombre_usuario,
-                $email,
-                $password,
-                $ruta_avatar
-            );
-
-            $_SESSION['usuario'] = $this->usuarioModel->obtenerPorId($id);
-
-            header("Location: index.php?controller=LoginController&method=home");
-            exit;
-        }
     }
 
     public function logout()

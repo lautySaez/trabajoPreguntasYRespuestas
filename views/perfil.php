@@ -1,70 +1,53 @@
-<?php 
-include("views/partials/header.php"); 
+<?php include("views/partials/header.php"); ?>
 
-$usuario = $_SESSION["usuario"] ?? null;
+<link rel="stylesheet" href="public/css/perfil.css">
 
-if (!$usuario) {
+<?php
+if (session_status() === PHP_SESSION_NONE) session_start();
+
+if (isset($_SESSION["usuario"])) {
+    $usuario = $_SESSION["usuario"];
+} else {
     header("Location: index.php?controller=LoginController&method=inicioSesion");
     exit;
 }
 ?>
 
-<link rel="stylesheet" href="public/css/home.css">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<div class="perfil-container">
+    <h2>Mi Perfil</h2>
 
-<div class="home-container">
-        <div class="welcome-section">
-            <h2>Editar Perfil</h2>
+    <?php if (!empty($_SESSION['error'])): ?>
+        <div class="error"><?= htmlspecialchars($_SESSION['error']) ?></div>
+        <?php unset($_SESSION['error']); ?>
+    <?php endif; ?>
 
-<?php if (!empty($_SESSION['error'])): ?>
-    <div class="error-message" style="color: red; margin-bottom: 10px;">
-        <?= htmlspecialchars($_SESSION['error']) ?>
+    <div class="perfil-info">
+        <img src="<?= htmlspecialchars($usuario['foto_perfil'] ?: 'public/img/default_avatar.JPG') ?>" class="perfil-avatar" alt="Avatar">
+
+        <p><strong>Nombre de usuario:</strong> <?= htmlspecialchars($usuario['nombre_usuario']) ?></p>
+        <p><strong>Email:</strong> <?= htmlspecialchars($usuario['email']) ?></p>
+        <p><strong>Contraseña:</strong> ******</p>
+
+        <button id="abrirModal" class="boton-partida">Configurar perfil</button>
     </div>
-    <?php unset($_SESSION['error']);?>
-<?php endif; ?>
-
-            <form action="index.php?controller=LoginController&method=actualizarPerfil" method="POST" enctype="multipart/form-data" class="perfil-form">
-
-            <input type="hidden" name="id" value="<?= $usuario['id'] ?>">
-
-                <!-- Cambiar avatar -->
-                <div class="form-group full-width avatar-section">
-                    <a href="index.php?controller=LoginController&method=elegirAvatar">
-                        <img src="<?= htmlspecialchars($usuario['foto_perfil'] ?: 'public/img/default_avatar.JPG') ?>" 
-                            alt="Avatar Actual" 
-                            class="avatar-actual" 
-                            title="Hacé clic para cambiar tu avatar">
-                    </a>
-                </div>
-
-                <!-- Cambiar username -->
-                <div class="form-group full-width">
-                    <label for="nombre_usuario">Nombre de Usuario:</label>
-                    <input type="text" name="nombre_usuario" id="nombre_usuario" value="<?= htmlspecialchars($usuario['nombre_usuario']) ?>" required>
-                </div>
-
-                <!-- Cambiar email -->
-                <div class="form-group full-width">
-                    <label for="email">Email:</label>
-                    <input type="email" name="email" id="email" value="<?= htmlspecialchars($usuario['email']) ?>" required>
-                </div>
-
-                <!-- Cambiar pass -->
-                <div class="form-group full-width">
-                    <label for="password">Nueva Contraseña:</label>
-                    <input type="password" name="password" id="password" placeholder="Dejar vacío para no cambiar">
-                </div>
-
-                <div class="form-group full-width">
-                    <label for="repassword">Repetir Contraseña:</label>
-                    <input type="password" name="repassword" id="repassword" placeholder="Dejar vacío para no cambiar">
-                </div>
-
-                <div class="form-group full-width" style="text-align: center;">
-                    <button type="submit" class="boton-partida">Actualizar Perfil</button>
-                </div>
-            </form>
-        </div>
 </div>
+
+<div id="modalPassword" class="modal" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <button class="cerrar" id="cerrarModal" aria-label="Cerrar">&times;</button>
+        <h3 id="modalTitle">Confirmar contraseña</h3>
+        <p>Para editar tu perfil, ingresa tu contraseña actual:</p>
+
+        <form id="formConfirmar" action="index.php?controller=UsuarioController&method=confirmarPassword" method="POST">
+            <input type="password" name="password_actual" placeholder="Contraseña actual" required autocomplete="current-password">
+            <div style="margin-top:12px;">
+                <button type="submit" class="boton-partida">Continuar</button>
+                <button type="button" class="boton-secundario" id="cancelarModal">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="public/js/perfil.js" type="text/javascript"></script>
 
 <?php include("views/partials/footer.php"); ?>
