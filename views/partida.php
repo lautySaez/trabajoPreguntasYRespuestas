@@ -1,18 +1,25 @@
 <?php include("views/partials/header.php"); ?>
 
 <div class="partida-contenedor">
-    <!-- Pregunta -->
-    <h2><?= htmlspecialchars($preguntaActual["texto"]) ?></h2>
 
-    <!-- Respuestas en grid 2x2 -->
-    <div class="respuestas-grid">
-        <?php foreach ($preguntaActual["respuestas"] as $respuesta): ?>
-            <button type="button"><?= htmlspecialchars($respuesta["texto"]) ?></button>
-        <?php endforeach; ?>
-    </div>
+ <?php if (!empty($preguntaActual) && !empty($preguntaActual["respuestas"])): ?>
+    <h2><?= htmlspecialchars($preguntaActual["pregunta"]) ?></h2>
+
+<div class="respuestas-grid">
+    <?php foreach ($preguntaActual["respuestas"] as $respuesta): ?>
+        <form method="POST" action="index.php?controller=partida&method=responderPregunta" style="display:inline;">
+            <input type="hidden" name="respuesta" value="<?= $respuesta["id"] ?>">
+            <button type="submit"><?= htmlspecialchars($respuesta["texto"]) ?></button>
+        </form>
+    <?php endforeach; ?>
 </div>
 
-<!-- Btn terminar partida flotante -->
+<?php else: ?>
+    <p>No hay preguntas disponibles para esta categoría.</p>
+<?php endif; ?>
+
+</div>
+
 <a href="index.php?controller=partida&method=terminarPartida" class="boton-flotante">
     Terminar partida
 </a>

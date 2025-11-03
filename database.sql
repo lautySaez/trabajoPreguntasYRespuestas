@@ -708,3 +708,18 @@ INSERT INTO preguntas (categoria_id, pregunta, respuesta_1, respuesta_2, respues
 (6, '¿Cuál es el país con más premios Nobel?', 'Reino Unido', 'Estados Unidos', 'Alemania', 'Francia', 2),
 (6, '¿Qué país tiene la mayor superficie de bosques?', 'Brasil', 'Rusia', 'Canadá', 'Estados Unidos', 2),
 (6, '¿Cuál es el país que produce más energía renovable?', 'China', 'Estados Unidos', 'Brasil', 'Alemania', 1);
+
+-- Tabla de partidas (historial de juegos por usuario)
+CREATE TABLE partidas (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    usuario_id INT NOT NULL,
+    categoria_id INT NOT NULL,
+    puntaje INT DEFAULT 0,
+    cantidad_preguntas INT DEFAULT 4,
+    fecha_inicio DATETIME DEFAULT CURRENT_TIMESTAMP,
+    fecha_fin DATETIME NULL,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (categoria_id) REFERENCES categorias(id) ON DELETE CASCADE,
+    INDEX idx_usuario (usuario_id),
+    INDEX idx_categoria (categoria_id)
+);
