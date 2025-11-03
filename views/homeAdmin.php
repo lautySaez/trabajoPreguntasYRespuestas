@@ -3,6 +3,17 @@
 <link rel="stylesheet" href="public/css/homeAdmin.css">
 
 <?php
+if (session_status() === PHP_SESSION_NONE) session_start();
+
+if (isset($_SESSION["usuario"])) {
+    $usuario = $_SESSION["usuario"];
+} else {
+    header("Location: index.php?controller=LoginController&method=inicioSesion");
+    exit;
+}
+?>
+
+<?php
 require_once("helper/VerificacionDeRoles.php");
 verificarRol("Administrador");
 ?>
