@@ -5,11 +5,6 @@
  <?php if (!empty($preguntaActual) && !empty($preguntaActual["respuestas"])): ?>
     <h2><?= htmlspecialchars($preguntaActual["pregunta"]) ?></h2>
 
-    <!-- Temporizador -->
-    <div id="temporizador" class="badge bg-danger fs-5 mt-2">
-        Tiempo restante
-    </div>
-
     <div class="respuestas-grid">
         <?php foreach ($preguntaActual["respuestas"] as $respuesta): ?>
             <form method="POST" action="index.php?controller=partida&method=responderPregunta" style="display:inline;">
@@ -19,6 +14,10 @@
         <?php endforeach; ?>
     </div>
 
+    <!-- Temporizador -->
+    <div id="temporizador" class="badge bg-danger fs-5 mt-2">
+    </div>
+    
         <!-- boton reportar
         <form method="POST" action="index.php?controller=partida&method=reportarPregunta" style="position: absolute; bottom: 0; left: 0;">
             <input type="hidden" name="pregunta_id" value="<?= $preguntaActual["id"] ?>">
