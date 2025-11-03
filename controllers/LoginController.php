@@ -182,30 +182,34 @@ class LoginController
                 );
 
                 if ($exito) {
-                    $mail = new PHPMailer(true);
+                    // Intentar enviar el mail, pero sin romper si falla
+                    try {
+                        if (class_exists('PHPMailer\PHPMailer\PHPMailer')) {
+                            $mail = new PHPMailer(true);
+                            $mail->isSMTP();
+                            $mail->Host       = 'smtp.gmail.com';
+                            $mail->SMTPAuth   = true;
+                            $mail->Username   = 'aciertayaa@gmail.com';
+                            $mail->Password   = 'egnq wplg anyu plah';
+                            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                            $mail->Port       = 587;
 
+                            $mail->setFrom('aciertayaa@gmail.com', 'AciertaYa');
+                            $mail->addAddress($email, $nombre_usuario);
 
-                    $mail->isSMTP();
-                    $mail->Host       = 'smtp.gmail.com';
-                    $mail->SMTPAuth   = true;
-                    $mail->Username   = 'aciertayaa@gmail.com';
-                    $mail->Password   = 'egnq wplg anyu plah';
-                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                    $mail->Port       = 587;
+                            $mail->isHTML(true);
+                            $mail->Subject = 'Bienvenido a AciertaYaa';
+                            $mail->Body    = '<h1>Bienvenido a AciertaYaa!</h1><p>Por favor, ingresá el siguiente código para confirmar tu registro: <strong>' . $token_activacion . '</strong></p>';
 
-                    $mail->setFrom('aciertayaa@gmail.com', 'AciertaYa');
-                    $mail->addAddress($email, 'Destinatario');
+                            $mail->send();
+                        }
+                    } catch (Exception $e) {
+                        error_log("Error al enviar email: " . $e->getMessage());
+                    }
 
-                    // Contenido
-                    $mail->isHTML(true);
-                    $mail->Subject = 'Bienvenido a AciertaYaa';
-                    $mail->Body    = '<h1>Bienvenido a AciertaYaa!</h1><p>por favor ingrese el codigo que se enviamos para confirmar el registro: <strong>' . $token_activacion . '</strong></p>';
-
-                    $mail->send();
-
-                    $mensaje = "Usuario registrado correctamente. Ahora puedes iniciar sesión.";
-                    header("Location: index.php?controller=login&method=inicioSesion");
-                    exit();
+                    // Mostrar página de éxito
+                    include("views/registroExitoso.php");
+                    return;
                 } else {
                     $error = "El usuario o el email ya existen.";
                 }
@@ -214,9 +218,9 @@ class LoginController
             include("views/registro.php");
             return;
         }
+
         include("views/registro.php");
     }
-
 
     public function validarRegistrarUsuario()
     {
