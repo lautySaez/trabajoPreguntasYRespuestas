@@ -22,6 +22,8 @@ $usuario = $_SESSION["usuario"] ?? null;
             <h2>¡Bienvenido de vuelta!</h2>
             <p>¿Estás listo para poner a prueba tus conocimientos?</p>
             
+            <a href="index.php?controller=partida&method=mostrarModo" class="boton-partida">Iniciar una Partida</a>
+
             <!-- Sección del mapa de contrincantes -->
             <div class="map-section">
                 <h3>Encuentra tu contrincante</h3>
@@ -43,8 +45,6 @@ $usuario = $_SESSION["usuario"] ?? null;
                     </div>
                 </div>
             </div>
-            
-            <a href="index.php?controller=partida&method=mostrarModo" class="boton-partida">Iniciar una Partida</a>
         </div>
     <?php else: ?>
         <div class="error-section">

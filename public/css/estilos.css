@@ -251,11 +251,11 @@ h2 {
 }
 
 form {
-    /*background: #ffffff;*/
+    /*background: none;*/
     color: #222;
     padding: 40px 50px;
     border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    /*box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);*/
     width: 100%;
     max-width: 950px;
 }
@@ -640,4 +640,27 @@ a:hover {
 
 .modal-buttons button:hover {
     background-color: #357ABD;
+}
+
+/* Botón flotante Reportar pregunta */
+.boton-reportar {
+    position: fixed;
+    bottom: 1em;
+    left: 1em;
+    background-color: #e94a4a;
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    text-decoration: none;
+    text-align: center;
+    transition: 0.3s;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background: #e94a4a;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }

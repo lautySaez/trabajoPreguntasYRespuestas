@@ -90,8 +90,7 @@ class PartidaController
         include("views/partida.php");
     }
 
-    public function responderPregunta()
-    {
+    public function responderPregunta() {
         $respuestaSeleccionada = $_POST["respuesta"] ?? null;
         $indice = $_SESSION["pregunta_actual"] ?? 0;
         $preguntas = $_SESSION["preguntas"] ?? [];
@@ -111,6 +110,31 @@ class PartidaController
             $_SESSION["puntaje"] -= 1;
         }
 
+        $_SESSION["pregunta_actual"]++;
+
+        if ($_SESSION["pregunta_actual"] >= count($preguntas)) {
+            // Fin de partida
+            $this->partidaModel->actualizarPuntaje($partidaId, $_SESSION["puntaje"]);
+            header("Location: index.php?controller=partida&method=terminarPartida");
+            exit();
+        } else {
+            $preguntaActual = $preguntas[$_SESSION["pregunta_actual"]];
+            include("views/partida.php");
+        }
+    }
+
+    public function siguientePregunta() {
+        // Verificar sesion iniciada y preguntas cargadas
+        $preguntas = $_SESSION["preguntas"] ?? [];
+        $indice = $_SESSION["pregunta_actual"] ?? 0;
+        $partidaId = $_SESSION["partida_id"] ?? null;
+
+        if (!$preguntas || $partidaId === null) {
+            header("Location: index.php?controller=partida&method=mostrarRuleta");
+            exit();
+        }
+
+        // Avanzar a la sgte pregunta
         $_SESSION["pregunta_actual"]++;
 
         if ($_SESSION["pregunta_actual"] >= count($preguntas)) {
