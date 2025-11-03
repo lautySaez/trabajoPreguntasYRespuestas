@@ -1,0 +1,23 @@
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  script:
+    - echo "Preparando proyecto..."
+  tags:
+    - shell
+  except:
+    - tags
+
+deploy:
+  stage: deploy
+  script:
+    - echo "Desplegando proyecto desde la rama $CI_COMMIT_BRANCH..."
+    - rsync -avz --delete ./ $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
+  environment:
+    name: $CI_COMMIT_BRANCH
+    url: http://$DEPLOY_HOST
+  only:
+    - branches
