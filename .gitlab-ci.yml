@@ -1,18 +1,23 @@
 stages:
+  - build
   - deploy
 
-deploy_to_infinityfree:
-  stage: deploy
-  image: alpine:latest
-  before_script:
-    - apk add --no-cache lftp
+build:
+  stage: build
   script:
-    - echo "Iniciando deploy a InfinityFree..."
-    - lftp -e "
-      set ftp:ssl-allow no;
-      open -u $FTP_USER,$FTP_PASS $FTP_HOST;
-      mirror -R ./ /htdocs/ --exclude .git* --exclude .gitlab-ci.yml;
-      bye
-      "
+    - echo "Preparando proyecto..."
+  tags:
+    - shell
+  except:
+    - tags
+
+deploy:
+  stage: deploy
+  script:
+    - echo "Desplegando proyecto desde la rama $CI_COMMIT_BRANCH..."
+    - rsync -avz --delete ./ $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
+  environment:
+    name: $CI_COMMIT_BRANCH
+    url: http://$DEPLOY_HOST
   only:
     - branches
