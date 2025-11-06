@@ -159,4 +159,61 @@ class PartidaController
         unset($_SESSION["partida_id"]);
         unset($_SESSION["puntaje"]);
     }
+
+    // Dentro de PartidaModel.php
+    public function obtenerCategorias() {
+        $stmt = $this->conexion->query("SELECT * FROM categorias ORDER BY nombre");
+        return $stmt->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function obtenerPreguntasPorCategoria($categoria_id = null) {
+        if ($categoria_id) {
+            $stmt = $this->conexion->prepare("SELECT * FROM preguntas WHERE categoria_id = ? ORDER BY id DESC");
+            $stmt->bind_param("i", $categoria_id);
+            $stmt->execute();
+            $resultado = $stmt->get_result();
+        } else {
+            $resultado = $this->conexion->query("SELECT * FROM preguntas ORDER BY id DESC");
+        }
+
+        $preguntas = [];
+        while ($pregunta = $resultado->fetch_assoc()) {
+            $pregunta["respuestas"] = [
+                ["id" => 1, "texto" => $pregunta["respuesta_1"]],
+                ["id" => 2, "texto" => $pregunta["respuesta_2"]],
+                ["id" => 3, "texto" => $pregunta["respuesta_3"]],
+                ["id" => 4, "texto" => $pregunta["respuesta_4"]]
+            ];
+            $preguntas[] = $pregunta;
+        }
+
+        return $preguntas;
+    }
+
+    public function crearPregunta($categoria_id, $texto, $r1, $r2, $r3, $r4, $correcta) {
+        $stmt = $this->conexion->prepare("
+        INSERT INTO preguntas (categoria_id, pregunta, respuesta_1, respuesta_2, respuesta_3, respuesta_4, respuesta_correcta)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    ");
+        $stmt->bind_param("isssssi", $categoria_id, $texto, $r1, $r2, $r3, $r4, $correcta);
+        $stmt->execute();
+        return $this->conexion->insert_id;
+    }
+
+    public function actualizarPregunta($id, $categoria_id, $texto, $r1, $r2, $r3, $r4, $correcta) {
+        $stmt = $this->conexion->prepare("
+        UPDATE preguntas
+        SET categoria_id=?, pregunta=?, respuesta_1=?, respuesta_2=?, respuesta_3=?, respuesta_4=?, respuesta_correcta=?
+        WHERE id=?
+    ");
+        $stmt->bind_param("isssssii", $categoria_id, $texto, $r1, $r2, $r3, $r4, $correcta, $id);
+        $stmt->execute();
+    }
+
+    public function borrarPregunta($id) {
+        $stmt = $this->conexion->prepare("DELETE FROM preguntas WHERE id=?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+    }
+
 }

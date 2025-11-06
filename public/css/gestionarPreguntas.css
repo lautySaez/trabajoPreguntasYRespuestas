@@ -1,0 +1,154 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f6fa;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #2f3640;
+    margin-bottom: 25px;
+}
+
+.filtros-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 15px;
+}
+
+.filtro-form,
+.buscar-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.filtro-form label,
+.buscar-form label {
+    font-weight: bold;
+    color: #2f3640;
+}
+
+input[type="number"],
+select {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 0.95em;
+}
+
+input[type="number"]:focus,
+select:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+}
+
+.buscar-form button,
+.btn-agregar,
+.btn-editar,
+.btn-borrar {
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 6px 12px;
+    font-size: 0.9em;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.btn-agregar {
+    background-color: #27ae60;
+    color: #fff;
+    margin-bottom: 15px;
+    display: inline-block;
+}
+
+.btn-agregar:hover {
+    background-color: #219150;
+}
+
+.buscar-form button {
+    background-color: #2980b9;
+    color: #fff;
+    border: none;
+}
+
+.buscar-form button:hover {
+    background-color: #1c5980;
+}
+
+.btn-editar {
+    background-color: #3498db;
+    color: #fff;
+    padding: 4px 8px;
+}
+
+.btn-editar:hover {
+    background-color: #217dbb;
+}
+
+.btn-borrar {
+    background-color: #e74c3c;
+    color: #fff;
+    padding: 4px 8px;
+}
+
+.btn-borrar:hover {
+    background-color: #c0392b;
+}
+
+.tabla-preguntas {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+}
+
+.tabla-preguntas th,
+.tabla-preguntas td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    vertical-align: top;
+    text-align: left;
+    font-size: 0.95em;
+}
+
+.tabla-preguntas th {
+    background-color: #f0f0f0;
+    font-weight: 600;
+}
+
+.tabla-preguntas tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.tabla-preguntas tbody tr:hover {
+    background-color: #f1faff;
+}
+
+.tabla-preguntas td[colspan="5"] {
+    text-align: center;
+    font-style: italic;
+    color: #777;
+}
+
+@media (max-width: 768px) {
+    .filtros-container {
+        flex-direction: column;
+    }
+
+    .tabla-preguntas th,
+    .tabla-preguntas td {
+        font-size: 0.85em;
+        padding: 8px 10px;
+    }
+
+    .btn-agregar {
+        width: 100%;
+        text-align: center;
+    }
+}
