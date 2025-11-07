@@ -1,4 +1,4 @@
-/* document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function() {
     var modal = document.getElementById("modalAccion");
     var tipoAccion = document.getElementById("tipoAccion");
     var preguntaId = document.getElementById("preguntaId");
@@ -55,4 +55,4 @@
     window.onclick = function(e) {
         if (e.target === modal) modal.style.display = "none";
     };
-}); */
+});

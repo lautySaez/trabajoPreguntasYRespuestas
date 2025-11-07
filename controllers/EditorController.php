@@ -48,7 +48,7 @@ class EditorController {
         include(__DIR__ . "/../views/crearPregunta.php");
     }
 
- /*   public function editarPregunta() {
+    public function editarPregunta() {
         if ($_POST) {
             $id = $_POST['id'];
             $motivo = $_POST['motivo'];
@@ -61,14 +61,24 @@ class EditorController {
                 $id,
                 $datosPregunta['categoria_id'] ?? $pregunta_vieja['categoria_id'],
                 $datosPregunta['pregunta'] ?? $pregunta_vieja['pregunta'],
-                $datosPregunta['r1'] ?? $pregunta_vieja['respuesta_1'],
-                $datosPregunta['r2'] ?? $pregunta_vieja['respuesta_2'],
-                $datosPregunta['r3'] ?? $pregunta_vieja['respuesta_3'],
-                $datosPregunta['r4'] ?? $pregunta_vieja['respuesta_4'],
-                $datosPregunta['correcta'] ?? $pregunta_vieja['respuesta_correcta']
+                $datosPregunta['r1'] ?? $pregunta_vieja['r1'] ?? $pregunta_vieja['respuesta_1'],
+                $datosPregunta['r2'] ?? $pregunta_vieja['r2'] ?? $pregunta_vieja['respuesta_2'],
+                $datosPregunta['r3'] ?? $pregunta_vieja['r3'] ?? $pregunta_vieja['respuesta_3'],
+                $datosPregunta['r4'] ?? $pregunta_vieja['r4'] ?? $pregunta_vieja['respuesta_4'],
+                $datosPregunta['correcta'] ?? $pregunta_vieja['correcta'] ?? $pregunta_vieja['respuesta_correcta']
             );
 
-            $this->model->registrarInforme($id, 'edicion', $motivo, $pregunta_vieja);
+            $pregunta_para_informe = [
+                'pregunta' => $datosPregunta['pregunta'] ?? $pregunta_vieja['pregunta'],
+                'r1' => $datosPregunta['r1'] ?? $pregunta_vieja['r1'] ?? $pregunta_vieja['respuesta_1'],
+                'r2' => $datosPregunta['r2'] ?? $pregunta_vieja['r2'] ?? $pregunta_vieja['respuesta_2'],
+                'r3' => $datosPregunta['r3'] ?? $pregunta_vieja['r3'] ?? $pregunta_vieja['respuesta_3'],
+                'r4' => $datosPregunta['r4'] ?? $pregunta_vieja['r4'] ?? $pregunta_vieja['respuesta_4'],
+                'correcta' => $datosPregunta['correcta'] ?? $pregunta_vieja['correcta'] ?? $pregunta_vieja['respuesta_correcta'],
+                'categoria_id' => $datosPregunta['categoria_id'] ?? $pregunta_vieja['categoria_id']
+            ];
+
+            $this->model->registrarInforme($id, 'Edición', $motivo, $pregunta_para_informe);
 
             header("Location: index.php?controller=editor&method=gestionarPreguntas");
             exit();
@@ -78,11 +88,26 @@ class EditorController {
     public function borrarPregunta() {
         $id = $_POST['id'] ?? null;
         $motivo = $_POST['motivo'] ?? null;
+
         if ($id && $motivo) {
             $pregunta = $this->model->obtenerPreguntaPorId($id);
-            $this->model->registrarInforme($id, 'eliminacion', $motivo, $pregunta);
+
+            $pregunta_para_informe = [
+                'pregunta' => $pregunta['pregunta'] ?? '',
+                'r1' => $pregunta['r1'] ?? $pregunta['respuesta_1'] ?? '',
+                'r2' => $pregunta['r2'] ?? $pregunta['respuesta_2'] ?? '',
+                'r3' => $pregunta['r3'] ?? $pregunta['respuesta_3'] ?? '',
+                'r4' => $pregunta['r4'] ?? $pregunta['respuesta_4'] ?? '',
+                'correcta' => $pregunta['correcta'] ?? $pregunta['respuesta_correcta'] ?? 0,
+                'categoria_id' => $pregunta['categoria_id'] ?? 0
+            ];
+
+            $this->model->registrarInforme($id, 'Eliminación', $motivo, $pregunta_para_informe);
+
             $this->model->borrarPregunta($id);
         }
+
         header("Location: index.php?controller=editor&method=gestionarPreguntas");
-    } */
+    }
+
 }

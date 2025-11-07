@@ -22,7 +22,6 @@ class EditorModel {
         $stmt->execute();
         $resultado = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
-        // Agregar array de respuestas
         foreach ($resultado as &$pregunta) {
             $pregunta["respuestas"] = [
                 ["id" => 1, "texto" => $pregunta["respuesta_1"]],
@@ -79,26 +78,30 @@ class EditorModel {
         $stmt->execute();
     }
 
-   /* public function registrarInforme($pregunta_id, $tipo_accion, $motivo, $pregunta_data = null) {
+    public function registrarInforme($pregunta_id, $tipo_accion, $motivo, $pregunta_data = null) {
+
         $stmt = $this->conexion->prepare("
-        INSERT INTO informes_acciones (pregunta_id, tipo_accion, motivo, pregunta_texto, respuesta_1, respuesta_2, respuesta_3, respuesta_4, respuesta_correcta, categoria_id)
+        INSERT INTO informepreguntas 
+        (pregunta_id, tipo_accion, motivo, pregunta, r1, r2, r3, r4, correcta, categoria_id)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ");
+
         $stmt->bind_param(
             "issssssiii",
             $pregunta_id,
             $tipo_accion,
             $motivo,
             $pregunta_data['pregunta'],
-            $pregunta_data['respuesta_1'],
-            $pregunta_data['respuesta_2'],
-            $pregunta_data['respuesta_3'],
-            $pregunta_data['respuesta_4'],
-            $pregunta_data['respuesta_correcta'],
+            $pregunta_data['r1'],
+            $pregunta_data['r2'],
+            $pregunta_data['r3'],
+            $pregunta_data['r4'],
+            $pregunta_data['correcta'],
             $pregunta_data['categoria_id']
         );
+
         $stmt->execute();
-    } */
+    }
 
 }
 

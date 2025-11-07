@@ -50,7 +50,6 @@ class UsuarioController
         }
 
         if (password_verify($password, $usuarioBD['password'])) {
-            // password correcto -> permitir edición y redirigir
             $_SESSION['permitir_configuracion'] = true;
             header("Location: index.php?controller=UsuarioController&method=configurarPerfil");
             exit;
@@ -120,7 +119,6 @@ class UsuarioController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $avatar = $_POST['foto_perfil'] ?? null;
             if ($avatar) {
-                // Actualizamos solo el avatar, manteniendo los demás campos
                 $this->usuarioModel->actualizarPerfil(
                     $usuario['id'],
                     $usuario['nombre_usuario'],

@@ -74,7 +74,6 @@ h2 {
     color: #ccc;
 }
 
-/* Animación suave al cargar los avatares */
 .avatar {
     opacity: 0;
     animation: fadeIn 0.6s ease forwards;

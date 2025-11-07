@@ -144,7 +144,6 @@ class LoginController
             $estado_registro = "Inactivo";
             $token_activacion = random_int(100000, 999999);
 
-            // Validaciones
             if ($password !== $repassword) {
                 $error = "Las contraseñas no coinciden.";
             } elseif (!preg_match("/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,12}$/", $password)) {
@@ -182,7 +181,6 @@ class LoginController
                 );
 
                 if ($exito) {
-                    // Intentar enviar el mail, pero sin romper si falla
                     try {
                         if (class_exists('PHPMailer\PHPMailer\PHPMailer')) {
                             $mail = new PHPMailer(true);
@@ -207,7 +205,6 @@ class LoginController
                         error_log("Error al enviar email: " . $e->getMessage());
                     }
 
-                    // Mostrar página de éxito
                     include("views/registroExitoso.php");
                     return;
                 } else {

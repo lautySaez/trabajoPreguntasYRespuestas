@@ -83,7 +83,6 @@ $buscar_id = isset($_GET['buscar_id']) ? $_GET['buscar_id'] : '';
     </tbody>
 </table>
 
-<!-- Modal de informe -->
 <div id="modalAccion" class="modal" style="display:none;">
     <div class="modal-content">
         <h3 id="modalTitulo">Informe de acción</h3>

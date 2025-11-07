@@ -13,7 +13,6 @@ class PartidaController
         }
     }
 
-    // Metodos previo a iniciar partida
     public function mostrarModo()
     {
         include("views/modoDeJuego.php");
@@ -41,51 +40,42 @@ class PartidaController
         include("views/ruleta.php");
     }
 
-    // Metodos de la partida
     public function iniciarPartida()
     {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
 
-        // Verificar que el usuario esté logueado
         if (!isset($_SESSION["usuario"]["id"])) {
             header("Location: index.php?controller=LoginController&method=inicioSesion");
             exit();
         }
 
-        // Obtener categoría desde la ruleta
         $categoria = $_GET["categoria"] ?? null;
         if (!$categoria) {
             header("Location: index.php?controller=partida&method=mostrarRuleta");
             exit();
         }
 
-        // Obtener el ID de la categoría desde la tabla categorias
         $categoria_id = $this->partidaModel->getCategoriaIdPorNombre($categoria);
         if (!$categoria_id) {
-            // Si la categoría no existe, volvemos a la ruleta
             header("Location: index.php?controller=partida&method=mostrarRuleta");
             exit();
         }
 
-        // Registrar la partida con el ID correcto
         $usuarioId = $_SESSION["usuario"]["id"];
         $partidaId = $this->partidaModel->registrarPartida($usuarioId, $categoria_id);
         $_SESSION["partida_id"] = $partidaId;
         $_SESSION["puntaje"] = 0;
 
-        // Obtener 4 preguntas aleatorias para la categoría
         $preguntas = $this->partidaModel->obtenerPreguntasPorCategoriaId($categoria_id);
         if (empty($preguntas)) {
-            // No hay preguntas disponibles
             header("Location: index.php?controller=partida&method=mostrarRuleta");
             exit();
         }
         $_SESSION["preguntas"] = $preguntas;
         $_SESSION["pregunta_actual"] = 0;
 
-        // Cargar la primera pregunta
         $preguntaActual = $preguntas[0];
         include("views/partida.php");
     }
@@ -124,7 +114,6 @@ class PartidaController
     }
 
     public function siguientePregunta() {
-        // Verificar sesion iniciada y preguntas cargadas
         $preguntas = $_SESSION["preguntas"] ?? [];
         $indice = $_SESSION["pregunta_actual"] ?? 0;
         $partidaId = $_SESSION["partida_id"] ?? null;
@@ -134,7 +123,6 @@ class PartidaController
             exit();
         }
 
-        // Avanzar a la sgte pregunta
         $_SESSION["pregunta_actual"]++;
 
         if ($_SESSION["pregunta_actual"] >= count($preguntas)) {
@@ -153,14 +141,12 @@ class PartidaController
         $puntaje = $_SESSION["puntaje"] ?? 0;
         include("views/resultadoPartida.php");
 
-        // Limpiar sesión de la partida
         unset($_SESSION["preguntas"]);
         unset($_SESSION["pregunta_actual"]);
         unset($_SESSION["partida_id"]);
         unset($_SESSION["puntaje"]);
     }
 
-    // Dentro de PartidaModel.php
     public function obtenerCategorias() {
         $stmt = $this->conexion->query("SELECT * FROM categorias ORDER BY nombre");
         return $stmt->fetch_all(MYSQLI_ASSOC);
