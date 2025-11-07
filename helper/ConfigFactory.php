@@ -28,8 +28,6 @@ class ConfigFactory
         );
 
         $usuarioModel = new Usuario($this->conexion->getConexion());
-        $partidaModel = new PartidaModel($this->conexion->getConexion());
-        $editorModel = new EditorModel($this->conexion->getConexion());
 
         $this->objetos["LoginController"] = new LoginController($usuarioModel);
         $this->objetos["UsuarioController"] = new UsuarioController($usuarioModel);

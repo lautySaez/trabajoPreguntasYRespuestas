@@ -78,5 +78,27 @@ class EditorModel {
         $stmt->bind_param("i", $id);
         $stmt->execute();
     }
+
+   /* public function registrarInforme($pregunta_id, $tipo_accion, $motivo, $pregunta_data = null) {
+        $stmt = $this->conexion->prepare("
+        INSERT INTO informes_acciones (pregunta_id, tipo_accion, motivo, pregunta_texto, respuesta_1, respuesta_2, respuesta_3, respuesta_4, respuesta_correcta, categoria_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ");
+        $stmt->bind_param(
+            "issssssiii",
+            $pregunta_id,
+            $tipo_accion,
+            $motivo,
+            $pregunta_data['pregunta'],
+            $pregunta_data['respuesta_1'],
+            $pregunta_data['respuesta_2'],
+            $pregunta_data['respuesta_3'],
+            $pregunta_data['respuesta_4'],
+            $pregunta_data['respuesta_correcta'],
+            $pregunta_data['categoria_id']
+        );
+        $stmt->execute();
+    } */
+
 }
 
