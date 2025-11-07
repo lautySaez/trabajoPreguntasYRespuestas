@@ -14,7 +14,6 @@
         <?php endforeach; ?>
     </div>
 
-    <!-- Temporizador -->
     <div id="temporizador" class="badge bg-danger fs-5 mt-2">
     </div>
     

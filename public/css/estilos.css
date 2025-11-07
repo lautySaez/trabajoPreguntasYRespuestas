@@ -49,7 +49,6 @@ header {
     white-space: nowrap;
 }
 
-/* Estilos del usuario */
 .user-section {
     position: relative;
     display: flex;
@@ -132,7 +131,6 @@ header {
     transform: rotate(180deg);
 }
 
-/* Menú desplegable */
 .user-dropdown {
     position: absolute;
     top: 100%;
@@ -185,7 +183,6 @@ header {
     font-weight: 500;
 }
 
-/* Responsive para header */
 @media (max-width: 1024px) {
     .logo-section h1 {
         font-size: 1.4rem;
@@ -251,11 +248,9 @@ h2 {
 }
 
 form {
-    /*background: none;*/
     color: #222;
     padding: 40px 50px;
     border-radius: 12px;
-    /*box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);*/
     width: 100%;
     max-width: 950px;
 }
@@ -351,7 +346,6 @@ a:hover {
     text-decoration: underline;
 }
 
-/* Footer compacto */
 .compact-footer {
     background: linear-gradient(135deg, #3B82F6 0%, #2563eb 100%);
     color: white;
@@ -426,7 +420,6 @@ a:hover {
     font-size: 0.9rem;
 }
 
-/* Responsive para footer compacto */
 @media (max-width: 768px) {
     .footer-container {
         padding: 15px 20px;
@@ -503,7 +496,6 @@ a:hover {
     }
 }
 
-/* Botones Partida */
 .boton-partida {
     background-color: #4a90e2;
     color: white;
@@ -528,7 +520,6 @@ a:hover {
     right: 4em;
 }
 
-/* Contenedor de la partida */
 .partida-contenedor {
     display: flex;
     flex-direction: column;
@@ -540,22 +531,20 @@ a:hover {
     text-align: center;
 }
 
-/* Pregunta */
 .partida-contenedor h2 {
     font-size: 1.8rem;
     color: #fff;
 }
 
-/* Grid de respuestas */
+
 .respuestas-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 columnas */
-    gap: 20px; /* espacio entre botones */
-    max-width: 500px; /* opcional: para que no sea demasiado ancho */
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 500px;
     width: 100%;
 }
 
-/* Botones de respuesta */
 .respuestas-grid button {
     background-color: #4a90e2;
     color: white;
@@ -572,7 +561,6 @@ a:hover {
     background-color: #357ABD;
 }
 
-/* Botón flotante Terminar partida */
 .boton-flotante {
     position: fixed;
     bottom: 2em;
@@ -642,7 +630,6 @@ a:hover {
     background-color: #357ABD;
 }
 
-/* Botón flotante Reportar pregunta */
 .boton-reportar {
     position: fixed;
     bottom: 1em;
