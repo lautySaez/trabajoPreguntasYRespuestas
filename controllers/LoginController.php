@@ -32,7 +32,10 @@ class LoginController
 
     public function __construct($usuarioModel)
     {
+        require_once("models/PartidaModel.php");
         $this->usuarioModel = $usuarioModel;
+        $this->partidaModel = new PartidaModel();
+
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -290,14 +293,47 @@ class LoginController
         }
     }
 
-    public function home()
-    {
+    public function home() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
         if (!isset($_SESSION["usuario"])) {
             include("views/inicioSesion.php");
             return;
         }
+
         $usuario = $_SESSION["usuario"];
-        include("views/home.php");
+        $ultimaPartida = null;
+
+        // Normalizar rol a minúsculas
+        $rol = strtolower($usuario['rol'] ?? '');
+
+        // Si es jugador, obtener su última partida
+        if ($rol === 'jugador') {
+            $ultimasPartidas = $this->partidaModel->getUltimasPartidas($usuario['id'], 5);
+        }
+
+        $datos = [
+            'usuario' => $usuario,
+            'ultimasPartidas' => $ultimasPartidas
+        ];
+
+        extract($datos);
+        switch ($rol) {
+            case 'jugador':
+                include("views/home.php");
+                break;
+            case 'editor':
+                include("views/home_editor.php");
+                break;
+            case 'admin':
+                include("views/home_admin.php");
+                break;
+            default:
+                include("views/inicioSesion.php");
+                break;
+        }
     }
 
     public function homeAdmin()

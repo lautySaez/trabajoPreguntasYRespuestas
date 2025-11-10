@@ -59,4 +59,24 @@ class PartidaModel {
         $stmt->bind_param("ii", $puntaje, $partidaId);
         $stmt->execute();
     }
+
+    public function getUltimasPartidas($usuarioId, $limite = 5) {
+        $stmt = $this->conexion->prepare("
+            SELECT fecha_inicio, puntaje 
+            FROM partidas 
+            WHERE usuario_id = ? 
+            ORDER BY fecha_inicio DESC 
+            LIMIT ?
+        ");
+        $stmt->bind_param("ii", $usuarioId, $limite);
+        $stmt->execute();
+        $resultado = $stmt->get_result();
+
+        $partidas = [];
+        while ($row = $resultado->fetch_assoc()) {
+            $partidas[] = $row;
+        }
+
+        return $partidas; // devuelve array vacío si no hay resultados
+    }
 }
