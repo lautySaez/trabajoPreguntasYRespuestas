@@ -1,12 +1,13 @@
 <?php include("views/partials/header.php"); ?>
 
+    <link rel="stylesheet" href="public/css/homeEditor.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
 <?php
 $usuario = $_SESSION["usuario"] ?? null;
 require_once("helper/VerificacionDeRoles.php");
 verificarRol("Editor");
 ?>
-
-<link rel="stylesheet" href="public/css/homeEditor.css">
 
 <div class="editor-dashboard">
     <?php if ($usuario && $usuario["rol"] === "Editor"): ?>

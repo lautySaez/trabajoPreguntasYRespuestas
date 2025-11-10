@@ -10,7 +10,6 @@ class Usuario
 
     public function registrarUsuario($nombre, $fecha_nacimiento, $sexo, $pais, $ciudad, $email, $password, $nombre_usuario, $foto_perfil = null, $estado_registro = "Inactivo", $token_activacion)
     {
-        // Revisar si ya existe email o usuario
         $query = "SELECT * FROM usuarios WHERE email = ? OR nombre_usuario = ?";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("ss", $email, $nombre_usuario);
@@ -22,7 +21,7 @@ class Usuario
         }
 
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-        $rol = "jugador"; // por defecto todos los usuarios son jugadores
+        $rol = "jugador";
 
         $query = "INSERT INTO usuarios (nombre, fecha_nacimiento, sexo, pais, ciudad, email, password, nombre_usuario, rol, foto_perfil, estado_registro, token_verificacion)
                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -141,7 +140,7 @@ class Usuario
     $conexion = new MyConexion("localhost", "root", "", "preguntas_respuestas");
     $conn = $conexion->getConexion();
 
-    $sql = "SELECT foto_perfil, nombre_usuario, email, estado_registro FROM usuarios";
+    $sql = "SELECT foto_perfil, nombre_usuario, email, rol, estado_registro FROM usuarios";
     $resultado = $conn->query($sql);
 
     if (!$resultado) {

@@ -53,8 +53,8 @@ VALUES
 CREATE TABLE categorias (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(50) NOT NULL UNIQUE,
-    color VARCHAR(7) DEFAULT '#FFFFFF', -- Color hexadecimal para la UI
-    icono VARCHAR(50) DEFAULT '❓', -- Emoji o clase de icono
+    color VARCHAR(7) DEFAULT '#FFFFFF',
+    icono VARCHAR(50) DEFAULT '❓',
     descripcion TEXT,
     activa BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -68,21 +68,20 @@ INSERT INTO categorias (nombre, color, icono, descripcion) VALUES
 ('Arte', '#9C27B0', '🎨', 'Pintura, escultura, literatura y bellas artes'),
 ('Geografía', '#2196F3', '🌍', 'Países, capitales, ríos, montañas y mapas');
 
--- Tabla principal de preguntas
 CREATE TABLE preguntas (
     id INT PRIMARY KEY AUTO_INCREMENT,
     categoria_id INT NOT NULL,
     pregunta TEXT NOT NULL,
-    respuesta_1 TEXT NOT NULL, -- Primera opción
-    respuesta_2 TEXT NOT NULL, -- Segunda opción  
-    respuesta_3 TEXT NOT NULL, -- Tercera opción
-    respuesta_4 TEXT NOT NULL, -- Cuarta opción
-    respuesta_correcta TINYINT NOT NULL CHECK (respuesta_correcta BETWEEN 1 AND 4), -- Cuál es la correcta (1,2,3,4)
-    veces_mostrada INT DEFAULT 0, -- Cuántas veces se mostró la pregunta
-    veces_respondida INT DEFAULT 0, -- Cuántas veces fue respondida (puede ser menor si abandonan)
-    veces_correcta INT DEFAULT 0, -- Cuántas veces se respondió correctamente
-    veces_incorrecta INT DEFAULT 0, -- Cuántas veces se respondió mal
-    porcentaje_acierto DECIMAL(5,2) DEFAULT 0.00, -- % de aciertos
+    respuesta_1 TEXT NOT NULL,
+    respuesta_2 TEXT NOT NULL,
+    respuesta_3 TEXT NOT NULL,
+    respuesta_4 TEXT NOT NULL,
+    respuesta_correcta TINYINT NOT NULL CHECK (respuesta_correcta BETWEEN 1 AND 4),
+    veces_mostrada INT DEFAULT 0,
+    veces_respondida INT DEFAULT 0,
+    veces_correcta INT DEFAULT 0,
+    veces_incorrecta INT DEFAULT 0,
+    porcentaje_acierto DECIMAL(5,2) DEFAULT 0.00,
     nivel_dificultad ENUM('Fácil', 'Medio', 'Difícil') DEFAULT 'Medio',
     activa BOOLEAN DEFAULT TRUE,
     creada_por VARCHAR(100) DEFAULT 'Sistema',
@@ -709,7 +708,6 @@ INSERT INTO preguntas (categoria_id, pregunta, respuesta_1, respuesta_2, respues
 (6, '¿Qué país tiene la mayor superficie de bosques?', 'Brasil', 'Rusia', 'Canadá', 'Estados Unidos', 2),
 (6, '¿Cuál es el país que produce más energía renovable?', 'China', 'Estados Unidos', 'Brasil', 'Alemania', 1);
 
--- Tabla de partidas (historial de juegos por usuario)
 CREATE TABLE partidas (
     id INT PRIMARY KEY AUTO_INCREMENT,
     usuario_id INT NOT NULL,
@@ -722,4 +720,26 @@ CREATE TABLE partidas (
     FOREIGN KEY (categoria_id) REFERENCES categorias(id) ON DELETE CASCADE,
     INDEX idx_usuario (usuario_id),
     INDEX idx_categoria (categoria_id)
+);
+
+CREATE TABLE InformePreguntas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    pregunta_id INT NULL,
+    editor_id INT NULL,
+    tipo_accion ENUM('Edición', 'Eliminación') NOT NULL,
+    motivo TEXT NOT NULL,
+    fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    pregunta TEXT,
+    r1 TEXT,
+    r2 TEXT,
+    r3 TEXT,
+    r4 TEXT,
+    correcta INT,
+    categoria_id INT,
+
+    FOREIGN KEY (pregunta_id) REFERENCES preguntas(id) ON DELETE SET NULL,
+    FOREIGN KEY (editor_id) REFERENCES usuarios(id) ON DELETE SET NULL,
+
+    INDEX (tipo_accion),
+    INDEX (fecha)
 );

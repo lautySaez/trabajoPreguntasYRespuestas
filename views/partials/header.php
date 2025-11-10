@@ -18,12 +18,10 @@
     ?>
     
     <div class="header-container">
-        <!-- Logo a la izquierda -->
         <div class="logo-section">
             <h1>AciertaYa - Juego de Preguntas</h1>
         </div>
-        
-        <!-- Usuario a la derecha -->
+
         <?php if ($usuario): ?>
         <div class="user-section">
             <div class="user-info" onclick="toggleUserMenu()">
@@ -63,7 +61,6 @@
             }
         }
 
-        // Cerrar el menú si se hace clic fuera de él
         document.addEventListener('click', function(event) {
             if (!event.target.closest('.user-section')) {
                 const dropdown = document.getElementById('userDropdown');

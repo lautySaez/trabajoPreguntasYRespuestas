@@ -13,7 +13,6 @@ class PartidaController
         }
     }
 
-    // Metodos previo a iniciar partida
     public function mostrarModo()
     {
         include("views/modoDeJuego.php");
@@ -41,51 +40,42 @@ class PartidaController
         include("views/ruleta.php");
     }
 
-    // Metodos de la partida
     public function iniciarPartida()
     {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
 
-        // Verificar que el usuario esté logueado
         if (!isset($_SESSION["usuario"]["id"])) {
             header("Location: index.php?controller=LoginController&method=inicioSesion");
             exit();
         }
 
-        // Obtener categoría desde la ruleta
         $categoria = $_GET["categoria"] ?? null;
         if (!$categoria) {
             header("Location: index.php?controller=partida&method=mostrarRuleta");
             exit();
         }
 
-        // Obtener el ID de la categoría desde la tabla categorias
         $categoria_id = $this->partidaModel->getCategoriaIdPorNombre($categoria);
         if (!$categoria_id) {
-            // Si la categoría no existe, volvemos a la ruleta
             header("Location: index.php?controller=partida&method=mostrarRuleta");
             exit();
         }
 
-        // Registrar la partida con el ID correcto
         $usuarioId = $_SESSION["usuario"]["id"];
         $partidaId = $this->partidaModel->registrarPartida($usuarioId, $categoria_id);
         $_SESSION["partida_id"] = $partidaId;
         $_SESSION["puntaje"] = 0;
 
-        // Obtener 4 preguntas aleatorias para la categoría
         $preguntas = $this->partidaModel->obtenerPreguntasPorCategoriaId($categoria_id);
         if (empty($preguntas)) {
-            // No hay preguntas disponibles
             header("Location: index.php?controller=partida&method=mostrarRuleta");
             exit();
         }
         $_SESSION["preguntas"] = $preguntas;
         $_SESSION["pregunta_actual"] = 0;
 
-        // Cargar la primera pregunta
         $preguntaActual = $preguntas[0];
         include("views/partida.php");
     }
@@ -124,7 +114,6 @@ class PartidaController
     }
 
     public function siguientePregunta() {
-        // Verificar sesion iniciada y preguntas cargadas
         $preguntas = $_SESSION["preguntas"] ?? [];
         $indice = $_SESSION["pregunta_actual"] ?? 0;
         $partidaId = $_SESSION["partida_id"] ?? null;
@@ -134,7 +123,6 @@ class PartidaController
             exit();
         }
 
-        // Avanzar a la sgte pregunta
         $_SESSION["pregunta_actual"]++;
 
         if ($_SESSION["pregunta_actual"] >= count($preguntas)) {
@@ -153,10 +141,65 @@ class PartidaController
         $puntaje = $_SESSION["puntaje"] ?? 0;
         include("views/resultadoPartida.php");
 
-        // Limpiar sesión de la partida
         unset($_SESSION["preguntas"]);
         unset($_SESSION["pregunta_actual"]);
         unset($_SESSION["partida_id"]);
         unset($_SESSION["puntaje"]);
     }
+
+    public function obtenerCategorias() {
+        $stmt = $this->conexion->query("SELECT * FROM categorias ORDER BY nombre");
+        return $stmt->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function obtenerPreguntasPorCategoria($categoria_id = null) {
+        if ($categoria_id) {
+            $stmt = $this->conexion->prepare("SELECT * FROM preguntas WHERE categoria_id = ? ORDER BY id DESC");
+            $stmt->bind_param("i", $categoria_id);
+            $stmt->execute();
+            $resultado = $stmt->get_result();
+        } else {
+            $resultado = $this->conexion->query("SELECT * FROM preguntas ORDER BY id DESC");
+        }
+
+        $preguntas = [];
+        while ($pregunta = $resultado->fetch_assoc()) {
+            $pregunta["respuestas"] = [
+                ["id" => 1, "texto" => $pregunta["respuesta_1"]],
+                ["id" => 2, "texto" => $pregunta["respuesta_2"]],
+                ["id" => 3, "texto" => $pregunta["respuesta_3"]],
+                ["id" => 4, "texto" => $pregunta["respuesta_4"]]
+            ];
+            $preguntas[] = $pregunta;
+        }
+
+        return $preguntas;
+    }
+
+    public function crearPregunta($categoria_id, $texto, $r1, $r2, $r3, $r4, $correcta) {
+        $stmt = $this->conexion->prepare("
+        INSERT INTO preguntas (categoria_id, pregunta, respuesta_1, respuesta_2, respuesta_3, respuesta_4, respuesta_correcta)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    ");
+        $stmt->bind_param("isssssi", $categoria_id, $texto, $r1, $r2, $r3, $r4, $correcta);
+        $stmt->execute();
+        return $this->conexion->insert_id;
+    }
+
+    public function actualizarPregunta($id, $categoria_id, $texto, $r1, $r2, $r3, $r4, $correcta) {
+        $stmt = $this->conexion->prepare("
+        UPDATE preguntas
+        SET categoria_id=?, pregunta=?, respuesta_1=?, respuesta_2=?, respuesta_3=?, respuesta_4=?, respuesta_correcta=?
+        WHERE id=?
+    ");
+        $stmt->bind_param("isssssii", $categoria_id, $texto, $r1, $r2, $r3, $r4, $correcta, $id);
+        $stmt->execute();
+    }
+
+    public function borrarPregunta($id) {
+        $stmt = $this->conexion->prepare("DELETE FROM preguntas WHERE id=?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+    }
+
 }

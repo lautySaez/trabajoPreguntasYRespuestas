@@ -5,7 +5,6 @@ class PartidaModel {
     private $conexion;
 
     public function __construct() {
-        // CORRECCIÓN: pasar los 4 parámetros obligatorios
         $db = new MyConexion("localhost", "root", "", "preguntas_respuestas");
         $this->conexion = $db->getConexion();
     }

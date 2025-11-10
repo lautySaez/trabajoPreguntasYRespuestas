@@ -1,31 +1,25 @@
-// JavaScript para el mapa de contrincantes en la página home
-
 let mapaContrincantes;
 let marcadoresJugadores = [];
 
-// Función principal de inicialización compatible con Edge
 function iniciarAplicacionMapa() {
     console.log('Iniciando Mapa');
     console.log('User Agent:', navigator.userAgent);
     console.log('Navegador detectado:', navigator.userAgent.includes('Edge') ? 'Microsoft Edge' : 'Otro navegador');
-    
-    // Verificaciones exhaustivas
+
     if (typeof L === 'undefined') {
         console.error('Leaflet no está disponible');
         mostrarErrorMapa('Leaflet no se cargó correctamente');
         return;
     }
     console.log('Leaflet disponible');
-    
-    // Verificar elemento DOM
+
     const elementoMapa = document.getElementById('mapa-contrincantes');
     if (!elementoMapa) {
         console.error('Elemento del mapa no encontrado');
         return;
     }
     console.log('Elemento del mapa encontrado');
-    
-    // Verificar dimensiones del contenedor
+
     const rect = elementoMapa.getBoundingClientRect();
     console.log('Dimensiones del contenedor:', rect.width, 'x', rect.height);
     
@@ -34,8 +28,7 @@ function iniciarAplicacionMapa() {
         setTimeout(iniciarAplicacionMapa, 500);
         return;
     }
-    
-    // Inicializar con más tiempo para Edge
+
     setTimeout(() => {
         try {
             console.log('Iniciando inicialización del mapa...');
@@ -54,7 +47,6 @@ function iniciarAplicacionMapa() {
     }, 200);
 }
 
-// Función para mostrar error visible al usuario
 function mostrarErrorMapa(mensaje) {
     const elementoMapa = document.getElementById('mapa-contrincantes');
     if (elementoMapa) {
@@ -64,7 +56,6 @@ function mostrarErrorMapa(mensaje) {
     }
 }
 
-// Múltiples eventos para asegurar carga en Edge
 document.addEventListener('DOMContentLoaded', iniciarAplicacionMapa);
 window.addEventListener('load', function() {
     // Backup si DOMContentLoaded no funciona
@@ -78,12 +69,10 @@ window.addEventListener('load', function() {
 
 function inicializarMapa() {
     try {
-        // Coordenadas de Buenos Aires, Argentina
         const coordenadasIniciales = [-34.6118, -58.3960];
         
         console.log('Creando instancia del mapa...');
-        
-        // Configuración específica para Edge
+
         const opcionesMapa = {
             center: coordenadasIniciales,
             zoom: 12,
@@ -92,27 +81,25 @@ function inicializarMapa() {
             doubleClickZoom: true,
             dragging: true,
             trackResize: true,
-            preferCanvas: false, // Edge funciona mejor con SVG
-            renderer: L.svg() // Forzar renderer SVG para Edge
+            preferCanvas: false,
+            renderer: L.svg()
         };
         
         mapaContrincantes = L.map('mapa-contrincantes', opcionesMapa);
         console.log('Instancia del mapa creada');
-        
-        // Agregar tiles con configuración para Edge
+
         console.log('Agregando capa de tiles...');
         const tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
             maxZoom: 19,
             minZoom: 10,
-            crossOrigin: true, // Importante para Edge
+            crossOrigin: true,
             errorTileUrl: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgZmlsbD0iIzMzMzMzMyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+Tm8gZGF0YTwvdGV4dD48L3N2Zz4='
         });
         
         tileLayer.addTo(mapaContrincantes);
         console.log('Capa de tiles agregada');
-        
-        // Event listeners para debugging
+
         tileLayer.on('loading', function() {
             console.log('📡 Cargando tiles...');
         });
@@ -124,8 +111,7 @@ function inicializarMapa() {
         tileLayer.on('tileerror', function(e) {
             console.warn('Error cargando tile:', e);
         });
-        
-        // Forzar redimensionamiento múltiple para Edge
+
         setTimeout(() => {
             if (mapaContrincantes) {
                 mapaContrincantes.invalidateSize();
@@ -155,8 +141,7 @@ function inicializarMapa() {
 
 function agregarJugadoresDemostracion() {
     console.log('Agregando jugadores de demostración...');
-    
-    // Jugadores de demostración con diferentes ubicaciones en Buenos Aires
+
     const jugadoresDemo = [
         {
             nombre: "Carlos_Gamer",
@@ -198,11 +183,9 @@ function agregarJugadoresDemostracion() {
 function agregarMarcadorJugador(jugador) {
     try {
         console.log(`Creando marcador para ${jugador.nombre} en [${jugador.lat}, ${jugador.lng}]`);
-        
-        // Crear marcador simple primero
+
         const marcador = L.marker([jugador.lat, jugador.lng]).addTo(mapaContrincantes);
-        
-        // Crear popup simple
+
         const popupContent = `
             <div style="text-align: center; min-width: 150px;">
                 <h4 style="margin: 0 0 10px 0; color: #333;">${jugador.nombre}</h4>
@@ -227,25 +210,20 @@ function agregarMarcadorJugador(jugador) {
 }
 
 function configurarEventos() {
-    // Botón buscar cercanos
     document.querySelector('.btn-find-nearby').addEventListener('click', function() {
-        // Simular búsqueda de jugadores cercanos
         this.innerHTML = '🔄 Buscando...';
         
         setTimeout(() => {
             this.innerHTML = '🎯 Buscar cercanos';
-            // Centrar en un área con más jugadores
             mapaContrincantes.setView([-34.6092, -58.3900], 14);
         }, 1500);
     });
 
-    // Botón actualizar mapa
     document.querySelector('.btn-refresh-map').addEventListener('click', function() {
         this.innerHTML = '🔄 Actualizando...';
         
         setTimeout(() => {
             this.innerHTML = '🔄 Actualizar';
-            // Simular actualización del contador
             const contador = document.getElementById('players-count');
             const nuevoNumero = Math.floor(Math.random() * 20) + 8;
             contador.textContent = nuevoNumero;
@@ -254,21 +232,17 @@ function configurarEventos() {
 }
 
 function desafiarJugador(nombreJugador) {
-    // Función para desafiar a un jugador
     const confirmacion = confirm(`¿Deseas desafiar a ${nombreJugador} a una partida?`);
     
     if (confirmacion) {
-        // Aquí se conectaría con el backend para enviar la invitación
         alert(`¡Invitación enviada a ${nombreJugador}! Espera su respuesta.`);
-        
-        // Simular redirección a la página de partida
+
         setTimeout(() => {
             window.location.href = 'index.php?controller=partida&method=mostrarReglas';
         }, 2000);
     }
 }
 
-// Estilos CSS adicionales para los marcadores (se agregan dinámicamente)
 const estilosMarcadores = `
 <style>
     .marcador-jugador {
@@ -356,28 +330,23 @@ const estilosMarcadores = `
 </style>
 `;
 
-// Agregar los estilos al head del documento
 document.head.insertAdjacentHTML('beforeend', estilosMarcadores);
 
-// Función específica para detectar y manejar Edge
 function detectarYManejarEdge() {
     const esEdge = navigator.userAgent.indexOf('Edge') > -1 || navigator.userAgent.indexOf('Edg') > -1;
     
     if (esEdge) {
         console.log('🌐 Microsoft Edge detectado - Aplicando configuraciones especiales');
-        
-        // Configuraciones adicionales para Edge
+
         setTimeout(() => {
             const elementoMapa = document.getElementById('mapa-contrincantes');
             if (elementoMapa && !mapaContrincantes) {
                 console.log('⚠️ Mapa no inicializado en Edge - Reintentando...');
-                
-                // Mostrar indicador de carga
+
                 elementoMapa.innerHTML = 
                     '<div style="display: flex; align-items: center; justify-content: center; height: 100%; background: rgba(0,0,0,0.2); color: white; text-align: center; border-radius: 15px;">' +
                     '<div><div style="border: 4px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 4px solid #FFD700; width: 40px; height: 40px; animation: spin 2s linear infinite; margin: 0 auto;"></div><h4 style="margin: 15px 0 5px 0;">Cargando Mapa...</h4><p style="margin: 0; font-size: 0.9rem;">Compatible con Edge</p></div></div>';
-                
-                // CSS para animación de carga
+
                 const estilosCarga = `
                     <style>
                         @keyframes spin {
@@ -387,13 +356,10 @@ function detectarYManejarEdge() {
                     </style>
                 `;
                 document.head.insertAdjacentHTML('beforeend', estilosCarga);
-                
-                // Reintentar después de mostrar carga
+
                 setTimeout(iniciarAplicacionMapa, 2000);
             }
         }, 3000);
     }
 }
-
-// Ejecutar detección de Edge
 detectarYManejarEdge();

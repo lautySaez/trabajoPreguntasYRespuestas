@@ -35,6 +35,7 @@ verificarRol("Administrador");
                     <th>Avatar</th>
                     <th>Nombre de Usuario</th>
                     <th>Email</th>
+                    <th>Rol</th>
                     <th>Estado</th>
                 </tr>
             </thead>
@@ -57,6 +58,7 @@ verificarRol("Administrador");
                             </td>
                             <td><?= htmlspecialchars($u["nombre_usuario"]) ?></td>
                             <td><?= htmlspecialchars($u["email"]) ?></td>
+                            <td><?= htmlspecialchars($u["rol"]) ?></td>                           
                             <td><?= htmlspecialchars($u["estado_registro"] ?? 'Desconocido') ?></td>
                         </tr>
                     <?php endforeach; ?>

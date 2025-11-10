@@ -9,12 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (tiempo < 0) {
             clearInterval(countdown);
-            // redirigir auto sgte pregunta
             window.location.href = "index.php?controller=partida&method=siguientePregunta";
         }
     }, 1000);
 
-    // detener timer si responde antes
     const botonesRespuesta = document.querySelectorAll('.respuestas-grid form');
     botonesRespuesta.forEach(form => {
         form.addEventListener('submit', () => {
