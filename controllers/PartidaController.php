@@ -231,13 +231,12 @@ class PartidaController
         try {
             $reporteModel->crearReporte($id_pregunta, $id_usuario, "Reportada por el usuario durante la partida");
         } catch (Exception $e) {
-            // Manejo de error ligero: loguear y mostrar mensaje genérico
             error_log("Error al crear reporte: " . $e->getMessage());
             echo "<script>alert('No se pudo enviar el reporte. Intentá nuevamente.'); window.location='index.php?controller=partida&method=terminarPartida';</script>";
             exit;
         }
 
-        // Mostrar confirmación breve y redirigir
+        // redirigir
         echo "<script>alert('¡Pregunta reportada! La partida se ha finalizado.'); window.location = 'index.php?controller=partida&method=terminarPartida';</script>";
         exit;
     }

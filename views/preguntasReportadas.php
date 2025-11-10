@@ -12,9 +12,8 @@ if (isset($_SESSION["usuario"])) {
     exit;
 }
 
-// Verificación de rol para que solo editor/admin puedan entrar
 require_once("helper/VerificacionDeRoles.php");
-verificarRol("Editor"); // o "Administrador" según corresponda
+verificarRol("Editor");
 ?>
 
 <h1>Preguntas Reportadas</h1>
