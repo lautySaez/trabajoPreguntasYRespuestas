@@ -640,7 +640,7 @@ a:hover {
 
 .boton-reportar {
     position: fixed;
-    bottom: 1em;
+    bottom: 3em;
     left: 1em;
     background-color: #e94a4a;
     color: #fff;
