@@ -140,7 +140,7 @@ class Usuario
     $conexion = new MyConexion("localhost", "root", "", "preguntas_respuestas");
     $conn = $conexion->getConexion();
 
-    $sql = "SELECT foto_perfil, nombre_usuario, email, estado_registro FROM usuarios";
+    $sql = "SELECT foto_perfil, nombre_usuario, email, rol, estado_registro FROM usuarios";
     $resultado = $conn->query($sql);
 
     if (!$resultado) {
