@@ -29,25 +29,6 @@ class EditorController {
         include(__DIR__ . "/../views/gestionarPreguntas.php");
     }
 
-    public function crearPregunta() {
-        if ($_POST) {
-            $this->model->crearPregunta(
-                $_POST["categoria_id"],
-                $_POST["pregunta"],
-                $_POST["r1"],
-                $_POST["r2"],
-                $_POST["r3"],
-                $_POST["r4"],
-                $_POST["correcta"]
-            );
-            header("Location: index.php?controller=editor&method=gestionarPreguntas");
-            exit();
-        }
-
-        $categorias = $this->model->obtenerCategorias();
-        include(__DIR__ . "/../views/crearPregunta.php");
-    }
-
     public function editarPregunta() {
         if ($_POST) {
             $id = $_POST['id'];
@@ -108,6 +89,26 @@ class EditorController {
         }
 
         header("Location: index.php?controller=editor&method=gestionarPreguntas");
+    }
+
+    public function crearPregunta() {
+        $categorias = $this->model->obtenerCategorias(); // <--- definir siempre
+
+        if ($_POST) {
+            $this->model->crearPregunta(
+                $_POST["categoria_id"],
+                $_POST["pregunta"],
+                $_POST["r1"],
+                $_POST["r2"],
+                $_POST["r3"],
+                $_POST["r4"],
+                $_POST["correcta"]
+            );
+            header("Location: index.php?controller=editor&method=gestionarPreguntas");
+            exit();
+        }
+
+        include(__DIR__ . "/../views/crearPregunta.php");
     }
 
 }

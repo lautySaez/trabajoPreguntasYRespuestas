@@ -57,7 +57,9 @@ $categoria_id = $_GET['categoria_id'] ?? '';
         <?php
         $filtradas = $preguntas;
         if ($buscar_id !== '') {
-            $filtradas = array_filter($preguntas, fn($p) => $p['id'] == $buscar_id);
+            $filtradas = array_filter($preguntas, function($p) use ($buscar_id) {
+                return $p['id'] == $buscar_id;
+            });
         }
         ?>
         <?php if (empty($filtradas)): ?>
