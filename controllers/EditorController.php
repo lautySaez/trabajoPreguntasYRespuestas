@@ -115,6 +115,7 @@ class EditorController
         }
 
         include(__DIR__ . "/../views/crearPregunta.php");
+    }
 
         public
         function preguntasReportadas()
@@ -127,4 +128,3 @@ class EditorController
 
         }
     }
-}
