@@ -1,0 +1,187 @@
+.crear-pregunta-page * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.crear-pregunta-page {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    color: #f9fafb;
+}
+
+.crear-pregunta-page h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.form-crear-pregunta label {
+    display: block;
+    margin-top: 15px;
+    font-weight: 600;
+    color: #f1f1f1;
+}
+
+.form-crear-pregunta input[type="text"],
+.form-crear-pregunta textarea,
+.form-crear-pregunta select {
+    width: 100%;
+    padding: 10px 12px;
+    margin-top: 5px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.05);
+    color: #fff;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.form-crear-pregunta input::placeholder,
+.form-crear-pregunta textarea::placeholder {
+    color: rgba(255,255,255,0.7);
+}
+
+.form-crear-pregunta select {
+    color: #000;
+    background-color: #fff;
+}
+
+.form-crear-pregunta select option {
+    color: #000;
+    background-color: #fff;
+}
+
+.form-crear-pregunta input:focus,
+.form-crear-pregunta textarea:focus,
+.form-crear-pregunta select:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.respuestas {
+    margin-top: 10px;
+}
+
+.respuesta-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.respuesta-item input[type="text"] {
+    flex: 1;
+    margin-right: 15px;
+    border-radius: 12px;
+}
+
+.check-container {
+    position: relative;
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+}
+
+.check-container input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.3);
+    transition: 0.3s;
+}
+
+.check-container input:checked ~ .checkmark {
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+}
+
+.checkmark::after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.check-container input:checked ~ .checkmark::after {
+    display: block;
+}
+
+.check-container .checkmark::after {
+    left: 9px;
+    top: 5px;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.form-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-start;
+    gap: 15px;
+}
+
+.btn-guardar, .btn-cancelar {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: 0.3s;
+    text-decoration: none;
+    text-align: center;
+}
+
+.btn-guardar {
+    background: linear-gradient(135deg, #4a90e2 0%, #357ABD 100%);
+    color: #fff;
+}
+
+.btn-guardar:hover {
+    background: linear-gradient(135deg, #357ABD 0%, #2e62a3 100%);
+}
+
+.btn-cancelar {
+    background: linear-gradient(135deg, #e94a4a 0%, #c92f2f 100%);
+    color: #fff;
+}
+
+.btn-cancelar:hover {
+    background: linear-gradient(135deg, #c92f2f 0%, #a82525 100%);
+}
+
+@media (max-width: 768px) {
+    .crear-pregunta-page {
+        margin: 20px 15px;
+        padding: 20px;
+    }
+
+    .form-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
