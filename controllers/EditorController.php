@@ -110,4 +110,12 @@ class EditorController {
         header("Location: index.php?controller=editor&method=gestionarPreguntas");
     }
 
+    public function preguntasReportadas() {
+        require_once("models/reporte.php");
+        $reporteModel = new Reporte();
+        $reportes = $reporteModel->obtenerReportes();
+
+        include(__DIR__ . "/../views/preguntasReportadas.php");
+    }
+
 }
