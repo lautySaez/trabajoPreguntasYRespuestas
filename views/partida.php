@@ -1,20 +1,40 @@
 <?php include("views/partials/header.php"); ?>
 
 <div class="partida-contenedor">
-    <!-- Pregunta -->
-    <h2><?= htmlspecialchars($preguntaActual["texto"]) ?></h2>
 
-    <!-- Respuestas en grid 2x2 -->
+ <?php if (!empty($preguntaActual) && !empty($preguntaActual["respuestas"])): ?>
+    <h2><?= htmlspecialchars($preguntaActual["pregunta"]) ?></h2>
+
     <div class="respuestas-grid">
         <?php foreach ($preguntaActual["respuestas"] as $respuesta): ?>
-            <button type="button"><?= htmlspecialchars($respuesta["texto"]) ?></button>
+            <form method="POST" action="index.php?controller=partida&method=responderPregunta" style="display:inline;">
+                <input type="hidden" name="respuesta" value="<?= $respuesta["id"] ?>">
+                <button type="submit"><?= htmlspecialchars($respuesta["texto"]) ?></button>
+            </form>
         <?php endforeach; ?>
     </div>
+
+    <div id="temporizador" class="badge bg-danger fs-5 mt-2">
+    </div>
+
+        <!-- boton reportar -->
+        <form method="POST" action="index.php?controller=partida&method=reportarPregunta" class="form-reportar">
+            <input type="hidden" name="id_pregunta" value="<?= $preguntaActual["id"] ?>">
+            <button type="submit" class="boton-reportar">
+            Reportar
+            </button>
+        </form>
+
+<?php else: ?>
+    <p>No hay preguntas disponibles para esta categoría.</p>
+<?php endif; ?>
+
 </div>
 
-<!-- Btn terminar partida flotante -->
 <a href="index.php?controller=partida&method=terminarPartida" class="boton-flotante">
     Terminar partida
 </a>
+
+<script src="public/js/temporizador.js"></script>
 
 <?php include("views/partials/footer.php"); ?>

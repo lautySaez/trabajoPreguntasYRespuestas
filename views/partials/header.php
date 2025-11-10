@@ -18,12 +18,10 @@
     ?>
     
     <div class="header-container">
-        <!-- Logo a la izquierda -->
         <div class="logo-section">
             <h1>AciertaYa - Juego de Preguntas</h1>
         </div>
-        
-        <!-- Usuario a la derecha -->
+
         <?php if ($usuario): ?>
         <div class="user-section">
             <div class="user-info" onclick="toggleUserMenu()">
@@ -35,16 +33,16 @@
                     </div>
                 <?php endif; ?>
                 <div class="user-details">
-                    <span class="user-name"><?= htmlspecialchars($usuario["nombre"]) ?></span>
+                    <span class="user-name"><?= htmlspecialchars($usuario["nombre_usuario"]) ?></span>
                     <span class="user-email"><?= htmlspecialchars($usuario["email"]) ?></span>
                 </div>
                 <span class="dropdown-arrow">▼</span>
             </div>
             
             <div class="user-dropdown" id="userDropdown">
-                <a href="index.php?controller=LoginController&method=home" class="dropdown-item">
-                    <i class="icon">🏠</i>
-                    <span>Inicio</span>
+                <a href="index.php?controller=UsuarioController&method=perfil" class="dropdown-item">
+                    <i class="icon">⚙</i>
+                    <span>Perfil</span>
                 </a>
                 <a href="index.php?controller=LoginController&method=logout" class="dropdown-item logout">
                     <i class="icon">🚪</i>
@@ -63,7 +61,6 @@
             }
         }
 
-        // Cerrar el menú si se hace clic fuera de él
         document.addEventListener('click', function(event) {
             if (!event.target.closest('.user-section')) {
                 const dropdown = document.getElementById('userDropdown');

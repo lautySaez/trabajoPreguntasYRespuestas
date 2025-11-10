@@ -53,8 +53,8 @@ VALUES
 CREATE TABLE categorias (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(50) NOT NULL UNIQUE,
-    color VARCHAR(7) DEFAULT '#FFFFFF', -- Color hexadecimal para la UI
-    icono VARCHAR(50) DEFAULT '❓', -- Emoji o clase de icono
+    color VARCHAR(7) DEFAULT '#FFFFFF',
+    icono VARCHAR(50) DEFAULT '❓',
     descripcion TEXT,
     activa BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -68,21 +68,20 @@ INSERT INTO categorias (nombre, color, icono, descripcion) VALUES
 ('Arte', '#9C27B0', '🎨', 'Pintura, escultura, literatura y bellas artes'),
 ('Geografía', '#2196F3', '🌍', 'Países, capitales, ríos, montañas y mapas');
 
--- Tabla principal de preguntas
 CREATE TABLE preguntas (
     id INT PRIMARY KEY AUTO_INCREMENT,
     categoria_id INT NOT NULL,
     pregunta TEXT NOT NULL,
-    respuesta_1 TEXT NOT NULL, -- Primera opción
-    respuesta_2 TEXT NOT NULL, -- Segunda opción  
-    respuesta_3 TEXT NOT NULL, -- Tercera opción
-    respuesta_4 TEXT NOT NULL, -- Cuarta opción
-    respuesta_correcta TINYINT NOT NULL CHECK (respuesta_correcta BETWEEN 1 AND 4), -- Cuál es la correcta (1,2,3,4)
-    veces_mostrada INT DEFAULT 0, -- Cuántas veces se mostró la pregunta
-    veces_respondida INT DEFAULT 0, -- Cuántas veces fue respondida (puede ser menor si abandonan)
-    veces_correcta INT DEFAULT 0, -- Cuántas veces se respondió correctamente
-    veces_incorrecta INT DEFAULT 0, -- Cuántas veces se respondió mal
-    porcentaje_acierto DECIMAL(5,2) DEFAULT 0.00, -- % de aciertos
+    respuesta_1 TEXT NOT NULL,
+    respuesta_2 TEXT NOT NULL,
+    respuesta_3 TEXT NOT NULL,
+    respuesta_4 TEXT NOT NULL,
+    respuesta_correcta TINYINT NOT NULL CHECK (respuesta_correcta BETWEEN 1 AND 4),
+    veces_mostrada INT DEFAULT 0,
+    veces_respondida INT DEFAULT 0,
+    veces_correcta INT DEFAULT 0,
+    veces_incorrecta INT DEFAULT 0,
+    porcentaje_acierto DECIMAL(5,2) DEFAULT 0.00,
     nivel_dificultad ENUM('Fácil', 'Medio', 'Difícil') DEFAULT 'Medio',
     activa BOOLEAN DEFAULT TRUE,
     creada_por VARCHAR(100) DEFAULT 'Sistema',
@@ -132,7 +131,7 @@ INSERT INTO preguntas (categoria_id, pregunta, respuesta_1, respuesta_2, respues
 (1, '¿Qué jugador es conocido como "His Airness"?', 'Magic Johnson', 'Larry Bird', 'Michael Jordan', 'Shaquille O Neal', 3),
 (1, '¿En qué ciudad están los Lakers actualmente?', 'Minneapolis', 'Los Ángeles', 'Oakland', 'Sacramento', 2),
 (1, '¿Cuál es la línea de tres puntos en la NBA?', '6.75 metros', '7.24 metros', '7.50 metros', '8.00 metros', 2),
-1, '¿Cuántos Grand Slams hay en el tenis?', '3', '4', '5', '6', 2),
+(1, '¿Cuántos Grand Slams hay en el tenis?', '3', '4', '5', '6', 2),
 (1, '¿Cuál es el torneo más antiguo de tenis?', 'US Open', 'Roland Garros', 'Wimbledon', 'Australian Open', 3),
 (1, '¿En qué superficie se juega Roland Garros?', 'Césped', 'Polvo de ladrillo', 'Cemento', 'Sintético', 2),
 (1, '¿Cuántos sets debe ganar un hombre para ganar un Grand Slam?', '2 de 3', '3 de 5', '4 de 7', '5 de 9', 2),
@@ -453,7 +452,7 @@ INSERT INTO preguntas (categoria_id, pregunta, respuesta_1, respuesta_2, respues
 (4, '¿Qué catalizador acelera las reacciones biológicas?', 'Enzimas', 'Hormonas', 'Vitaminas', 'Minerales', 1),
 (4, '¿Cuál es la fórmula del metano?', 'CH₄', 'C₂H₄', 'C₂H₆', 'CH₂', 1),
 (4, '¿Qué proceso separa mezclas por diferencia de puntos de ebullición?', 'Filtración', 'Destilación', 'Decantación', 'Cristalización', 2),
-(4, '¿Cuál es la masa atómica aproximada del carbono?', '6', '12', '14', '16', 2);
+(4, '¿Cuál es la masa atómica aproximada del carbono?', '6', '12', '14', '16', 2),
 (4, '¿Cuántos huesos tiene el cuerpo humano adulto?', '198', '206', '214', '220', 2),
 (4, '¿Cuál es la unidad básica de la vida?', 'Tejido', 'Célula', 'Órgano', 'Átomo', 2),
 (4, '¿Qué orgánulo contiene el ADN en las células eucariotas?', 'Mitocondria', 'Núcleo', 'Ribosoma', 'Retículo endoplasmático', 2),
@@ -708,3 +707,49 @@ INSERT INTO preguntas (categoria_id, pregunta, respuesta_1, respuesta_2, respues
 (6, '¿Cuál es el país con más premios Nobel?', 'Reino Unido', 'Estados Unidos', 'Alemania', 'Francia', 2),
 (6, '¿Qué país tiene la mayor superficie de bosques?', 'Brasil', 'Rusia', 'Canadá', 'Estados Unidos', 2),
 (6, '¿Cuál es el país que produce más energía renovable?', 'China', 'Estados Unidos', 'Brasil', 'Alemania', 1);
+
+CREATE TABLE partidas (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    usuario_id INT NOT NULL,
+    categoria_id INT NOT NULL,
+    puntaje INT DEFAULT 0,
+    cantidad_preguntas INT DEFAULT 4,
+    fecha_inicio DATETIME DEFAULT CURRENT_TIMESTAMP,
+    fecha_fin DATETIME NULL,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (categoria_id) REFERENCES categorias(id) ON DELETE CASCADE,
+    INDEX idx_usuario (usuario_id),
+    INDEX idx_categoria (categoria_id)
+);
+
+CREATE TABLE InformePreguntas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    pregunta_id INT NULL,
+    editor_id INT NULL,
+    tipo_accion ENUM('Edición', 'Eliminación') NOT NULL,
+    motivo TEXT NOT NULL,
+    fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    pregunta TEXT,
+    r1 TEXT,
+    r2 TEXT,
+    r3 TEXT,
+    r4 TEXT,
+    correcta INT,
+    categoria_id INT,
+
+    FOREIGN KEY (pregunta_id) REFERENCES preguntas(id) ON DELETE SET NULL,
+    FOREIGN KEY (editor_id) REFERENCES usuarios(id) ON DELETE SET NULL,
+
+    INDEX (tipo_accion),
+    INDEX (fecha)
+);
+
+CREATE TABLE reportes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    pregunta_id INT NOT NULL,
+    usuario_id INT NOT NULL,
+    motivo TEXT NOT NULL,
+    fecha_reporte TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (pregunta_id) REFERENCES preguntas(id),
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+);

@@ -10,4 +10,3 @@ $controller = $_GET["controller"] ?? "LoginController";
 $method = $_GET["method"] ?? "inicioSesion";
 
 $router->executeController($controller, $method);
-

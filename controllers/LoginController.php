@@ -1,5 +1,5 @@
 <?php
-// Intentar cargar PHPMailer desde diferentes ubicaciones
+
 $autoload_paths = [
     __DIR__ . '/../vendor/autoload.php',
     __DIR__ . '/../../vendor/autoload.php',
@@ -17,7 +17,6 @@ foreach ($autoload_paths as $path) {
 }
 
 if (!$autoload_loaded) {
-    // Fallback: cargar PHPMailer directamente
     require_once __DIR__ . '/../vendor/phpmailer/phpmailer/src/PHPMailer.php';
     require_once __DIR__ . '/../vendor/phpmailer/phpmailer/src/SMTP.php';
     require_once __DIR__ . '/../vendor/phpmailer/phpmailer/src/Exception.php';
@@ -33,7 +32,10 @@ class LoginController
 
     public function __construct($usuarioModel)
     {
+        require_once("models/PartidaModel.php");
         $this->usuarioModel = $usuarioModel;
+        $this->partidaModel = new PartidaModel();
+
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -145,7 +147,6 @@ class LoginController
             $estado_registro = "Inactivo";
             $token_activacion = random_int(100000, 999999);
 
-            // Validaciones
             if ($password !== $repassword) {
                 $error = "Las contraseñas no coinciden.";
             } elseif (!preg_match("/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,12}$/", $password)) {
@@ -157,7 +158,6 @@ class LoginController
                 }
             }
 
-            // Si no hay errores, procesamos el registro
             if (!$error) {
                 $foto_perfil = null;
                 if (!empty($_FILES["foto_perfil"]["name"])) {
@@ -184,30 +184,31 @@ class LoginController
                 );
 
                 if ($exito) {
-                    $mail = new PHPMailer(true);
+                    try {
+                        if (class_exists('PHPMailer\PHPMailer\PHPMailer')) {
+                            $mail = new PHPMailer(true);
+                            $mail->isSMTP();
+                            $mail->Host       = 'smtp.gmail.com';
+                            $mail->SMTPAuth   = true;
+                            $mail->Username   = 'aciertayaa@gmail.com';
+                            $mail->Password   = 'egnq wplg anyu plah';
+                            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                            $mail->Port       = 587;
 
+                            $mail->setFrom('aciertayaa@gmail.com', 'AciertaYa');
+                            $mail->addAddress($email, $nombre_usuario);
 
-                    $mail->isSMTP();
-                    $mail->Host       = 'smtp.gmail.com'; // Servidor SMTP
-                    $mail->SMTPAuth   = true;
-                    $mail->Username   = 'aciertayaa@gmail.com'; // Tu correo Gmail
-                    $mail->Password   = 'egnq wplg anyu plah'; // Contraseña o App Password
-                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                    $mail->Port       = 587;
+                            $mail->isHTML(true);
+                            $mail->Subject = 'Bienvenido a AciertaYaa';
+                            $mail->Body    = '<h1>Bienvenido a AciertaYaa!</h1><p>Por favor, ingresá el siguiente código para confirmar tu registro: <strong>' . $token_activacion . '</strong></p>';
 
-                    // Remitente y destinatario
-                    $mail->setFrom('aciertayaa@gmail.com', 'AciertaYa');
-                    $mail->addAddress($email, 'Destinatario');
+                            $mail->send();
+                        }
+                    } catch (Exception $e) {
+                        error_log("Error al enviar email: " . $e->getMessage());
+                    }
 
-                    // Contenido
-                    $mail->isHTML(true);
-                    $mail->Subject = 'Bienvenido a AciertaYaa';
-                    $mail->Body    = '<h1>Bienvenido a AciertaYaa!</h1><p>por favor ingrese el codigo que se enviamos para confirmar el registro: <strong>' . $token_activacion . '</strong></p>';
-
-                    $mail->send();
-
-                    $mensaje = "Usuario registrado correctamente. Ahora puedes iniciar sesión.";
-                    include("views/validarRegistroUsuario.php");
+                    include("views/registroExitoso.php");
                     return;
                 } else {
                     $error = "El usuario o el email ya existen.";
@@ -217,9 +218,9 @@ class LoginController
             include("views/registro.php");
             return;
         }
+
         include("views/registro.php");
     }
-
 
     public function validarRegistrarUsuario()
     {
@@ -239,7 +240,6 @@ class LoginController
                 );
 
                 if ($exito) {
-                    // Redirigir al método elegirAvatar con el nombre de usuario
                     header("Location: index.php?controller=LoginController&method=elegirAvatar&usuario=" . urlencode($nombre_usuario));
                     exit();
                 } else {
@@ -254,40 +254,83 @@ class LoginController
 
     public function elegirAvatar()
     {
-        // Validación: si no viene nombre de usuario, redirigir a registro
-        $nombre_usuario = $_GET["usuario"] ?? null;
-        if (!$nombre_usuario) {
-            header("Location: index.php?controller=LoginController&method=registro");
+        $usuario = $_SESSION['usuario'] ?? null;
+
+        if (!$usuario) {
+            header("Location: index.php?controller=LoginController&method=inicioSesion");
             exit();
         }
 
+        $nombre_usuario = $usuario['nombre_usuario'];
         include("views/elegir_avatar.php");
     }
+
 
     public function guardarAvatar()
     {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            $nombre_usuario = $_POST["nombre_usuario"];
-            $foto_perfil = $_POST["foto_perfil"] ?? null;
+            $usuario = $_SESSION['usuario'] ?? null;
+
+            if (!$usuario) {
+                header("Location: index.php?controller=LoginController&method=inicioSesion");
+                exit();
+            }
+
+            $nombre_usuario = $usuario['nombre_usuario'];
+            $foto_perfil = $_POST['foto_perfil'] ?? null;
 
             if ($foto_perfil) {
                 $this->usuarioModel->actualizarAvatar($nombre_usuario, $foto_perfil);
+
+                $_SESSION['usuario']['foto_perfil'] = $foto_perfil;
             }
 
-            // Redirigir al login
-            header("Location: index.php?controller=LoginController&method=inicioSesion");
+            header("Location: index.php?controller=LoginController&method=home");
             exit();
         }
     }
 
-    public function home()
-    {
+    public function home() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
         if (!isset($_SESSION["usuario"])) {
             include("views/inicioSesion.php");
             return;
         }
+
         $usuario = $_SESSION["usuario"];
-        include("views/home.php");
+        $ultimaPartida = null;
+
+        // Normalizar rol a minúsculas
+        $rol = strtolower($usuario['rol'] ?? '');
+
+        // Si es jugador, obtener su última partida
+        if ($rol === 'jugador') {
+            $ultimasPartidas = $this->partidaModel->getUltimasPartidas($usuario['id'], 5);
+        }
+
+        $datos = [
+            'usuario' => $usuario,
+            'ultimasPartidas' => $ultimasPartidas
+        ];
+
+        extract($datos);
+        switch ($rol) {
+            case 'jugador':
+                include("views/home.php");
+                break;
+            case 'editor':
+                include("views/home_editor.php");
+                break;
+            case 'admin':
+                include("views/home_admin.php");
+                break;
+            default:
+                include("views/inicioSesion.php");
+                break;
+        }
     }
 
     public function homeAdmin()
@@ -296,7 +339,17 @@ class LoginController
             include("views/inicioSesion.php");
             return;
         }
+
         $usuario = $_SESSION["usuario"];
+
+        require_once("models/usuario.php");
+        require_once("helper/MyConexion.php");
+        $conexion = new MyConexion("localhost", "root", "", "preguntas_respuestas");
+        $conn = $conexion->getConexion();
+
+        $modelUsuario = new Usuario($conn);
+        $usuarios = $modelUsuario->obtenerTodosLosUsuarios();
+
         include("views/homeAdmin.php");
     }
 
@@ -314,5 +367,10 @@ class LoginController
     {
         session_destroy();
         include("views/inicioSesion.php");
+    }
+
+    public function iniciarNuevaPartida()
+    {
+
     }
 }

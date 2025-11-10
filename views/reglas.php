@@ -1,18 +1,21 @@
 <?php include("views/partials/header.php"); ?>
 
-<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 20vh; text-align: center; gap: 20px;">
+<link rel="stylesheet" href="public/css/reglas.css">
 
+    <div class="reglas-container">
     <h2>Reglas del Juego</h2>
 
-    <ul style="text-align: left; max-width: 400px;">
+    <ul>
         <li>Cada partida consta de 10 preguntas.</li>
         <li>Tenés un tiempo límite de 20 segundos por pregunta.</li>
-        <li>Si respondés incorrectamente, la partida termina.</li>
-        <li>Responder correctamente todas las preguntas te da la máxima puntuación y participarás en los rankings.</li>
+        <li>Si se acaba tu tiempo de respuesta la pregunta se considera incorrecta.</li>
+        <li>Cada pregunta correcta suma +2 puntos.</li>
+        <li>Cada pregunta incorrecta resta -1 punto.</li>
+        <li>Si finalizás como ganador se suman +5 puntos.</li>
+        <li>Si finalizás como perdedor se restan -3 puntos.</li>
     </ul>
 
-    <a href="index.php?controller=partida&method=iniciarPartida" class="boton-partida">Comenzar</a>
-
+    <a href="index.php?controller=partida&method=mostrarRuleta" class="boton-partida">Comenzar</a>
 </div>
 
 <?php include("views/partials/footer.php"); ?>
