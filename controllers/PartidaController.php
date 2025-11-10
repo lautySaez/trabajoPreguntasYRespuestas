@@ -202,4 +202,43 @@ class PartidaController
         $stmt->execute();
     }
 
+    public function reportarPregunta() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['id_pregunta'])) {
+            header("Location: index.php?controller=partida&method=mostrarModo");
+            exit;
+        }
+
+        $id_pregunta = intval($_POST['id_pregunta']);
+
+        $id_usuario = null;
+        if (isset($_SESSION['usuario']) && isset($_SESSION['usuario']['id'])) {
+            $id_usuario = intval($_SESSION['usuario']['id']);
+        }
+
+        if (!$id_usuario) {
+            header("Location: index.php?controller=LoginController&method=inicioSesion");
+            exit;
+        }
+
+        // Guardar reporte
+        require_once("models/Reporte.php");
+        $reporteModel = new Reporte();
+
+        try {
+            $reporteModel->crearReporte($id_pregunta, $id_usuario, "Reportada por el usuario durante la partida");
+        } catch (Exception $e) {
+            error_log("Error al crear reporte: " . $e->getMessage());
+            echo "<script>alert('No se pudo enviar el reporte. Intentá nuevamente.'); window.location='index.php?controller=partida&method=terminarPartida';</script>";
+            exit;
+        }
+
+        // redirigir
+        echo "<script>alert('¡Pregunta reportada! La partida se ha finalizado.'); window.location = 'index.php?controller=partida&method=terminarPartida';</script>";
+        exit;
+    }
+
 }

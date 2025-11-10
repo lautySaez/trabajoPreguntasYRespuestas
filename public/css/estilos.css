@@ -248,9 +248,17 @@ h2 {
 }
 
 form {
+<<<<<<< HEAD
+    background: none;
     color: #222;
     padding: 40px 50px;
     border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+=======
+    color: #222;
+    padding: 40px 50px;
+    border-radius: 12px;
+>>>>>>> DEV
     width: 100%;
     max-width: 950px;
 }
@@ -632,7 +640,7 @@ a:hover {
 
 .boton-reportar {
     position: fixed;
-    bottom: 1em;
+    bottom: 3em;
     left: 1em;
     background-color: #e94a4a;
     color: #fff;

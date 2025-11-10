@@ -11,10 +11,6 @@
     }
 </style>
 
-<?php
-$usuario = $_SESSION["usuario"] ?? null;
-?>
-
 <div class="home-container">
     <?php if ($usuario): ?>
         <div class="welcome-section">
@@ -42,6 +38,31 @@ $usuario = $_SESSION["usuario"] ?? null;
                     </div>
                 </div>
             </div>
+
+                            <?php if (!empty($ultimasPartidas)): ?>
+            <div class="ultimas-partidas mt-4">
+                <h4>Tus últimas partidas</h4>
+                <table class="table table-striped table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Puntaje</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($ultimasPartidas as $partida): ?>
+                        <tr>
+                            <td><?= date("d/m/Y H:i", strtotime($partida["fecha_inicio"])) ?></td>
+                            <td><?= htmlspecialchars($partida["puntaje"]) ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <?php else: ?>
+            <p class="mt-3">No has jugado ninguna partida todavía.</p>
+            <?php endif; ?>
+
         </div>
     <?php else: ?>
         <div class="error-section">

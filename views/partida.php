@@ -16,15 +16,14 @@
 
     <div id="temporizador" class="badge bg-danger fs-5 mt-2">
     </div>
-    
-        <!-- boton reportar
-        <form method="POST" action="index.php?controller=partida&method=reportarPregunta" style="position: absolute; bottom: 0; left: 0;">
-            <input type="hidden" name="pregunta_id" value="<?= $preguntaActual["id"] ?>">
+
+        <!-- boton reportar -->
+        <form method="POST" action="index.php?controller=partida&method=reportarPregunta" class="form-reportar">
+            <input type="hidden" name="id_pregunta" value="<?= $preguntaActual["id"] ?>">
             <button type="submit" class="boton-reportar">
-                Reportar
+            Reportar
             </button>
         </form>
-    </div> -->
 
 <?php else: ?>
     <p>No hay preguntas disponibles para esta categoría.</p>
