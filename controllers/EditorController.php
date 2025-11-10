@@ -1,6 +1,6 @@
 <?php
 require_once("helper/VerificacionDeRoles.php");
-require_once("models/EditorModel.php");
+require_once("models/editorModel.php");
 
 class EditorController {
     private $model;
