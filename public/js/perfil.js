@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", function () {
     function abrirModal() {
         modal.style.display = "flex";
         modal.setAttribute("aria-hidden", "false");
-
         const input = modal.querySelector('input[name="password_actual"]');
         if (input) input.focus();
     }
@@ -23,12 +22,10 @@ document.addEventListener("DOMContentLoaded", function () {
     if (cerrar) cerrar.addEventListener("click", cerrarModal);
     if (cancelar) cancelar.addEventListener("click", cerrarModal);
 
-    window.addEventListener("click", function (e) {
+    window.addEventListener("click", (e) => {
         if (e.target === modal) cerrarModal();
     });
-
-    window.addEventListener("keydown", function (e) {
+    window.addEventListener("keydown", (e) => {
         if (e.key === "Escape" && modal.style.display === "flex") cerrarModal();
     });
 });
-
