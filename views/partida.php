@@ -18,13 +18,12 @@
     </div>
 
         <!-- boton reportar -->
-        <form method="POST" action="index.php?controller=partida&method=reportarPregunta" onsubmit="return confirm('¿Seguro que querés reportar esta pregunta y finalizar la partida?');">
-            <input type="hidden" name="id_pregunta" value="<?= $preguntaActual['id'] ?>">
+        <form method="POST" action="index.php?controller=partida&method=reportarPregunta" class="form-reportar">
+            <input type="hidden" name="id_pregunta" value="<?= $preguntaActual["id"] ?>">
             <button type="submit" class="boton-reportar">
-                Reportar
+            Reportar
             </button>
         </form>
-
 
 <?php else: ?>
     <p>No hay preguntas disponibles para esta categoría.</p>

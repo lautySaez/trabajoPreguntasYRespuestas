@@ -12,19 +12,21 @@ class Reporte
         $this->conn = $conexion->getConexion();
     }
 
-    public function obtenerReportes()
-    {
+    public function obtenerReportes() {
         $sql = "
             SELECT 
                 r.id,
-                p.pregunta AS texto,
+                p.pregunta AS pregunta,
                 u.nombre_usuario AS usuario,
                 r.motivo,
                 r.fecha_reporte,
-                r.revisado
+                CASE 
+                    WHEN r.revisado = 1 THEN 'Revisado'
+                    ELSE 'Pendiente'
+                END AS estado
             FROM reportes r
-            JOIN preguntas p ON r.id_pregunta = p.id
-            JOIN usuarios u ON r.id_usuario = u.id
+            LEFT JOIN preguntas p ON r.id_pregunta = p.id
+            LEFT JOIN usuarios u ON r.id_usuario = u.id
             ORDER BY r.fecha_reporte DESC
         ";
 
@@ -37,8 +39,7 @@ class Reporte
         return $resultado->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function crearReporte($id_pregunta, $id_usuario, $motivo)
-    {
+    public function crearReporte($id_pregunta, $id_usuario, $motivo) {
         $stmt = $this->conn->prepare("
             INSERT INTO reportes (id_pregunta, id_usuario, motivo, fecha_reporte, revisado)
             VALUES (?, ?, ?, NOW(), 0)
