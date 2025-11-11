@@ -20,6 +20,7 @@ class Reporte
                 u.nombre_usuario AS usuario,
                 r.motivo,
                 r.fecha_reporte,
+                r.revisado,
                 CASE 
                     WHEN r.revisado = 1 THEN 'Revisado'
                     ELSE 'Pendiente'
