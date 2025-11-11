@@ -2,10 +2,12 @@
 require_once("helper/VerificacionDeRoles.php");
 require_once("models/EditorModel.php");
 
-class EditorController {
+class EditorController
+{
     private $model;
 
-    public function __construct($conexion) {
+    public function __construct($conexion)
+    {
         $this->model = new EditorModel($conexion);
 
         if (session_status() === PHP_SESSION_NONE) {
@@ -17,7 +19,8 @@ class EditorController {
         }
     }
 
-    public function gestionarPreguntas() {
+    public function gestionarPreguntas()
+    {
         $categoria_id = $_GET["categoria_id"] ?? null;
 
         $categorias = $this->model->obtenerCategorias();
@@ -29,26 +32,8 @@ class EditorController {
         include(__DIR__ . "/../views/gestionarPreguntas.php");
     }
 
-    public function crearPregunta() {
-        if ($_POST) {
-            $this->model->crearPregunta(
-                $_POST["categoria_id"],
-                $_POST["pregunta"],
-                $_POST["r1"],
-                $_POST["r2"],
-                $_POST["r3"],
-                $_POST["r4"],
-                $_POST["correcta"]
-            );
-            header("Location: index.php?controller=editor&method=gestionarPreguntas");
-            exit();
-        }
-
-        $categorias = $this->model->obtenerCategorias();
-        include(__DIR__ . "/../views/crearPregunta.php");
-    }
-
-    public function editarPregunta() {
+    public function editarPregunta()
+    {
         if ($_POST) {
             $id = $_POST['id'];
             $motivo = $_POST['motivo'];
@@ -85,7 +70,8 @@ class EditorController {
         }
     }
 
-    public function borrarPregunta() {
+    public function borrarPregunta()
+    {
         $id = $_POST['id'] ?? null;
         $motivo = $_POST['motivo'] ?? null;
 
@@ -110,7 +96,8 @@ class EditorController {
         header("Location: index.php?controller=editor&method=gestionarPreguntas");
     }
 
-    public function preguntasReportadas() {
+    public function preguntasReportadas()
+    {
         require_once("models/reporte.php");
         $reporteModel = new Reporte();
         $reportes = $reporteModel->obtenerReportes();
@@ -118,4 +105,24 @@ class EditorController {
         include(__DIR__ . "/../views/preguntasReportadas.php");
     }
 
+    public function crearPregunta()
+    {
+        $categorias = $this->model->obtenerCategorias(); // <--- definir siempre
+
+        if ($_POST) {
+            $this->model->crearPregunta(
+                $_POST["categoria_id"],
+                $_POST["pregunta"],
+                $_POST["r1"],
+                $_POST["r2"],
+                $_POST["r3"],
+                $_POST["r4"],
+                $_POST["correcta"]
+            );
+            header("Location: index.php?controller=editor&method=gestionarPreguntas");
+            exit();
+        }
+
+        include(__DIR__ . "/../views/crearPregunta.php");
+    }
 }

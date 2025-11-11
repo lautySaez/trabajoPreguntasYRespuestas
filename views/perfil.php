@@ -1,5 +1,4 @@
 <?php include("views/partials/header.php"); ?>
-
 <link rel="stylesheet" href="public/css/perfil.css">
 
 <?php
@@ -13,17 +12,18 @@ if (isset($_SESSION["usuario"])) {
 }
 ?>
 
-<div class="perfil-container">
+<div class="contenedor-principal">
     <div class="perfil-card">
         <div class="avatar-container">
-            <img src="<?= htmlspecialchars($usuario['foto_perfil'] ?: 'public/img/default_avatar.JPG') ?>" class="perfil-avatar" alt="Avatar">
+            <img src="<?= htmlspecialchars($usuario['foto_perfil'] ?: 'public/img/default_avatar.JPG') ?>"
+                 class="perfil-avatar" alt="Avatar">
         </div>
 
         <h2><?= htmlspecialchars($usuario['nombre_usuario']) ?></h2>
         <p class="email"><?= htmlspecialchars($usuario['email']) ?></p>
         <p class="password">******</p>
 
-        <button id="abrirModal" class="boton-partida">Configurar perfil</button>
+        <button id="abrirModal" class="boton-principal">Configurar perfil</button>
     </div>
 </div>
 
@@ -36,7 +36,7 @@ if (isset($_SESSION["usuario"])) {
         <form id="formConfirmar" action="index.php?controller=UsuarioController&method=confirmarPassword" method="POST">
             <input type="password" name="password_actual" placeholder="Contraseña actual" required autocomplete="current-password">
             <div class="modal-buttons">
-                <button type="submit" class="boton-partida">Continuar</button>
+                <button type="submit" class="boton-principal">Continuar</button>
                 <button type="button" class="boton-secundario" id="cancelarModal">Cancelar</button>
             </div>
         </form>
