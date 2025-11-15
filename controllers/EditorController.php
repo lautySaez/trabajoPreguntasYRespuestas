@@ -26,9 +26,6 @@ class EditorController
         $categorias = $this->model->obtenerCategorias();
         $preguntas = $this->model->obtenerPreguntasPorCategoria($categoria_id);
 
-        $categorias = $categorias ?? [];
-        $preguntas = $preguntas ?? [];
-
         include(__DIR__ . "/../views/gestionarPreguntas.php");
     }
 
@@ -39,7 +36,6 @@ class EditorController
             $motivo = $_POST['motivo'];
 
             $datosPregunta = json_decode($_POST['form_data'], true);
-
             $pregunta_vieja = $this->model->obtenerPreguntaPorId($id);
 
             $this->model->editarPregunta(
@@ -89,11 +85,19 @@ class EditorController
             ];
 
             $this->model->registrarInforme($id, 'Eliminación', $motivo, $pregunta_para_informe);
-
             $this->model->borrarPregunta($id);
         }
 
         header("Location: index.php?controller=editor&method=gestionarPreguntas");
+    }
+
+    public function preguntasReportadas()
+    {
+        require_once("models/reporte.php");
+        $reporteModel = new Reporte();
+        $reportes = $reporteModel->obtenerReportes();
+
+        include(__DIR__ . "/../views/preguntasReportadas.php");
     }
 
     public function crearPregunta()
@@ -116,15 +120,4 @@ class EditorController
 
         include(__DIR__ . "/../views/crearPregunta.php");
     }
-
-        public
-        function preguntasReportadas()
-        {
-            require_once("models/reporte.php");
-            $reporteModel = new Reporte();
-            $reportes = $reporteModel->obtenerReportes();
-
-            include(__DIR__ . "/../views/preguntasReportadas.php");
-
-        }
-    }
+}
