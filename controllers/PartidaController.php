@@ -4,6 +4,7 @@ require_once("models/PartidaModel.php");
 class PartidaController
 {
     private $partidaModel;
+    private $conexion;
 
     public function __construct($usuarioModel = null)
     {
