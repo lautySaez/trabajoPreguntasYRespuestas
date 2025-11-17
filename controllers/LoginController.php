@@ -29,6 +29,7 @@ use PHPMailer\PHPMailer\Exception;
 class LoginController
 {
     private $usuarioModel;
+    private $partidaModel;  
 
     public function __construct($usuarioModel)
     {
@@ -342,9 +343,10 @@ class LoginController
 
         $usuario = $_SESSION["usuario"];
 
+        $config = parse_ini_file("config/config.ini");
         require_once("models/usuario.php");
         require_once("helper/MyConexion.php");
-        $conexion = new MyConexion("localhost", "root", "", "preguntas_respuestas");
+        $conexion = new MyConexion($config['server'], $config['user'], $config['pass'], $config['database']);
         $conn = $conexion->getConexion();
 
         $modelUsuario = new Usuario($conn);
