@@ -52,16 +52,6 @@ class EditorModel {
         return $pregunta;
     }
 
-    public function crearPregunta($categoria_id, $pregunta, $respuesta_1, $respuesta_2, $respuesta_3, $respuesta_4, $respuesta_correcta) {
-        $stmt = $this->conexion->prepare("
-            INSERT INTO preguntas (categoria_id, pregunta, respuesta_1, respuesta_2, respuesta_3, respuesta_4, respuesta_correcta)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        ");
-        $stmt->bind_param("isssssi", $categoria_id, $pregunta, $respuesta_1, $respuesta_2, $respuesta_3, $respuesta_4, $respuesta_correcta);
-        $stmt->execute();
-        return $this->conexion->insert_id;
-    }
-
     public function editarPregunta($id, $categoria_id, $pregunta, $respuesta_1, $respuesta_2, $respuesta_3, $respuesta_4, $respuesta_correcta) {
         $stmt = $this->conexion->prepare("
             UPDATE preguntas
@@ -103,5 +93,14 @@ class EditorModel {
         $stmt->execute();
     }
 
-}
+    public function crearPregunta($categoria_id, $pregunta, $respuesta_1, $respuesta_2, $respuesta_3, $respuesta_4, $respuesta_correcta) {
+        $stmt = $this->conexion->prepare("
+        INSERT INTO preguntas (categoria_id, pregunta, respuesta_1, respuesta_2, respuesta_3, respuesta_4, respuesta_correcta)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    ");
+        $stmt->bind_param("isssssi", $categoria_id, $pregunta, $respuesta_1, $respuesta_2, $respuesta_3, $respuesta_4, $respuesta_correcta);
+        $stmt->execute();
+        return $this->conexion->insert_id;
+    }
 
+}
