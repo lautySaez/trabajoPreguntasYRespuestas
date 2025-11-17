@@ -8,7 +8,19 @@ class Usuario
         $this->conexion = $conexion;
     }
 
-    public function registrarUsuario($nombre, $fecha_nacimiento, $sexo, $pais, $ciudad, $email, $password, $nombre_usuario, $foto_perfil = null, $estado_registro = "Inactivo", $token_activacion)
+    public function registrarUsuario(
+        $nombre,
+        $fecha_nacimiento,
+        $sexo,
+        $pais,
+        $ciudad,
+        $email,
+        $password,
+        $nombre_usuario,
+        $token_activacion,
+        $foto_perfil = null,
+        $estado_registro = "Inactivo"
+    )
     {
         $query = "SELECT * FROM usuarios WHERE email = ? OR nombre_usuario = ?";
         $stmt = $this->conexion->prepare($query);

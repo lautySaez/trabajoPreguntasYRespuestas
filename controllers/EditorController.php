@@ -1,6 +1,6 @@
 <?php
 require_once("helper/VerificacionDeRoles.php");
-require_once("models/EditorModel.php");
+require_once("models/editorModel.php");
 
 class EditorController
 {
@@ -96,18 +96,9 @@ class EditorController
         header("Location: index.php?controller=editor&method=gestionarPreguntas");
     }
 
-    public function preguntasReportadas()
-    {
-        require_once("models/reporte.php");
-        $reporteModel = new Reporte();
-        $reportes = $reporteModel->obtenerReportes();
-
-        include(__DIR__ . "/../views/preguntasReportadas.php");
-    }
-
     public function crearPregunta()
     {
-        $categorias = $this->model->obtenerCategorias(); // <--- definir siempre
+        $categorias = $this->model->obtenerCategorias();
 
         if ($_POST) {
             $this->model->crearPregunta(
@@ -125,4 +116,15 @@ class EditorController
 
         include(__DIR__ . "/../views/crearPregunta.php");
     }
-}
+
+        public
+        function preguntasReportadas()
+        {
+            require_once("models/reporte.php");
+            $reporteModel = new Reporte();
+            $reportes = $reporteModel->obtenerReportes();
+
+            include(__DIR__ . "/../views/preguntasReportadas.php");
+
+        }
+    }
