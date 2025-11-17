@@ -193,23 +193,23 @@ header {
     header {
         padding: 12px 15px;
     }
-    
+
     .header-container {
         height: 50px;
     }
-    
+
     .logo-section h1 {
         font-size: 1.2rem;
     }
-    
+
     .user-details {
         display: none;
     }
-    
+
     .user-dropdown {
         min-width: 180px;
     }
-    
+
     .user-info {
         height: 40px;
         padding: 6px 10px;
@@ -221,11 +221,11 @@ header {
     .logo-section h1 {
         font-size: 1rem;
     }
-    
+
     .header-container {
         height: 45px;
     }
-    
+
     .user-info {
         height: 35px;
         padding: 4px 8px;
@@ -248,9 +248,11 @@ h2 {
 }
 
 form {
+    background: none; /* Añadido de DEV-GASTON */
     color: #222;
     padding: 40px 50px;
     border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25); /* Añadido de DEV-GASTON */
     width: 100%;
     max-width: 950px;
 }
@@ -373,7 +375,8 @@ a:hover {
     padding-bottom: 0;
 }
 
-.footer-left, .footer-right {
+.footer-left,
+.footer-right {
     display: flex;
     align-items: center;
     gap: 20px;
@@ -415,7 +418,8 @@ a:hover {
     transform: translateY(-1px);
 }
 
-.footer-left span, .footer-right span {
+.footer-left span,
+.footer-right span {
     color: rgba(255, 255, 255, 0.9);
     font-size: 0.9rem;
 }
@@ -424,24 +428,25 @@ a:hover {
     .footer-container {
         padding: 15px 20px;
     }
-    
+
     .footer-line {
         flex-direction: column;
         gap: 10px;
         text-align: center;
         padding: 10px 0;
     }
-    
-    .footer-left, .footer-right {
+
+    .footer-left,
+    .footer-right {
         justify-content: center;
         gap: 15px;
     }
-    
+
     .developers {
         flex-direction: column;
         gap: 8px;
     }
-    
+
     .developers span {
         font-size: 0.85rem;
     }
@@ -451,21 +456,22 @@ a:hover {
     .footer-container {
         padding: 12px 15px;
     }
-    
-    .footer-left, .footer-right {
+
+    .footer-left,
+    .footer-right {
         flex-direction: column;
         gap: 8px;
     }
-    
+
     .app-name {
         font-size: 1rem;
     }
-    
+
     .university {
         font-size: 0.8rem;
         padding: 3px 8px;
     }
-    
+
     .developers span {
         font-size: 0.8rem;
     }
@@ -481,6 +487,7 @@ a:hover {
     form[action*="registrarUsuario"] {
         grid-template-columns: 1fr;
     }
+
     .full-width {
         text-align: center;
     }
@@ -490,7 +497,7 @@ a:hover {
     main {
         padding: 20px 3%;
     }
-    
+
     form {
         padding: 30px 25px;
     }

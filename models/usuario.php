@@ -17,9 +17,9 @@ class Usuario
         $email,
         $password,
         $nombre_usuario,
-        $token_activacion,
         $foto_perfil = null,
-        $estado_registro = "Inactivo"
+        $estado_registro = "Inactivo",
+        $token_activacion
     )
     {
         $query = "SELECT * FROM usuarios WHERE email = ? OR nombre_usuario = ?";
@@ -35,10 +35,11 @@ class Usuario
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
         $rol = "jugador";
 
-        $query = "INSERT INTO usuarios (nombre, fecha_nacimiento, sexo, pais, ciudad, email, password, nombre_usuario, rol, foto_perfil, estado_registro, token_verificacion)
-                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        $stmt = $this->conexion->prepare($query);
-        $stmt->bind_param("sssssssssssi", $nombre, $fecha_nacimiento, $sexo, $pais, $ciudad, $email, $passwordHash, $nombre_usuario, $rol, $foto_perfil, $estado_registro, $token_activacion);
+    $query = "INSERT INTO usuarios (nombre, fecha_nacimiento, sexo, pais, ciudad, email, password, nombre_usuario, rol, foto_perfil, estado_registro, token_verificacion)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $this->conexion->prepare($query);
+    // Tipos: 11 strings + 1 int (token)
+    $stmt->bind_param("sssssssssssi", $nombre, $fecha_nacimiento, $sexo, $pais, $ciudad, $email, $passwordHash, $nombre_usuario, $rol, $foto_perfil, $estado_registro, $token_activacion);
 
         return $stmt->execute();
     }

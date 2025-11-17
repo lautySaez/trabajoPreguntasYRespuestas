@@ -19,7 +19,7 @@
     
     <div class="header-container">
         <div class="logo-section">
-            <h1>AciertaYa - Juego de Preguntas</h1>
+            <h1><a href="index.php">AciertaYaa</a></h1>
         </div>
 
         <div class="main-menu">
