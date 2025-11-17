@@ -9,12 +9,9 @@ include_once("controllers/UsuarioController.php");
 include_once("controllers/EditorController.php");
 include_once("models/editorModel.php");
 include_once("models/partidaModel.php");
-<<<<<<< HEAD
 include_once ("models/adminModel.php");
 include_once ("controllers/AdminController.php");
-=======
 include_once("controllers/RankingController.php");
->>>>>>> origin/DEV-MARTIN
 
 class ConfigFactory
 {
@@ -39,11 +36,8 @@ class ConfigFactory
         $this->objetos["UsuarioController"] = new UsuarioController($usuarioModel);
         $this->objetos["PartidaController"] = new PartidaController();
         $this->objetos["EditorController"] = new EditorController($this->conexion->getConexion());
-<<<<<<< HEAD
         $this->objetos["AdminController"] = new AdminController($this->conexion->getConexion());
-=======
         $this->objetos["RankingController"] = new RankingController();
->>>>>>> origin/DEV-MARTIN
 
         $this->objetos["router"] = new NewRouter($this, "LoginController", "inicioSesion");
     }
