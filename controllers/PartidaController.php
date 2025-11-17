@@ -59,12 +59,14 @@ class PartidaController
 
         $categoria = $_GET["categoria"] ?? null;
         if (!$categoria) {
+            $_SESSION['flash_error'] = 'Debe elegir una categoría girando la ruleta.';
             header("Location: index.php?controller=partida&method=mostrarRuleta");
             exit();
         }
 
         $categoria_id = $this->partidaModel->getCategoriaIdPorNombre($categoria);
         if (!$categoria_id) {
+            $_SESSION['flash_error'] = 'Categoría no válida: ' . htmlspecialchars($categoria);
             header("Location: index.php?controller=partida&method=mostrarRuleta");
             exit();
         }
@@ -73,9 +75,15 @@ class PartidaController
 
         // Si no hay partida activa, crear una nueva. Caso contrario reutilizar puntaje y partida.
         if (!isset($_SESSION["partida_id"])) {
-            $partidaId = $this->partidaModel->registrarPartida($usuarioId, $categoria_id);
-            $_SESSION["partida_id"] = $partidaId;
-            $_SESSION["puntaje"] = 0;
+            try {
+                $partidaId = $this->partidaModel->registrarPartida($usuarioId, $categoria_id);
+                $_SESSION["partida_id"] = $partidaId;
+                $_SESSION["puntaje"] = 0;
+            } catch (Exception $e) {
+                $_SESSION['flash_error'] = $e->getMessage();
+                header("Location: index.php?controller=partida&method=mostrarRuleta");
+                exit();
+            }
         } else {
             $partidaId = $_SESSION["partida_id"];
         }
@@ -89,6 +97,10 @@ class PartidaController
         $_SESSION["pregunta_actual"] = 0;
 
         $preguntaActual = $preguntas[0];
+        // Registrar entrega de la primera pregunta mostrada
+        if (isset($preguntaActual['id'])) {
+            $this->partidaModel->registrarEntregaPregunta($preguntaActual['id']);
+        }
         include("views/partida.php");
     }
 
@@ -116,6 +128,10 @@ class PartidaController
         } else {
             $_SESSION["puntaje"] -= 1;
             $_SESSION["partida_finalizada"] = true; // marcar que la partida termina por error
+            // Registrar respuesta incorrecta para estadísticas
+            if (isset($pregunta['id'])) {
+                $this->partidaModel->registrarIncorrectaPregunta($pregunta['id']);
+            }
         }
 
         // Guardar puntaje parcial en DB siempre

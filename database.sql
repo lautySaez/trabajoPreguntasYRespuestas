@@ -77,7 +77,7 @@ CREATE TABLE preguntas (
     respuesta_3 TEXT NOT NULL,
     respuesta_4 TEXT NOT NULL,
     respuesta_correcta TINYINT NOT NULL CHECK (respuesta_correcta BETWEEN 1 AND 4),
-    veces_moentregada INT DEFAULT 0,
+    veces_entregada INT DEFAULT 0,
     veces_incorrecta INT DEFAULT 0,
     porcentaje_acierto DECIMAL(5,2) DEFAULT 0.00,
     nivel_dificultad ENUM('Fácil', 'Medio', 'Difícil') DEFAULT 'Medio',

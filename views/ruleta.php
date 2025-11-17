@@ -3,6 +3,13 @@
 <link rel="stylesheet" href="public/css/ruleta.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
+<?php if (!empty($_SESSION['flash_error'])): ?>
+    <div style="background:#ffebee;color:#c62828;padding:10px 15px;border-radius:8px;margin:10px 0;font-weight:600;max-width:800px;">
+        <?= htmlspecialchars($_SESSION['flash_error']) ?>
+    </div>
+    <?php unset($_SESSION['flash_error']); ?>
+<?php endif; ?>
+
 <div class="ruleta-page">
     <div class="ruleta-container">
 
@@ -24,7 +31,7 @@
     </div>
 </div>
 
-<script src="public/js/ruleta.js" type="text/javascript"></script>
+<script src="public/js/ruleta.js?v=20251117" type="text/javascript"></script>
 
 <?php include("views/partials/footer.php"); ?>
 
