@@ -47,6 +47,11 @@ class PartidaController
             session_start();
         }
 
+        // Aseguramos limpiar bandera de finalización si se inicia (o reinicia) una ronda.
+        if (isset($_SESSION["partida_finalizada"])) {
+            unset($_SESSION["partida_finalizada"]);
+        }
+
         if (!isset($_SESSION["usuario"]["id"])) {
             header("Location: index.php?controller=LoginController&method=inicioSesion");
             exit();
@@ -65,9 +70,15 @@ class PartidaController
         }
 
         $usuarioId = $_SESSION["usuario"]["id"];
-        $partidaId = $this->partidaModel->registrarPartida($usuarioId, $categoria_id);
-        $_SESSION["partida_id"] = $partidaId;
-        $_SESSION["puntaje"] = 0;
+
+        // Si no hay partida activa, crear una nueva. Caso contrario reutilizar puntaje y partida.
+        if (!isset($_SESSION["partida_id"])) {
+            $partidaId = $this->partidaModel->registrarPartida($usuarioId, $categoria_id);
+            $_SESSION["partida_id"] = $partidaId;
+            $_SESSION["puntaje"] = 0;
+        } else {
+            $partidaId = $_SESSION["partida_id"];
+        }
 
         $preguntas = $this->partidaModel->obtenerPreguntasPorCategoriaId($categoria_id);
         if (empty($preguntas)) {
@@ -95,23 +106,29 @@ class PartidaController
         $pregunta = $preguntas[$indice];
         $correcta = $pregunta["respuesta_correcta"];
 
-        if ($respuestaSeleccionada == $correcta) {
+        $esCorrecta = ($respuestaSeleccionada == $correcta);
+        if ($esCorrecta) {
             $_SESSION["puntaje"] += 2;
+            // Si venía de una partida finalizada anterior y el usuario reinició correctamente, limpiamos la bandera.
+            if (isset($_SESSION["partida_finalizada"])) {
+                unset($_SESSION["partida_finalizada"]);
+            }
         } else {
             $_SESSION["puntaje"] -= 1;
+            $_SESSION["partida_finalizada"] = true; // marcar que la partida termina por error
         }
 
-        $_SESSION["pregunta_actual"]++;
+        // Guardar puntaje parcial en DB siempre
+        $this->partidaModel->actualizarPuntaje($partidaId, $_SESSION["puntaje"]);
 
-        if ($_SESSION["pregunta_actual"] >= count($preguntas)) {
-            // Fin de partida
-            $this->partidaModel->actualizarPuntaje($partidaId, $_SESSION["puntaje"]);
-            header("Location: index.php?controller=partida&method=terminarPartida");
-            exit();
-        } else {
-            $preguntaActual = $preguntas[$_SESSION["pregunta_actual"]];
-            include("views/partida.php");
-        }
+        // Limpiar preguntas para forzar nuevo giro si acertó, o terminar si falló
+        unset($_SESSION["preguntas"]);
+        unset($_SESSION["pregunta_actual"]);
+
+        $preguntaActual = $pregunta; // Para la vista de feedback
+        $respuestaSeleccionadaId = (int)$respuestaSeleccionada;
+        $respuestaCorrectaId = (int)$correcta;
+        include("views/partida_feedback.php");
     }
 
     public function siguientePregunta() {
@@ -146,6 +163,7 @@ class PartidaController
         unset($_SESSION["pregunta_actual"]);
         unset($_SESSION["partida_id"]);
         unset($_SESSION["puntaje"]);
+        unset($_SESSION["partida_finalizada"]); // permitir nueva partida limpia
     }
 
     public function obtenerCategorias() {
