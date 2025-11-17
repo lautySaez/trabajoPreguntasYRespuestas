@@ -748,3 +748,18 @@ CREATE TABLE reportes (
     FOREIGN KEY (pregunta_id) REFERENCES preguntas(id),
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
+
+-- Registro de preguntas respondidas por cada usuario para evitar repetición
+CREATE TABLE IF NOT EXISTS preguntas_usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    pregunta_id INT NOT NULL,
+    correcta TINYINT(1) NOT NULL, -- 1 si respondió correctamente, 0 caso contrario
+    fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uniq_usuario_pregunta (usuario_id, pregunta_id),
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (pregunta_id) REFERENCES preguntas(id) ON DELETE CASCADE,
+    INDEX idx_usuario (usuario_id),
+    INDEX idx_pregunta (pregunta_id),
+    INDEX idx_usuario_correcta (usuario_id, correcta)
+);

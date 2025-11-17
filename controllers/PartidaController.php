@@ -88,13 +88,16 @@ class PartidaController
             $partidaId = $_SESSION["partida_id"];
         }
 
-        $preguntas = $this->partidaModel->obtenerPreguntasPorCategoriaId($categoria_id);
+        // Obtener listado completo restante para la ronda (sin límite artificial)
+        $preguntas = $this->partidaModel->obtenerPreguntasPorCategoriaId($categoria_id, $usuarioId, 1000);
         if (empty($preguntas)) {
+            $_SESSION['flash_error'] = 'No quedan preguntas disponibles en esta categoría para vos. Elegí otra categoría.';
             header("Location: index.php?controller=partida&method=mostrarRuleta");
             exit();
         }
         $_SESSION["preguntas"] = $preguntas;
         $_SESSION["pregunta_actual"] = 0;
+        $_SESSION["categoria_ronda"] = $categoria_id; // Persistir categoría de la ronda actual
 
         $preguntaActual = $preguntas[0];
         // Registrar entrega de la primera pregunta mostrada
@@ -121,30 +124,65 @@ class PartidaController
         $esCorrecta = ($respuestaSeleccionada == $correcta);
         if ($esCorrecta) {
             $_SESSION["puntaje"] += 2;
-            // Si venía de una partida finalizada anterior y el usuario reinició correctamente, limpiamos la bandera.
             if (isset($_SESSION["partida_finalizada"])) {
                 unset($_SESSION["partida_finalizada"]);
             }
         } else {
             $_SESSION["puntaje"] -= 1;
-            $_SESSION["partida_finalizada"] = true; // marcar que la partida termina por error
-            // Registrar respuesta incorrecta para estadísticas
+            $_SESSION["partida_finalizada"] = true;
             if (isset($pregunta['id'])) {
                 $this->partidaModel->registrarIncorrectaPregunta($pregunta['id']);
             }
         }
 
+        // Registrar pregunta respondida (correcta o incorrecta) para evitar repetición
+        if (isset($_SESSION['usuario']['id']) && isset($pregunta['id'])) {
+            $this->partidaModel->registrarPreguntaUsuario($_SESSION['usuario']['id'], $pregunta['id'], $esCorrecta);
+        }
+
         // Guardar puntaje parcial en DB siempre
         $this->partidaModel->actualizarPuntaje($partidaId, $_SESSION["puntaje"]);
 
-        // Limpiar preguntas para forzar nuevo giro si acertó, o terminar si falló
-        unset($_SESSION["preguntas"]);
-        unset($_SESSION["pregunta_actual"]);
+        // Si fallo: limpiar para terminar la ronda completamente
+        if (!$esCorrecta) {
+            unset($_SESSION["preguntas"]);
+            unset($_SESSION["pregunta_actual"]);
+            unset($_SESSION["categoria_ronda"]);
+        } else {
+            // Avanzar índice si aún hay preguntas
+            $total = count($preguntas);
+            if ($indice + 1 < $total) {
+                $_SESSION["pregunta_actual"] = $indice + 1;
+            } else {
+                // Se acabaron las preguntas sin fallar: terminar ronda pero permitir girar la ruleta
+                unset($_SESSION["preguntas"]);
+                unset($_SESSION["pregunta_actual"]);
+                unset($_SESSION["categoria_ronda"]);
+                $_SESSION['ronda_completada'] = true;
+            }
+        }
 
         $preguntaActual = $pregunta; // Para la vista de feedback
         $respuestaSeleccionadaId = (int)$respuestaSeleccionada;
         $respuestaCorrectaId = (int)$correcta;
         include("views/partida_feedback.php");
+    }
+
+    // Mostrar la siguiente pregunta en la misma ronda (sin avanzar índice previamente)
+    public function continuarRonda() {
+        $preguntas = $_SESSION["preguntas"] ?? [];
+        $indice = $_SESSION["pregunta_actual"] ?? null;
+        if (!$preguntas || $indice === null) {
+            header("Location: index.php?controller=partida&method=mostrarRuleta");
+            exit();
+        }
+        // Tomar la pregunta actual (ya se avanzó el índice en responderPregunta)
+        $preguntaActual = $preguntas[$indice];
+        // Registrar entrega estadística
+        if (isset($preguntaActual['id'])) {
+            $this->partidaModel->registrarEntregaPregunta($preguntaActual['id']);
+        }
+        include("views/partida.php");
     }
 
     public function siguientePregunta() {

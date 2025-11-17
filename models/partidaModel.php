@@ -8,6 +8,7 @@ class PartidaModel {
         $db = new MyConexion("localhost", "root", "", "preguntas_respuestas");
         $this->conexion = $db->getConexion();
         $this->asegurarColumnasEstadisticas();
+        $this->asegurarTablaPreguntasUsuarios();
     }
 
     public function getCategoriaIdPorNombre($nombre) {
@@ -20,14 +21,16 @@ class PartidaModel {
         return $resultado['id'] ?? null;
     }
 
-    public function obtenerPreguntasPorCategoriaId($categoria_id, $limite = 4) {
+    public function obtenerPreguntasPorCategoriaId($categoria_id, $usuarioId, $limite = 4) {
+        // Excluir preguntas ya respondidas por el usuario
         $stmt = $this->conexion->prepare("
-            SELECT * FROM preguntas
-            WHERE categoria_id = ?
+            SELECT p.* FROM preguntas p
+            LEFT JOIN preguntas_usuarios pu ON pu.pregunta_id = p.id AND pu.usuario_id = ?
+            WHERE p.categoria_id = ? AND pu.pregunta_id IS NULL AND p.activa = 1
             ORDER BY RAND()
             LIMIT ?
         ");
-        $stmt->bind_param("ii", $categoria_id, $limite);
+        $stmt->bind_param("iii", $usuarioId, $categoria_id, $limite);
         $stmt->execute();
         $resultado = $stmt->get_result();
 
@@ -109,6 +112,13 @@ class PartidaModel {
         $stmt->execute();
         $this->recalcularDificultad($preguntaId);
     }
+
+    public function registrarPreguntaUsuario($usuarioId, $preguntaId, $correcta) {
+        $stmt = $this->conexion->prepare("INSERT IGNORE INTO preguntas_usuarios (usuario_id, pregunta_id, correcta) VALUES (?,?,?)");
+        $flag = $correcta ? 1 : 0;
+        $stmt->bind_param("iii", $usuarioId, $preguntaId, $flag);
+        $stmt->execute();
+    }
     
     private function recalcularDificultad($preguntaId) {
         // Calcula porcentaje de acierto y actualiza nivel según umbrales
@@ -177,5 +187,26 @@ class PartidaModel {
         $stmt->bind_param("i", $id);
         $stmt->execute();
         return $stmt->get_result()->num_rows === 1;
+    }
+
+    private function asegurarTablaPreguntasUsuarios() {
+        // Crear tabla si no existe (verificación sencilla)
+        $res = $this->conexion->query("SHOW TABLES LIKE 'preguntas_usuarios'");
+        if ($res && $res->num_rows === 0) {
+            $ddl = "CREATE TABLE preguntas_usuarios (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                usuario_id INT NOT NULL,
+                pregunta_id INT NOT NULL,
+                correcta TINYINT(1) NOT NULL,
+                fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE KEY uniq_usuario_pregunta (usuario_id, pregunta_id),
+                FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+                FOREIGN KEY (pregunta_id) REFERENCES preguntas(id) ON DELETE CASCADE,
+                INDEX idx_usuario (usuario_id),
+                INDEX idx_pregunta (pregunta_id),
+                INDEX idx_usuario_correcta (usuario_id, correcta)
+            )";
+            $this->conexion->query($ddl);
+        }
     }
 }
