@@ -753,3 +753,12 @@ CREATE TABLE reportes (
     FOREIGN KEY (pregunta_id) REFERENCES preguntas(id),
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
+
+CREATE TABLE ranking_jugadores (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    id_avatar INT DEFAULT NULL,
+    puntaje_total INT DEFAULT 0,
+    actualizado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
+);

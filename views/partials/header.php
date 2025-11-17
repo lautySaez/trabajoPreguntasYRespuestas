@@ -22,6 +22,12 @@
             <h1>AciertaYa - Juego de Preguntas</h1>
         </div>
 
+        <div class="main-menu">
+            <a href="index.php?controller=RankingController&method=verRankings" class="menu-item">
+                🏆 Rankings
+            </a>
+        </div>
+
         <?php if ($usuario): ?>
         <div class="user-section">
             <div class="user-info" onclick="toggleUserMenu()">
@@ -43,6 +49,10 @@
                 <a href="index.php?controller=UsuarioController&method=perfil" class="dropdown-item">
                     <i class="icon">⚙</i>
                     <span>Perfil</span>
+                </a>
+                <a href="index.php?controller=partida&method=mostrarModo" class="dropdown-item">
+                    <i class="icon">🎮</i>
+                    <span>Iniciar Partida</span>
                 </a>
                 <a href="index.php?controller=LoginController&method=logout" class="dropdown-item logout">
                     <i class="icon">🚪</i>

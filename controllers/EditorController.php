@@ -44,8 +44,8 @@ class EditorController
                 $datosPregunta['pregunta'] ?? $pregunta_vieja['pregunta'],
                 $datosPregunta['r1'] ?? $pregunta_vieja['r1'] ?? $pregunta_vieja['respuesta_1'],
                 $datosPregunta['r2'] ?? $pregunta_vieja['r2'] ?? $pregunta_vieja['respuesta_2'],
-                $datosPregunta['r3'] ?? $pregunta_vieja['r3'] ?? $pregunta_vieja['respuesta_3'],
-                $datosPregunta['r4'] ?? $pregunta_vieja['r4'] ?? $pregunta_vieja['respuesta_4'],
+                $datosPregunta['r3'] ?? $datosPregunta['r3'] ?? $pregunta_vieja['respuesta_3'],
+                $datosPregunta['r4'] ?? $datosPregunta['r4'] ?? $pregunta_vieja['respuesta_4'],
                 $datosPregunta['correcta'] ?? $pregunta_vieja['correcta'] ?? $pregunta_vieja['respuesta_correcta']
             );
 
