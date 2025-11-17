@@ -77,16 +77,11 @@ CREATE TABLE preguntas (
     respuesta_3 TEXT NOT NULL,
     respuesta_4 TEXT NOT NULL,
     respuesta_correcta TINYINT NOT NULL CHECK (respuesta_correcta BETWEEN 1 AND 4),
-    veces_mostrada INT DEFAULT 0,
-    veces_respondida INT DEFAULT 0,
-    veces_correcta INT DEFAULT 0,
+    veces_entregada INT DEFAULT 0,
     veces_incorrecta INT DEFAULT 0,
     porcentaje_acierto DECIMAL(5,2) DEFAULT 0.00,
     nivel_dificultad ENUM('Fácil', 'Medio', 'Difícil') DEFAULT 'Medio',
     activa BOOLEAN DEFAULT TRUE,
-    creada_por VARCHAR(100) DEFAULT 'Sistema',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (categoria_id) REFERENCES categorias(id) ON DELETE CASCADE,
     INDEX idx_categoria (categoria_id),
     INDEX idx_dificultad (nivel_dificultad),
@@ -752,4 +747,19 @@ CREATE TABLE reportes (
     fecha_reporte TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (pregunta_id) REFERENCES preguntas(id),
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+);
+
+-- Registro de preguntas respondidas por cada usuario para evitar repetición
+CREATE TABLE IF NOT EXISTS preguntas_usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    pregunta_id INT NOT NULL,
+    correcta TINYINT(1) NOT NULL, -- 1 si respondió correctamente, 0 caso contrario
+    fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uniq_usuario_pregunta (usuario_id, pregunta_id),
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (pregunta_id) REFERENCES preguntas(id) ON DELETE CASCADE,
+    INDEX idx_usuario (usuario_id),
+    INDEX idx_pregunta (pregunta_id),
+    INDEX idx_usuario_correcta (usuario_id, correcta)
 );
