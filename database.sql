@@ -751,11 +751,13 @@ CREATE TABLE reportes (
 
 CREATE TABLE ranking_jugadores (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    id_usuario INT NOT NULL,
-    id_avatar INT DEFAULT NULL,
+    usuario_id INT NOT NULL,
     puntaje_total INT DEFAULT 0,
-    actualizado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
+    actualizado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
+                   ON UPDATE CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+);
 
 CREATE TABLE IF NOT EXISTS preguntas_usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,

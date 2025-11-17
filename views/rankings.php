@@ -1,6 +1,7 @@
 <?php include("views/partials/header.php"); ?>
 
 <link rel="stylesheet" href="public/css/home.css">
+<link rel="stylesheet" href="public/css/rankings.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
 <div class="ranking-container">
@@ -23,32 +24,29 @@
     <table class="ranking-table">
         <thead>
             <tr>
-                <th>#</th>
                 <th>Avatar</th>
                 <th>Usuario</th>
                 <th>Puntos</th>
             </tr>
         </thead>
         <tbody>
-            <!-- DATOS HARDCODEADOS POR AHORA -->
-            <tr>
-                <td>1</td>
-                <td><img src="public/img/avatar1.png" class="rank-avatar"></td>
-                <td>Martin</td>
-                <td>2450</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td><img src="public/img/avatar2.png" class="rank-avatar"></td>
-                <td>Gaston</td>
-                <td>2190</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td><img src="public/img/avatar3.png" class="rank-avatar"></td>
-                <td>Sebas</td>
-                <td>1800</td>
-            </tr>
+            <?php foreach ($rankings as $r): ?>
+                    <tr>
+                        <td>
+                            <?php if (!empty($r["foto_perfil"])): ?>
+                                <img src="<?= htmlspecialchars($r["foto_perfil"]) ?>"
+                                    width="50" height="50" style="border-radius:50%;">
+                            <?php else: ?>
+                                <div style="
+                                    width:50px;height:50px;border-radius:50%;
+                                    background:#fff;display:inline-block;">
+                                </div>
+                            <?php endif; ?>
+                        </td>
+                        <td><?= htmlspecialchars($r["nombre_usuario"]) ?></td>
+                        <td><?= htmlspecialchars($r["puntaje_total"]) ?></td>
+                    </tr>
+            <?php endforeach; ?>
         </tbody>
     </table>
 
