@@ -1,6 +1,6 @@
 <?php include("views/partials/header.php"); ?>
 
-<link rel="stylesheet" href="public/css/adminDashboard.css">
+<link rel="stylesheet" href="public/css/adminInfoYRepo.css">
 
 <?php
 if (session_status() === PHP_SESSION_NONE) session_start();
@@ -12,7 +12,6 @@ if (!$usuario) {
 ?>
 
 <div class="admin-app">
-    <?php include("views/partials/adminSidebar.php"); ?>
 
     <main class="admin-main">
 

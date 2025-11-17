@@ -4,7 +4,7 @@
 /** @var array $informes */
 ?>
 
-<link rel="stylesheet" href="public/css/adminDashboard.css">
+<link rel="stylesheet" href="public/css/adminInfoYRepo.css">
 
 <?php
 if (session_status() === PHP_SESSION_NONE) session_start();
@@ -16,7 +16,6 @@ if (!$usuario) {
 ?>
 
 <div class="admin-app">
-    <?php include("views/partials/adminSidebar.php"); ?>
 
     <main class="admin-main">
 
@@ -67,7 +66,6 @@ if (!$usuario) {
     </main>
 </div>
 
-<!-- MODAL -->
 <div id="modalDetalle" class="modal" style="display:none;">
     <div class="modal-content">
         <h2>Detalle del Informe</h2>

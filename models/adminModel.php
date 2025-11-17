@@ -71,11 +71,11 @@ class adminModel {
     }
 
     public function lugaresDondeJuegan($limit = 50) {
-        $sql = "SELECT COALESCE(u.pais,'Desconocido') AS pais, COALESCE(u.ciudad,'Desconocido') AS ciudad, COUNT(pt.id) AS sesiones
+        $sql = "SELECT COALESCE(u.pais,'Desconocido') AS pais, COALESCE(u.ciudad,'Desconocido') AS ciudad, COUNT(pt.id) AS cantidad
                 FROM partidas pt
                 LEFT JOIN usuarios u ON u.id = pt.usuario_id
                 GROUP BY pais, ciudad
-                ORDER BY sesiones DESC
+                ORDER BY cantidad DESC
                 LIMIT ?";
         $stmt = $this->conexion->prepare($sql);
         $stmt->bind_param("i", $limit);
