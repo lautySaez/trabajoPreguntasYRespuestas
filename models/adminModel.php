@@ -39,11 +39,14 @@ class adminModel {
     }
 
     public function top10PreguntasMasFaciles() {
-        $sql = "SELECT id, pregunta, porcentaje_acierto, nivel_dificultad, veces_mostrada
-                FROM preguntas
-                WHERE veces_mostrada > 0
-                ORDER BY porcentaje_acierto DESC
-                LIMIT 10";
+        $sql = "SELECT id,
+                   pregunta,
+                   COALESCE(porcentaje_acierto, 0) AS porcentaje_acierto,
+                   nivel_dificultad,
+                   veces_mostrada
+            FROM preguntas
+            ORDER BY COALESCE(porcentaje_acierto, 0) DESC
+            LIMIT 10";
         $stmt = $this->conexion->prepare($sql);
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);

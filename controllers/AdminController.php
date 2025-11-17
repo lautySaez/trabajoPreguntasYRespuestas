@@ -20,6 +20,8 @@ class AdminController {
     }
 
     public function homeAdmin() {
+        $usuario = $_SESSION['usuario'] ?? null;
+
         $kpis = [
             'total_usuarios'    => $this->model->contarUsuarios(),
             'total_preguntas'   => $this->model->contarPreguntas(),
@@ -27,7 +29,24 @@ class AdminController {
             'usuarios_list'     => $this->model->obtenerUsuarios(200),
         ];
 
-        include(__DIR__ . "/../views/homeAdmin.php");
+        $data = [
+            'kpis'    => $kpis,
+            'usuario' => $usuario
+        ];
+
+        $this->render('homeAdmin', $data);
+    }
+
+    protected function render($viewName, $data = []) {
+        extract($data);
+
+        $viewPath = __DIR__ . "/../views/" . $viewName . ".php";
+
+        if (file_exists($viewPath)) {
+            include $viewPath;
+        } else {
+            echo "Error: Vista no encontrada.";
+        }
     }
 
     public function statsJson() {
@@ -35,14 +54,15 @@ class AdminController {
 
         $payload = [
             'total_preguntas' => $this->model->contarPreguntas(),
+            'total_partidas'  => $this->model->contarPartidas(),
             'por_categoria'   => $this->model->preguntasPorCategoria(),
             'top_faciles'     => $this->model->top10PreguntasMasFaciles(),
             'top_jugadores'   => $this->model->mejoresJugadores(10),
-            'lugares'         => $this->model->lugaresDondeJuegan(50),
+            'lugares'         => $this->model->lugaresDondeJuegan(500),
             'edades'          => $this->model->distribucionEdades(),
             'genero'          => $this->model->distribucionGenero(),
-            'informes'        => $this->model->obtenerInformes(10),
-            'reportes'        => $this->model->obtenerReportesJugadores(10)
+            'informes'        => $this->model->obtenerInformes(100),
+            'reportes'        => $this->model->obtenerReportesJugadores(100)
         ];
 
         echo json_encode($payload);

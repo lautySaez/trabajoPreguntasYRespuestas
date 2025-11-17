@@ -1,165 +1,117 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
 
-    const url = 'index.php?controller=admin&method=statsJson';
-
-    fetch(url)
-        .then(r => {
-            if (!r.ok) {
-                throw new Error(`HTTP error! status: ${r.status}`);
-            }
-            return r.json();
-        })
+    fetch("index.php?controller=admin&method=statsJson")
+        .then(res => res.json())
         .then(data => {
+            console.log("DEBUG DATA:", data);
 
-            qs('#kpi-total-preguntas').innerText = data.total_preguntas?.toLocaleString() ?? '0';
-            qs('#kpi-categorias').innerText = (data.por_categoria?.length)?.toLocaleString() ?? '0';
-            qs('#kpi-partidas').innerText = data.total_partidas?.toLocaleString() ?? '0';
+            document.getElementById("kpi-total-preguntas").textContent = data.total_preguntas ?? "0";
+            document.getElementById("kpi-partidas").textContent = data.total_partidas ?? "0";
+            document.getElementById("kpi-categorias").textContent = data.por_categoria?.length ?? "0";
 
-            graph('chart-edades', 'bar',
-                (data.edades || []).map(e => e.rango),
-                (data.edades || []).map(e => e.cantidad)
-            );
+            const topJugadoresBody = document.getElementById("top-jugadores-body");
+            topJugadoresBody.innerHTML = "";
 
-            graph('chart-genero', 'pie',
-                (data.genero || []).map(g => g.genero),
-                (data.genero || []).map(g => g.cantidad)
-            );
+            if (data.top_jugadores?.length > 0) {
+                data.top_jugadores.forEach(j => {
+                    topJugadoresBody.innerHTML += `
+                        <tr>
+                            <td>
+                                ${j.foto_perfil
+                        ? `<img src="${j.foto_perfil}" class="avatar-small">`
+                        : `<div class="avatar-small placeholder">${j.nombre_usuario[0].toUpperCase()}</div>`
+                    }
+                            </td>
+                            <td>${j.nombre_usuario}</td>
+                            <td>${j.total_puntos}</td>
+                            <td>${j.partidas_jugadas}</td>
+                        </tr>`;
+                });
+            } else {
+                topJugadoresBody.innerHTML = `<tr><td colspan="4">No hay datos</td></tr>`;
+            }
 
-            graph('chart-categorias', 'doughnut',
-                (data.por_categoria || []).map(c => c.nombre),
-                (data.por_categoria || []).map(c => c.total)
-            );
+            const topFacilesList = document.getElementById("top-faciles-list");
+            topFacilesList.innerHTML = "";
 
-            const lugaresLabels = (data.lugares || []).map(l => `${l.ciudad}, ${l.pais}`);
-            const lugaresValues = (data.lugares || []).map(l => l.cantidad);
+            if (data.top_faciles?.length > 0) {
+                data.top_faciles.forEach(p => {
+                    topFacilesList.innerHTML += `
+                        <li>
+                            <strong>${p.pregunta}</strong><br>
+                            <small>Acierto: ${p.porcentaje_acierto}% — ${p.veces_mostrada} jugadas</small>
+                        </li>`;
+                });
+            } else {
+                topFacilesList.innerHTML = "<li>No hay datos</li>";
+            }
 
-            graph('mapa-usuarios', 'bar',
-                lugaresLabels,
-                lugaresValues
-            );
+            const informesList = document.getElementById("ultimos-informes-list");
+            informesList.innerHTML = "";
 
-            const ul = qs('#top-faciles-list');
-            ul.innerHTML = '';
-            (data.top_faciles || []).slice(0, 10).forEach(q => {
-                const li = document.createElement('li');
+            if (data.informes?.length > 0) {
+                data.informes.forEach(i => {
+                    informesList.innerHTML += `
+                        <li>
+                            <strong>${i.editor_nombre ?? "Editor desconocido"}</strong><br>
+                            <small>${i.tipo_accion} — ${i.fecha}</small>
+                        </li>`;
+                });
+            } else {
+                informesList.innerHTML = "<li>No hay informes</li>";
+            }
 
-                const preguntaTexto = q.pregunta ? q.pregunta.substring(0, 80) : 'N/A';
-                const porcentaje = parseFloat(q.porcentaje_acierto).toFixed(1);
-
-                li.innerHTML = `<strong>${porcentaje}%</strong> — ${preguntaTexto}...`;
-                ul.append(li);
+            new Chart(document.getElementById("chart-edades"), {
+                type: "bar",
+                data: {
+                    labels: data.edades.map(e => e.rango),
+                    datasets: [{
+                        label: "Usuarios",
+                        data: data.edades.map(e => e.cantidad)
+                    }]
+                }
             });
 
-            const tbody = qs('#top-jugadores-body');
-            tbody.innerHTML = '';
-            (data.top_jugadores || []).slice(0, 10).forEach(u => {
-                const tr = document.createElement('tr');
-
-                const avatar = u.foto_perfil ?
-                    `<img src="${u.foto_perfil}" class="avatar-small">` :
-                    `<div class="avatar-small placeholder-small">${u.nombre_usuario.substring(0,1).toUpperCase()}</div>`;
-
-                tr.innerHTML = `
-                    <td>${avatar}</td>
-                    <td>${u.nombre_usuario}</td>
-                    <td>${(u.total_puntos ?? 0).toLocaleString()}</td>
-                    <td>${(u.partidas_jugadas ?? 0).toLocaleString()}</td>
-                `;
-                tbody.appendChild(tr);
+            new Chart(document.getElementById("chart-genero"), {
+                type: "pie",
+                data: {
+                    labels: data.genero.map(g => g.genero),
+                    datasets: [{
+                        data: data.genero.map(g => g.cantidad)
+                    }]
+                }
             });
 
-            const ul2 = qs('#ultimos-informes-list');
-            ul2.innerHTML = '';
-            (data.informes || []).slice(0, 10).forEach(i => {
-                const li = document.createElement('li');
+            new Chart(document.getElementById("chart-categorias"), {
+                type: "bar",
+                data: {
+                    labels: data.por_categoria.map(c => c.nombre),
+                    datasets: [{
+                        label: "Preguntas",
+                        data: data.por_categoria.map(c => c.total)
+                    }]
+                }
+            });
 
-                const motivoTexto = i.motivo ? i.motivo.substring(0, 45) : 'Sin motivo';
-                const editor = i.editor_nombre ?? 'Sistema';
+            const map = L.map("mapa-usuarios").setView([-34.60, -58.38], 3);
 
-                li.innerHTML = `<strong>${i.tipo_accion}</strong>: ${editor}<br><small title="${i.motivo}">${motivoTexto}...</small>`;
-                ul2.append(li);
+            L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                maxZoom: 18
+            }).addTo(map);
+
+            data.lugares?.forEach(l => {
+                if (!l.pais || l.pais === "Desconocido") return;
+
+                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${l.ciudad}, ${l.pais}`)
+                    .then(res => res.json())
+                    .then(loc => {
+                        if (loc[0]) {
+                            L.marker([loc[0].lat, loc[0].lon]).addTo(map)
+                                .bindPopup(`${l.ciudad}, ${l.pais}<br>Partidas: ${l.cantidad}`);
+                        }
+                    });
             });
 
         })
-        .catch(err => {
-            console.error('Error al cargar las estadísticas:', err);
-            qs('#top-jugadores-body').innerHTML = '<tr><td colspan="4">Error al cargar datos.</td></tr>';
-        });
+        .catch(err => console.error("Error cargando dashboard:", err));
 });
-
-function qs(s) { return document.querySelector(s); }
-
-function graph(id, type, labels, values) {
-    let el = document.getElementById(id);
-    if (!el) return;
-
-    if (id === 'mapa-usuarios' && el.tagName !== 'CANVAS') {
-        const parent = el.parentElement;
-        parent.removeChild(el);
-        const newCanvas = document.createElement('canvas');
-        newCanvas.id = id;
-        parent.appendChild(newCanvas);
-        el = newCanvas;
-    }
-
-    const colors = [
-        '#2563eb', '#059669', '#f59e0b', '#ef4444', '#6366f1', '#14b8a6', '#f97316', '#a855f7'
-    ];
-
-    let options = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: (type !== 'bar' && type !== 'line'),
-                position: type === 'pie' || type === 'doughnut' ? 'right' : 'top',
-                labels: {
-                    font: { size: 12, family: 'Inter' }
-                }
-            },
-            tooltip: {
-                bodyFont: { family: 'Inter' }
-            }
-        },
-        scales: {}
-    };
-
-    let datasetConfig = {
-        data: values,
-        backgroundColor: colors.map(c => c + 'd0'),
-        borderColor: colors,
-        borderWidth: 1,
-    };
-
-    if (type === 'bar' || type === 'line') {
-        options.scales.y = {
-            beginAtZero: true,
-            ticks: { precision: 0 },
-            grid: { color: '#e2e8f0' }
-        };
-        options.scales.x = {
-            grid: { display: false }
-        };
-
-        datasetConfig.backgroundColor = '#2563eb';
-        datasetConfig.borderColor = '#2563eb';
-        datasetConfig.borderWidth = 0;
-        datasetConfig.label = 'Cantidad de Usuarios';
-    }
-
-    if (type === 'pie' || type === 'doughnut') {
-        datasetConfig.backgroundColor = colors;
-        datasetConfig.hoverOffset = 8;
-        datasetConfig.borderColor = '#fff';
-        datasetConfig.label = 'Distribución';
-    }
-
-    new Chart(el, {
-        type,
-        data: {
-            labels,
-            datasets: [datasetConfig]
-        },
-        options: options
-    });
-}
