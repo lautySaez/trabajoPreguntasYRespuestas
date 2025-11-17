@@ -9,6 +9,8 @@ include_once("controllers/UsuarioController.php");
 include_once("controllers/EditorController.php");
 include_once("models/editorModel.php");
 include_once("models/partidaModel.php");
+include_once ("models/adminModel.php");
+include_once ("controllers/AdminController.php");
 
 class ConfigFactory
 {
@@ -33,7 +35,7 @@ class ConfigFactory
         $this->objetos["UsuarioController"] = new UsuarioController($usuarioModel);
         $this->objetos["PartidaController"] = new PartidaController();
         $this->objetos["EditorController"] = new EditorController($this->conexion->getConexion());
-
+        $this->objetos["AdminController"] = new AdminController($this->conexion->getConexion());
 
         $this->objetos["router"] = new NewRouter($this, "LoginController", "inicioSesion");
     }
