@@ -29,6 +29,14 @@ if (!$usuario) {
                 </a>
             </nav>
 
+            <div class="sidebar-actions">
+                <button class="btn-sidebar-action" id="btn-print">
+                    <i class="fa fa-print"></i> Imprimir Dashboard
+                </button>
+                <button class="btn-sidebar-action" id="btn-export-pdf">
+                    <i class="fa fa-file-pdf"></i> Exportar PDF
+                </button>
+            </div>
             <div class="sidebar-user">
                 <small>Conectado como</small>
                 <strong><?= htmlspecialchars($usuario['nombre_usuario']) ?></strong>
@@ -91,9 +99,9 @@ if (!$usuario) {
                 </div>
             </section>
 
-            <section class="table-grid">
+            <section class="table-grid" id="printable-area">
 
-                <div class="table-card">
+                <div class="table-card" id="top-jugadores-table-card">
                     <h3>Top 10 jugadores</h3>
                     <table>
                         <thead>
@@ -119,6 +127,9 @@ if (!$usuario) {
 
         </main>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="public/js/adminDashboard.js"></script>

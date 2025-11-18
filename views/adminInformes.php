@@ -4,7 +4,7 @@
 /** @var array $informes */
 ?>
 
-    <link rel="stylesheet" href="public/css/adminInfoYRepo.css">
+    <link rel="stylesheet" href="public/css/adminInformes.css">
 
 <?php
 if (session_status() === PHP_SESSION_NONE) session_start();
@@ -71,8 +71,9 @@ if (!$usuario) {
         </main>
     </div>
 
-    <div id="modalDetalle" class="modal" style="display:none;">
+    <div id="modalDetalle" class="modal">
         <div class="modal-content">
+            <span class="close-button">&times;</span>
             <h2>Detalle del Informe</h2>
             <p><strong>Pregunta:</strong> <span id="m_pregunta"></span></p>
             <p><strong>Respuestas:</strong></p>
@@ -85,28 +86,10 @@ if (!$usuario) {
             <p><strong>Correcta:</strong> <span id="m_correcta"></span></p>
             <p><strong>Motivo:</strong> <span id="m_motivo"></span></p>
 
-            <button onclick="cerrarModal()" class="btn btn-red">Cerrar</button>
+            <button id="modal-close-btn" class="btn btn-secondary">Cerrar</button>
         </div>
     </div>
 
-    <script>
-        document.querySelectorAll('.ver-detalle').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.getElementById('m_pregunta').innerText = btn.dataset.pregunta;
-                document.getElementById('m_r1').innerText = btn.dataset.r1;
-                document.getElementById('m_r2').innerText = btn.dataset.r2;
-                document.getElementById('m_r3').innerText = btn.dataset.r3;
-                document.getElementById('m_r4').innerText = btn.dataset.r4;
-                document.getElementById('m_correcta').innerText = btn.dataset.correcta;
-                document.getElementById('m_motivo').innerText = btn.dataset.motivo;
-
-                document.getElementById('modalDetalle').style.display = "flex";
-            });
-        });
-
-        function cerrarModal(){
-            document.getElementById('modalDetalle').style.display = "none";
-        }
-    </script>
+    <script src="public/js/adminInformes.js"></script>
 
 <?php include("views/partials/footer.php"); ?>

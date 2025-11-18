@@ -52,6 +52,39 @@
     box-shadow: 0 2px 4px rgba(37, 99, 235, 0.4);
 }
 
+.sidebar-actions {
+    padding: 15px 0;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-top: 1px solid #334155;
+    border-bottom: 1px solid #334155;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn-sidebar-action {
+    background-color: #334155;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    width: 100%;
+    text-align: left;
+}
+
+.btn-sidebar-action:hover {
+    background-color: #475569;
+}
+
 .sidebar-user {
     margin-top: auto;
     padding-top: 15px;
@@ -209,6 +242,45 @@ table tbody td { padding: 12px 10px; border-bottom: 1px solid #f1f5f9; font-size
     margin-bottom: 2px;
 }
 
+.action-bar {
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 10px 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.action-bar h3 {
+    font-size: 20px;
+    color: #1f2937;
+    font-weight: 600;
+}
+
+.action-bar > div {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-action {
+    background-color: #64748b;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-action:hover {
+    background-color: #475569;
+}
+
 @media (max-width: 1100px) {
     .chart-grid { grid-template-columns: 1fr; }
 
@@ -229,4 +301,58 @@ table tbody td { padding: 12px 10px; border-bottom: 1px solid #f1f5f9; font-size
     .topbar { flex-direction: column; align-items: flex-start; }
     .topbar h1 { margin-bottom: 10px; }
     .content { padding: 15px; }
+}
+
+@media print {
+    .sidebar-actions, .topbar .user-info {
+        display: none !important;
+    }
+
+    .admin-wrapper {
+        display: block !important;
+        width: 100% !important;
+    }
+
+    .sidebar {
+        display: none !important;
+    }
+
+    .content {
+        flex: 1;
+        padding: 10px 15px !important;
+        width: 100%;
+        min-width: 100%;
+        margin: 0 !important;
+    }
+
+    .topbar {
+        border-bottom: none !important;
+        padding-bottom: 5px !important;
+        margin-bottom: 10px !important;
+        display: block !important;
+    }
+    .topbar h1 {
+        font-size: 22px !important;
+    }
+
+    .kpi-grid, .chart-grid, .table-grid {
+        display: block !important;
+        page-break-inside: avoid;
+        margin-bottom: 15px;
+    }
+
+    .kpi-card, .chart-card, .table-card {
+        box-shadow: none !important;
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+        page-break-inside: avoid !important;
+        height: auto !important;
+        overflow: visible !important;
+        width: 98% !important;
+        margin-left: 1%;
+    }
+
+    .chart-card canvas {
+        max-height: 200px !important;
+    }
 }

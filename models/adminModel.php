@@ -137,6 +137,28 @@ class adminModel {
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function obtenerDetalleReportePorId($id) {
+        // Consulta con ALIAS para que los nombres de las claves en el JSON coincidan con tu JS
+        $sql = "SELECT r.id, r.pregunta_id, r.usuario_id, u.nombre AS usuario_nombre, u.email AS usuario_email, 
+                   r.motivo, r.fecha_reporte, q.pregunta AS pregunta_texto, q.respuesta_correcta, 
+                   q.respuesta_1 AS respuesta1, q.respuesta_2 AS respuesta2, q.respuesta_3 AS respuesta3, q.respuesta_4 AS respuesta4
+            FROM reportes r
+            LEFT JOIN usuarios u ON u.id = r.usuario_id
+            LEFT JOIN preguntas q ON q.id = r.pregunta_id
+            WHERE r.id = ?";
+
+        $stmt = $this->conexion->prepare($sql);
+        if ($stmt === false) {
+            error_log("Error de MySQL al preparar detalle de reporte: " . $this->conexion->error);
+            return null;
+        }
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $detalle = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+        return $detalle;
+    }
+
     public function exportUsuariosCSVData() {
         return $this->obtenerUsuarios(10000);
     }

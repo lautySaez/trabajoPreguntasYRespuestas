@@ -79,6 +79,27 @@ class AdminController {
         include(__DIR__ . "/../views/adminReportes.php");
     }
 
+    public function obtenerDetalleReporte() {
+        if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+            http_response_code(400);
+            echo json_encode(['error' => 'ID de reporte inválido.']);
+            exit;
+        }
+
+        $id = (int)$_GET['id'];
+        header('Content-Type: application/json; charset=utf-8');
+
+        $detalle = $this->model->obtenerDetalleReportePorId($id);
+
+        if ($detalle) {
+            echo json_encode($detalle);
+        } else {
+            http_response_code(404);
+            echo json_encode(['error' => 'Reporte no encontrado.']);
+        }
+        exit;
+    }
+
     public function accionReporte() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_POST['id'] ?? null;

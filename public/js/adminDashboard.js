@@ -126,4 +126,70 @@ document.addEventListener("DOMContentLoaded", () => {
 
         })
         .catch(err => console.error("Error cargando dashboard:", err));
+
+
+    const btnPrint = document.getElementById('btn-print');
+    const btnExportPdf = document.getElementById('btn-export-pdf');
+
+    if (btnPrint) {
+        btnPrint.addEventListener('click', () => {
+            window.print();
+        });
+    }
+
+    if (btnExportPdf) {
+        btnExportPdf.addEventListener('click', () => {
+            const content = document.querySelector('.content');
+            const date = new Date().toISOString().slice(0, 10);
+
+            const actionsDiv = document.querySelector('.sidebar-actions');
+            const sidebar = document.querySelector('.sidebar');
+            if (actionsDiv) actionsDiv.style.display = 'none';
+            if (sidebar) sidebar.style.display = 'none';
+
+            const paddingBottomValue = '50px';
+            const originalPaddingBottom = content.style.paddingBottom;
+            content.style.paddingBottom = paddingBottomValue;
+
+            html2canvas(content, {
+                scale: 2,
+                useCORS: true,
+                scrollX: 0,
+                scrollY: 0,
+                windowWidth: content.scrollWidth,
+                windowHeight: content.scrollHeight + parseInt(paddingBottomValue)
+            }).then(canvas => {
+
+                content.style.paddingBottom = originalPaddingBottom;
+                if (actionsDiv) actionsDiv.style.display = 'flex';
+                if (sidebar) sidebar.style.display = 'flex';
+
+                const imgData = canvas.toDataURL('image/jpeg', 1.0);
+
+                const pdf = new window.jspdf.jsPDF('p', 'mm', 'a4');
+
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+
+                const imgRatio = canvas.height / canvas.width;
+                const imgDisplayHeight = pdfWidth * imgRatio;
+
+                let heightLeft = imgDisplayHeight;
+                let position = 0;
+
+                pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, imgDisplayHeight);
+                heightLeft -= pdfHeight;
+
+                while (heightLeft > 0) {
+                    position -= pdfHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, imgDisplayHeight);
+                    heightLeft -= pdfHeight;
+                }
+
+                pdf.save(`dashboard_admin_${date}.pdf`);
+            });
+        });
+    }
+
 });
