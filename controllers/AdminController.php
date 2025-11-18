@@ -37,6 +37,38 @@ class AdminController {
         $this->render('homeAdmin', $data);
     }
 
+    public function gestionUsuarios() {
+        $usuarios = $this->model->obtenerUsuarios(500);
+        $this->render('adminUsuarios', ['usuarios' => $usuarios]);
+    }
+
+    public function accionUsuario() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = $_POST['id'] ?? null;
+            $accion = $_POST['accion'] ?? null;
+            $current_rol = $_POST['current_rol'] ?? null;
+
+            if ($id && is_numeric($id) && $accion) {
+                if ($accion === 'bloquear') {
+                    $this->model->actualizarEstadoUsuario($id, 'Bloqueado');
+                } elseif ($accion === 'desbloquear') {
+                    $this->model->actualizarEstadoUsuario($id, 'Activo');
+                } elseif ($accion === 'eliminar') {
+                    $this->model->eliminarUsuario($id);
+                } elseif ($accion === 'cambiar_rol' && $current_rol) {
+                    $nuevoRol = ($current_rol === 'Jugador') ? 'Editor' : 'Jugador';
+                    $this->model->actualizarRolUsuario($id, $nuevoRol);
+                }
+
+                header("Location: index.php?controller=admin&method=gestionUsuarios");
+                exit;
+            }
+        }
+        http_response_code(400);
+        echo "Acción inválida o datos faltantes.";
+        exit;
+    }
+
     protected function render($viewName, $data = []) {
         extract($data);
 

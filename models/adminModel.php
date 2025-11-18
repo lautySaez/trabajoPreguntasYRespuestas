@@ -5,19 +5,59 @@ class adminModel {
     public function __construct($conexion) {
         $this->conexion = $conexion;
     }
-
     public function contarUsuarios() {
-        $stmt = $this->conexion->prepare("SELECT COUNT(*) AS total FROM usuarios WHERE rol = 'Jugador'");
+        $stmt = $this->conexion->prepare("SELECT COUNT(*) AS total FROM usuarios WHERE rol != 'Administrador'");
         $stmt->execute();
         $res = $stmt->get_result()->fetch_assoc();
         return (int)($res['total'] ?? 0);
     }
-
-    public function obtenerUsuarios($limit = 200) {
-        $stmt = $this->conexion->prepare("SELECT id, nombre, nombre_usuario, email, rol, estado_registro, foto_perfil, fecha_registro, pais, ciudad, fecha_nacimiento FROM usuarios ORDER BY fecha_registro DESC LIMIT ?");
+    public function obtenerUsuarios($limit = 500) {
+        $stmt = $this->conexion->prepare("SELECT id, nombre, nombre_usuario, email, rol, estado_registro, foto_perfil, fecha_registro, pais, ciudad, fecha_nacimiento 
+                                          FROM usuarios 
+                                          WHERE rol != 'Administrador' 
+                                          ORDER BY fecha_registro DESC LIMIT ?");
         $stmt->bind_param("i", $limit);
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function actualizarEstadoUsuario($userId, $estado) {
+        $sql = "UPDATE usuarios SET estado_registro = ? WHERE id = ? AND rol != 'Administrador'";
+        $stmt = $this->conexion->prepare($sql);
+        if ($stmt === false) {
+            error_log("Error al preparar 'actualizarEstadoUsuario': " . $this->conexion->error);
+            return 0;
+        }
+        $stmt->bind_param("si", $estado, $userId);
+        $stmt->execute();
+        return $stmt->affected_rows;
+    }
+
+    public function eliminarUsuario($userId) {
+        $sql = "DELETE FROM usuarios WHERE id = ? AND rol != 'Administrador'";
+        $stmt = $this->conexion->prepare($sql);
+        if ($stmt === false) {
+            error_log("Error al preparar 'eliminarUsuario': " . $this->conexion->error);
+            return 0;
+        }
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        return $stmt->affected_rows;
+    }
+    public function actualizarRolUsuario($userId, $nuevoRol) {
+        if (!in_array($nuevoRol, ['Jugador', 'Editor'])) {
+            return 0;
+        }
+
+        $sql = "UPDATE usuarios SET rol = ? WHERE id = ?";
+        $stmt = $this->conexion->prepare($sql);
+        if ($stmt === false) {
+            error_log("Error al preparar 'actualizarRolUsuario': " . $this->conexion->error);
+            return 0;
+        }
+        $stmt->bind_param("si", $nuevoRol, $userId);
+        $stmt->execute();
+        return $stmt->affected_rows;
     }
 
     public function contarPreguntas() {

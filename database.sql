@@ -15,7 +15,7 @@ CREATE TABLE usuarios (
     foto_perfil VARCHAR(255) DEFAULT NULL,
     rol ENUM('Jugador', 'Administrador', 'Editor') DEFAULT 'Jugador',
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    estado_registro ENUM('Activo', 'Inactivo') DEFAULT 'Inactivo',
+    estado_registro ENUM('Activo', 'Inactivo', 'Bloqueado') DEFAULT 'Inactivo',
     token_verificacion INT DEFAULT NULL
 );
 

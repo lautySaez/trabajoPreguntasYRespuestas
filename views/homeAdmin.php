@@ -21,6 +21,10 @@ if (!$usuario) {
                 <a href="index.php?controller=admin&method=homeAdmin" class="active">
                     <i class="fa fa-chart-line"></i> Dashboard
                 </a>
+
+                <a href="index.php?controller=admin&method=gestionUsuarios">
+                    <i class="fa fa-users"></i> Gestión de Jugadores
+                </a>
                 <a href="index.php?controller=admin&method=informes">
                     <i class="fa fa-flag"></i> Informes de Editores
                 </a>
@@ -59,7 +63,6 @@ if (!$usuario) {
                         <div><?= htmlspecialchars($usuario['nombre']) ?></div>
                         <small><?= htmlspecialchars($usuario['email']) ?></small>
                     </div>
-                </div>
             </header>
 
             <section class="kpi-grid">
