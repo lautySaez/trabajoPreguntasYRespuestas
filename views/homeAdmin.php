@@ -1,7 +1,6 @@
 <?php include("views/partials/header.php"); ?>
 
     <link rel="stylesheet" href="public/css/adminDashboard.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <?php
@@ -87,8 +86,8 @@ if (!$usuario) {
                 </div>
 
                 <div class="chart-card">
-                    <h3>Dónde se juega</h3>
-                    <div id="mapa-usuarios"></div>
+                    <h3>Ciudades con más partidas</h3>
+                    <canvas id="chart-lugares"></canvas>
                 </div>
             </section>
 
@@ -122,7 +121,6 @@ if (!$usuario) {
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="public/js/adminDashboard.js"></script>
 
 <?php include("views/partials/footer.php"); ?>

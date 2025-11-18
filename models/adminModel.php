@@ -72,9 +72,8 @@ class adminModel {
         $res = $stmt->get_result()->fetch_assoc();
         return (int)($res['total'] ?? 0);
     }
-
     public function lugaresDondeJuegan($limit = 50) {
-        $sql = "SELECT COALESCE(u.pais,'Desconocido') AS pais, COALESCE(u.ciudad,'Desconocido') AS ciudad, COUNT(pt.id) AS cantidad
+        $sql = "SELECT COALESCE(u.pais,'Desconocido') AS pais, COALESCE(u.ciudad,'Desconocido') AS ciudad, COUNT(DISTINCT pt.usuario_id) AS cantidad
                 FROM partidas pt
                 LEFT JOIN usuarios u ON u.id = pt.usuario_id
                 GROUP BY pais, ciudad

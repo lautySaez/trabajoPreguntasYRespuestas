@@ -93,24 +93,36 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
 
-            const map = L.map("mapa-usuarios").setView([-34.60, -58.38], 3);
+            const lugaresLabels = data.lugares
+                .filter(l => l.ciudad && l.pais && l.pais !== "Desconocido")
+                .map(l => `${l.ciudad}, ${l.pais}`);
 
-            L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-                maxZoom: 18
-            }).addTo(map);
+            const lugaresData = data.lugares
+                .filter(l => l.ciudad && l.pais && l.pais !== "Desconocido")
+                .map(l => l.cantidad);
 
-            data.lugares?.forEach(l => {
-                if (!l.pais || l.pais === "Desconocido") return;
-
-                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${l.ciudad}, ${l.pais}`)
-                    .then(res => res.json())
-                    .then(loc => {
-                        if (loc[0]) {
-                            L.marker([loc[0].lat, loc[0].lon]).addTo(map)
-                                .bindPopup(`${l.ciudad}, ${l.pais}<br>Partidas: ${l.cantidad}`);
+            if (lugaresLabels.length > 0) {
+                new Chart(document.getElementById("chart-lugares"), {
+                    type: "bar",
+                    data: {
+                        labels: lugaresLabels,
+                        datasets: [{
+                            label: "Total Jugadores",
+                            data: lugaresData,
+                            backgroundColor: 'rgba(75, 192, 192, 0.8)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
                         }
-                    });
-            });
+                    }
+                });
+            }
 
         })
         .catch(err => console.error("Error cargando dashboard:", err));
