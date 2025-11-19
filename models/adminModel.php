@@ -178,7 +178,6 @@ class adminModel {
     }
 
     public function obtenerDetalleReportePorId($id) {
-        // Consulta con ALIAS para que los nombres de las claves en el JSON coincidan con tu JS
         $sql = "SELECT r.id, r.pregunta_id, r.usuario_id, u.nombre AS usuario_nombre, u.email AS usuario_email, 
                    r.motivo, r.fecha_reporte, q.pregunta AS pregunta_texto, q.respuesta_correcta, 
                    q.respuesta_1 AS respuesta1, q.respuesta_2 AS respuesta2, q.respuesta_3 AS respuesta3, q.respuesta_4 AS respuesta4

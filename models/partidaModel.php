@@ -12,7 +12,6 @@ class PartidaModel {
     }
 
     public function getCategoriaIdPorNombre($nombre) {
-        // Normalizar para tolerar diferencias de mayúsculas/minúsculas y espacios
         $nombreNormalizado = trim($nombre);
         $stmt = $this->conexion->prepare("SELECT id FROM categorias WHERE LOWER(nombre) = LOWER(?) LIMIT 1");
         $stmt->bind_param("s", $nombreNormalizado);
@@ -22,7 +21,6 @@ class PartidaModel {
     }
 
     public function obtenerPreguntasPorCategoriaId($categoria_id, $usuarioId, $limite = 4) {
-        // Excluir preguntas ya respondidas por el usuario
         $stmt = $this->conexion->prepare("
             SELECT p.* FROM preguntas p
             LEFT JOIN preguntas_usuarios pu ON pu.pregunta_id = p.id AND pu.usuario_id = ?
@@ -49,7 +47,6 @@ class PartidaModel {
     }
 
     public function registrarPartida($usuarioId, $categoria_id) {
-        // Validaciones previas para evitar errores de FK
         if (!$this->existeUsuario($usuarioId)) {
             throw new Exception("El usuario $usuarioId no existe en la tabla usuarios.");
         }
@@ -60,7 +57,7 @@ class PartidaModel {
         $stmt = $this->conexion->prepare("
         INSERT INTO partidas (usuario_id, categoria_id, puntaje) 
         VALUES (?, ?, 0)");
-        $stmt->bind_param("ii", $usuarioId, $categoria_id); // <-- ambos enteros
+        $stmt->bind_param("ii", $usuarioId, $categoria_id);
         try {
             $stmt->execute();
         } catch (mysqli_sql_exception $e) {
@@ -95,15 +92,14 @@ class PartidaModel {
             $partidas[] = $row;
         }
 
-        return $partidas; // devuelve array vacío si no hay resultados
+        return $partidas;
     }
     
-    /* ================== ESTADÍSTICAS DE PREGUNTAS ================== */
     public function registrarEntregaPregunta($preguntaId) {
         $stmt = $this->conexion->prepare("UPDATE preguntas SET veces_entregada = veces_entregada + 1 WHERE id = ?");
         $stmt->bind_param("i", $preguntaId);
         $stmt->execute();
-        $this->recalcularDificultad($preguntaId); // opcional mantener dificultad actualizada
+        $this->recalcularDificultad($preguntaId);
     }
     
     public function registrarIncorrectaPregunta($preguntaId) {
@@ -121,7 +117,6 @@ class PartidaModel {
     }
     
     private function recalcularDificultad($preguntaId) {
-        // Calcula porcentaje de acierto y actualiza nivel según umbrales
         $stmt = $this->conexion->prepare("SELECT veces_entregada, veces_incorrecta FROM preguntas WHERE id = ? LIMIT 1");
         $stmt->bind_param("i", $preguntaId);
         $stmt->execute();
@@ -130,7 +125,7 @@ class PartidaModel {
         
         $entregadas = (int)$data['veces_entregada'];
         $incorrectas = (int)$data['veces_incorrecta'];
-        if ($entregadas <= 0) return; // aún no hay entregas reales
+        if ($entregadas <= 0) return;
         $aciertos = max($entregadas - $incorrectas, 0);
         $porcentaje = ($aciertos / $entregadas) * 100.0;
         
@@ -147,9 +142,7 @@ class PartidaModel {
         $stmtUpd->execute();
     }
 
-    /* ================== AUTO MIGRACIÓN DE COLUMNAS (defensivo) ================== */
     private function asegurarColumnasEstadisticas() {
-        // Verifica contra INFORMATION_SCHEMA porque SHOW COLUMNS no soporta parámetros en prepared statements.
         $dbNameResult = $this->conexion->query("SELECT DATABASE() AS db");
         $dbRow = $dbNameResult ? $dbNameResult->fetch_assoc() : null;
         $dbName = $dbRow['db'] ?? 'preguntas_respuestas';
@@ -167,14 +160,13 @@ class PartidaModel {
             if ($checkStmt->execute()) {
                 $res = $checkStmt->get_result();
                 if ($res->num_rows === 0) {
-                    // Crear columna faltante
                     $this->conexion->query($ddl);
                 }
             }
         }
         $checkStmt->close();
     }
-    /* ================== HELPERS DE EXISTENCIA ================== */
+
     private function existeUsuario($id) {
         $stmt = $this->conexion->prepare("SELECT 1 FROM usuarios WHERE id = ? LIMIT 1");
         $stmt->bind_param("i", $id);
@@ -190,7 +182,6 @@ class PartidaModel {
     }
 
     private function asegurarTablaPreguntasUsuarios() {
-        // Crear tabla si no existe (verificación sencilla)
         $res = $this->conexion->query("SHOW TABLES LIKE 'preguntas_usuarios'");
         if ($res && $res->num_rows === 0) {
             $ddl = "CREATE TABLE preguntas_usuarios (

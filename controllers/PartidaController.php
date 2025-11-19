@@ -47,7 +47,6 @@ class PartidaController
             session_start();
         }
 
-        // Aseguramos limpiar bandera de finalización si se inicia (o reinicia) una ronda.
         if (isset($_SESSION["partida_finalizada"])) {
             unset($_SESSION["partida_finalizada"]);
         }
@@ -73,7 +72,6 @@ class PartidaController
 
         $usuarioId = $_SESSION["usuario"]["id"];
 
-        // Si no hay partida activa, crear una nueva. Caso contrario reutilizar puntaje y partida.
         if (!isset($_SESSION["partida_id"])) {
             try {
                 $partidaId = $this->partidaModel->registrarPartida($usuarioId, $categoria_id);
@@ -88,7 +86,6 @@ class PartidaController
             $partidaId = $_SESSION["partida_id"];
         }
 
-        // Obtener listado completo restante para la ronda (sin límite artificial)
         $preguntas = $this->partidaModel->obtenerPreguntasPorCategoriaId($categoria_id, $usuarioId, 1000);
         if (empty($preguntas)) {
             $_SESSION['flash_error'] = 'No quedan preguntas disponibles en esta categoría para vos. Elegí otra categoría.';
@@ -97,10 +94,9 @@ class PartidaController
         }
         $_SESSION["preguntas"] = $preguntas;
         $_SESSION["pregunta_actual"] = 0;
-        $_SESSION["categoria_ronda"] = $categoria_id; // Persistir categoría de la ronda actual
+        $_SESSION["categoria_ronda"] = $categoria_id;
 
         $preguntaActual = $preguntas[0];
-        // Registrar entrega de la primera pregunta mostrada
         if (isset($preguntaActual['id'])) {
             $this->partidaModel->registrarEntregaPregunta($preguntaActual['id']);
         }
@@ -135,26 +131,21 @@ class PartidaController
             }
         }
 
-        // Registrar pregunta respondida (correcta o incorrecta) para evitar repetición
         if (isset($_SESSION['usuario']['id']) && isset($pregunta['id'])) {
             $this->partidaModel->registrarPreguntaUsuario($_SESSION['usuario']['id'], $pregunta['id'], $esCorrecta);
         }
 
-        // Guardar puntaje parcial en DB siempre
         $this->partidaModel->actualizarPuntaje($partidaId, $_SESSION["puntaje"]);
 
-        // Si fallo: limpiar para terminar la ronda completamente
         if (!$esCorrecta) {
             unset($_SESSION["preguntas"]);
             unset($_SESSION["pregunta_actual"]);
             unset($_SESSION["categoria_ronda"]);
         } else {
-            // Avanzar índice si aún hay preguntas
             $total = count($preguntas);
             if ($indice + 1 < $total) {
                 $_SESSION["pregunta_actual"] = $indice + 1;
             } else {
-                // Se acabaron las preguntas sin fallar: terminar ronda pero permitir girar la ruleta
                 unset($_SESSION["preguntas"]);
                 unset($_SESSION["pregunta_actual"]);
                 unset($_SESSION["categoria_ronda"]);
@@ -162,13 +153,12 @@ class PartidaController
             }
         }
 
-        $preguntaActual = $pregunta; // Para la vista de feedback
+        $preguntaActual = $pregunta;
         $respuestaSeleccionadaId = (int)$respuestaSeleccionada;
         $respuestaCorrectaId = (int)$correcta;
         include("views/partida_feedback.php");
     }
 
-    // Mostrar la siguiente pregunta en la misma ronda (sin avanzar índice previamente)
     public function continuarRonda() {
         $preguntas = $_SESSION["preguntas"] ?? [];
         $indice = $_SESSION["pregunta_actual"] ?? null;
@@ -176,9 +166,7 @@ class PartidaController
             header("Location: index.php?controller=partida&method=mostrarRuleta");
             exit();
         }
-        // Tomar la pregunta actual (ya se avanzó el índice en responderPregunta)
         $preguntaActual = $preguntas[$indice];
-        // Registrar entrega estadística
         if (isset($preguntaActual['id'])) {
             $this->partidaModel->registrarEntregaPregunta($preguntaActual['id']);
         }
@@ -217,7 +205,7 @@ class PartidaController
         unset($_SESSION["pregunta_actual"]);
         unset($_SESSION["partida_id"]);
         unset($_SESSION["puntaje"]);
-        unset($_SESSION["partida_finalizada"]); // permitir nueva partida limpia
+        unset($_SESSION["partida_finalizada"]);
     }
 
     public function obtenerCategorias() {
@@ -297,7 +285,6 @@ class PartidaController
             exit;
         }
 
-        // Guardar reporte
         require_once("models/Reporte.php");
         $reporteModel = new Reporte();
 
@@ -308,8 +295,6 @@ class PartidaController
             echo "<script>alert('No se pudo enviar el reporte. Intentá nuevamente.'); window.location='index.php?controller=partida&method=terminarPartida';</script>";
             exit;
         }
-
-        // redirigir
         echo "<script>alert('¡Pregunta reportada! La partida se ha finalizado.'); window.location = 'index.php?controller=partida&method=terminarPartida';</script>";
         exit;
     }

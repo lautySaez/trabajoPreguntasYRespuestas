@@ -5,11 +5,20 @@ const resultado = document.getElementById("resultado");
 const categoriaTexto = document.getElementById("categoria-elegida");
 const btnIniciar = document.getElementById("btn-iniciar");
 const audioRuleta = document.getElementById("sonidoRuleta");
-const categorias = ["Deporte", "Entretenimiento", "Historia", "Ciencia", "Arte", "Geografía"];
+const categorias = [
+    { nombre: "Deporte", icono: "⚽" },
+    { nombre: "Entretenimiento", icono: "🎬" },
+    { nombre: "Historia", icono: "📜" },
+    { nombre: "Ciencia", icono: "🔬" },
+    { nombre: "Arte", icono: "🎨" },
+    { nombre: "Geografía", icono: "🌎" }
+];
+const nombresCategorias = categorias.map(c => c.nombre);
+
 const colores = ["#e63946", "#f1c40f", "#2ecc71", "#3498db", "#9b59b6", "#e67e22"];
+
 const total = categorias.length;
 const anguloPorSector = (2 * Math.PI) / total;
-
 let anguloActual = 0;
 let girando = false;
 
@@ -28,20 +37,24 @@ function dibujarRuleta() {
     for (let i = 0; i < total; i++) {
         const start = anguloActual + i * anguloPorSector;
         const end = start + anguloPorSector;
+        const categoria = categorias[i];
 
         ctx.beginPath();
         ctx.moveTo(centro, centro);
         ctx.arc(centro, centro, radio - 5, start, end);
         ctx.fillStyle = colores[i];
         ctx.fill();
-
         ctx.save();
         ctx.translate(centro, centro);
         ctx.rotate(start + anguloPorSector / 2);
-        ctx.textAlign = "right";
+
+        ctx.textAlign = "center";
         ctx.fillStyle = "#fff";
-        ctx.font = "bold 20px Poppins";
-        ctx.fillText(categorias[i], radio - 25, 10);
+        ctx.font = "bold 40px Poppins";
+
+        // Dibuja solo el icono
+        ctx.fillText(categoria.icono, radio - 50, 10);
+
         ctx.restore();
     }
 
@@ -96,9 +109,9 @@ function mostrarResultado(gradosFinal) {
 
     const gradosAjustados = (360 - ((gradosFinal + 90) % 360)) % 360;
     const index = Math.floor(gradosAjustados / (360 / total));
-    const categoria = categorias[index];
+    const categoria = categorias[index].nombre;
 
-    categoriaTexto.textContent = `Categoría elegida: ${categoria}`;
+    categoriaTexto.textContent = `📚 Categoría elegida: ${categoria}`;
     btnIniciar.href = `index.php?controller=partida&method=iniciarPartida&categoria=${encodeURIComponent(categoria)}`;
 
     resultado.style.display = "flex";

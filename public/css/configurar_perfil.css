@@ -71,7 +71,6 @@ input:focus {
     transform: scale(1.02);
 }
 
-/* Botones */
 .boton-principal {
     align-self: center;
     background: linear-gradient(135deg, #6a11cb, #2575fc);
@@ -99,7 +98,6 @@ input:focus {
     margin-bottom: 10px;
 }
 
-/* Avatar */
 .avatar-group {
     text-align: center;
 }

@@ -1,4 +1,3 @@
-/* ===================== FEEDBACK RESPUESTAS ===================== */
 .partida-contenedor.feedback .respuestas-grid {
     display: flex;
     flex-direction: column;
@@ -125,8 +124,6 @@
     color: #ffb3b3;
 }
 
-/* Reglas específicas para el modo feedback.
-   Se reemplazan las duplicadas globales para evitar confusión y hacer los estados más distinguibles. */
 .partida-contenedor.feedback .respuesta-item.correcta {
     background: #22d722;
     color: #fff;
