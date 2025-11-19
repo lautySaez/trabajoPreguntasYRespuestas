@@ -4,14 +4,12 @@ const botonGirar = document.getElementById("boton-girar");
 const resultado = document.getElementById("resultado");
 const categoriaTexto = document.getElementById("categoria-elegida");
 const btnIniciar = document.getElementById("btn-iniciar");
-
-// Las categorías deben coincidir EXACTAMENTE con los nombres en la base de datos para que iniciarPartida no redirija de nuevo a la ruleta.
-// DB: Deporte, Entretenimiento, Historia, Ciencia, Arte, Geografía
+const audioRuleta = document.getElementById("sonidoRuleta");
 const categorias = ["Deporte", "Entretenimiento", "Historia", "Ciencia", "Arte", "Geografía"];
 const colores = ["#e63946", "#f1c40f", "#2ecc71", "#3498db", "#9b59b6", "#e67e22"];
-
 const total = categorias.length;
 const anguloPorSector = (2 * Math.PI) / total;
+
 let anguloActual = 0;
 let girando = false;
 
@@ -64,6 +62,12 @@ function girarRuleta() {
     resultado.classList.remove("resultado-activo");
     resultado.style.display = "none";
 
+    audioRuleta.loop = true;
+    audioRuleta.currentTime = 0;
+    audioRuleta.play().catch(e => {
+        console.warn("Reproducción de audio bloqueada.", e);
+    });
+
     const giros = 360 * 5 + Math.random() * 360;
     const duracion = 5000;
     const inicio = performance.now();
@@ -87,12 +91,14 @@ function girarRuleta() {
 }
 
 function mostrarResultado(gradosFinal) {
+    audioRuleta.pause();
+    audioRuleta.loop = false;
+
     const gradosAjustados = (360 - ((gradosFinal + 90) % 360)) % 360;
     const index = Math.floor(gradosAjustados / (360 / total));
     const categoria = categorias[index];
-    // Seguridad: encodeURIComponent ya aplicado en href abajo; podríamos validar texto si hiciera falta.
 
-    categoriaTexto.textContent = `📚 Categoría elegida: ${categoria}`;
+    categoriaTexto.textContent = `Categoría elegida: ${categoria}`;
     btnIniciar.href = `index.php?controller=partida&method=iniciarPartida&categoria=${encodeURIComponent(categoria)}`;
 
     resultado.style.display = "flex";
