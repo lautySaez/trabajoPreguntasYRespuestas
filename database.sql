@@ -88,7 +88,6 @@ CREATE TABLE preguntas (
     INDEX idx_activa (activa)
 );
 
-
 DELETE FROM preguntas;
 INSERT INTO preguntas (categoria_id, pregunta, respuesta_1, respuesta_2, respuesta_3, respuesta_4, respuesta_correcta) VALUES
 (1, '¿En qué año se celebró el primer Mundial de Fútbol?', '1928', '1930', '1932', '1934', 2),
@@ -749,13 +748,16 @@ CREATE TABLE reportes (
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
 
-CREATE TABLE ranking_jugadores (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_usuario INT NOT NULL,
-    id_avatar INT DEFAULT NULL,
-    puntaje_total INT DEFAULT 0,
+CREATE TABLE ranking_jugadores
+(
+    id             INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario     INT NOT NULL,
+    id_avatar      INT       DEFAULT NULL,
+    puntaje_total  INT       DEFAULT 0,
     actualizado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
+    FOREIGN KEY (id_usuario) REFERENCES usuarios (id)
+
+);
 
 CREATE TABLE IF NOT EXISTS preguntas_usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,

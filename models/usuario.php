@@ -168,4 +168,30 @@ class Usuario
     return $usuarios;
     }
 
+
+    public function obtenerPerfilPublico($username)
+    {
+        $sql = "SELECT 
+                u.id, 
+                u.nombre_usuario, 
+                u.foto_perfil,
+                IFNULL(SUM(p.puntaje), 0) AS puntos_totales,
+                COUNT(p.id) AS partidas_jugadas
+            FROM usuarios u
+            LEFT JOIN partidas p ON p.usuario_id = u.id
+            WHERE u.nombre_usuario = ? AND u.estado_registro != 'Bloqueado'
+            GROUP BY u.id, u.nombre_usuario, u.foto_perfil";
+
+        $stmt = $this->conexion->prepare($sql);
+
+        if ($stmt === false) {
+            error_log("Error al preparar 'obtenerPerfilPublico': " . $this->conexion->error);
+            return null;
+        }
+
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_assoc();
+    }
+
 }

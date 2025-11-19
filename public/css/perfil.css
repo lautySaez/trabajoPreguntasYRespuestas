@@ -57,6 +57,22 @@
     margin-bottom: 20px;
 }
 
+.estadisticas-resumen {
+    margin-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    padding-top: 15px;
+    text-align: left;
+}
+.estadisticas-resumen h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #a0d2eb;
+}
+.estadisticas-resumen p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+
 .boton-principal {
     background: linear-gradient(135deg, #6a11cb, #2575fc);
     color: #fff;
@@ -67,6 +83,9 @@
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
+    width: 100%;
+    margin-bottom: 10px;
+    box-sizing: border-box;
 }
 .boton-principal:hover {
     transform: translateY(-2px);
@@ -76,10 +95,14 @@
 .boton-secundario {
     background: #ccc;
     color: #222;
-    border-radius: 8px;
-    padding: 10px 20px;
+    border-radius: 10px;
+    padding: 12px 30px;
     font-weight: bold;
     cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
 }
 .boton-secundario:hover {
     background: #bbb;
@@ -107,7 +130,9 @@
     transform: scale(0.95);
     opacity: 0;
     transition: transform 0.3s ease, opacity 0.3s ease;
+    position: relative;
 }
+
 .modal[aria-hidden="false"] .modal-content {
     transform: scale(1);
     opacity: 1;
@@ -129,6 +154,13 @@
     gap: 15px;
     margin-top: 20px;
 }
+.modal-buttons .boton-principal,
+.modal-buttons .boton-secundario {
+    width: 50%;
+    margin: 0;
+    padding: 10px 20px;
+    font-size: 0.95rem;
+}
 .cerrar {
     position: absolute;
     top: 10px;
@@ -142,4 +174,17 @@
 }
 .cerrar:hover {
     color: #6a11cb;
+}
+
+.qr-code-display {
+    padding: 20px;
+}
+.qr-code-display img {
+    display: block;
+    margin: 0 auto;
+    max-width: 80%;
+    height: auto;
+    border: 1px solid #eee;
+    padding: 5px;
+    border-radius: 5px;
 }
