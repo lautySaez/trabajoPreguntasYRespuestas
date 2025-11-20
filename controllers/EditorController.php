@@ -76,9 +76,17 @@ class EditorController
     public function gestionarPreguntas()
     {
         $categoria_id = $_GET["categoria_id"] ?? null;
+        $filtro_reportes = $_GET["filtro_reportes"] ?? 'todas';
+
+        $solo_reportadas = null;
+        if ($filtro_reportes === 'reportadas') {
+            $solo_reportadas = true;
+        } elseif ($filtro_reportes === 'no_reportadas') {
+            $solo_reportadas = false;
+        }
 
         $categorias = $this->model->obtenerCategorias();
-        $preguntas = $this->model->obtenerPreguntasPorCategoria($categoria_id);
+        $preguntas = $this->model->obtenerPreguntasPorCategoria($categoria_id, $solo_reportadas);
 
         include(__DIR__ . "/../views/gestionarPreguntas.php");
     }
@@ -114,6 +122,7 @@ class EditorController
             ];
 
             $this->model->registrarInforme($id, 'Edición', $motivo, $pregunta_para_informe);
+            $this->model->marcarReporteComoResuelto($id, "Resuelto al corregir la pregunta: " . $motivo);
 
             header("Location: index.php?controller=editor&method=gestionarPreguntas");
             exit();
@@ -140,6 +149,7 @@ class EditorController
 
             $this->model->registrarInforme($id, 'Eliminación', $motivo, $pregunta_para_informe);
             $this->model->borrarPregunta($id);
+
         }
 
         header("Location: index.php?controller=editor&method=gestionarPreguntas");
@@ -147,11 +157,33 @@ class EditorController
 
     public function preguntasReportadas()
     {
-        require_once("models/reporte.php");
-        $reporteModel = new Reporte();
-        $reportes = $reporteModel->obtenerReportes();
 
-        include(__DIR__ . "/../views/preguntasReportadas.php");
+        $filtro_estado = $_GET['filtro_estado'] ?? 'Activo';
+        $reportes_agrupados = $this->model->obtenerReportesAgrupados($filtro_estado);
+        $pregunta_id = $_GET['id'] ?? null;
+        $reportes_detallados = [];
+        $pregunta_info = null;
+
+        if ($pregunta_id) {
+            $reportes_detallados = $this->model->obtenerReportesDetalladosPorPregunta($pregunta_id);
+            $pregunta_info = $this->model->obtenerPreguntaPorId($pregunta_id);
+        }
+
+        include(__DIR__ . "/../views/preguntasReportadasEditor.php");
+    }
+
+    public function resolverReporte()
+    {
+        $pregunta_id = $_POST['pregunta_id'] ?? null;
+        $motivo = $_POST['motivo_resolucion'] ?? 'Marcar como resuelto (Reporte inválido o corregido externamente).';
+
+        if ($pregunta_id) {
+            $this->model->marcarReporteComoResuelto($pregunta_id, $motivo);
+
+            header("Location: index.php?controller=editor&method=preguntasReportadas&filtro_estado=Activo");
+            exit();
+        }
+        header("Location: index.php?controller=editor&method=preguntasReportadas");
     }
 
     public function crearPregunta()

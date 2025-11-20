@@ -9,6 +9,7 @@ $preguntas = $preguntas ?? [];
 $categorias = $categorias ?? [];
 $buscar_id = $_GET['buscar_id'] ?? '';
 $categoria_id = $_GET['categoria_id'] ?? '';
+$filtro_reportes = $_GET['filtro_reportes'] ?? 'todas';
 
 require_once("helper/VerificacionDeRoles.php");
 verificarRol("Editor");
@@ -23,6 +24,7 @@ verificarRol("Editor");
             <form method="get" class="filtro-form">
                 <input type="hidden" name="controller" value="editor">
                 <input type="hidden" name="method" value="gestionarPreguntas">
+                <input type="hidden" name="filtro_reportes" value="<?= htmlspecialchars($filtro_reportes) ?>"> <input type="hidden" name="buscar_id" value="<?= htmlspecialchars($buscar_id) ?>">
 
                 <label for="categoria_id">Categoría:</label>
                 <select name="categoria_id" id="categoria_id" onchange="this.form.submit()">
@@ -35,9 +37,24 @@ verificarRol("Editor");
                 </select>
             </form>
 
+            <form method="get" class="filtro-reportes-form">
+                <input type="hidden" name="controller" value="editor">
+                <input type="hidden" name="method" value="gestionarPreguntas">
+                <input type="hidden" name="categoria_id" value="<?= htmlspecialchars($categoria_id) ?>"> <input type="hidden" name="buscar_id" value="<?= htmlspecialchars($buscar_id) ?>">
+
+                <label for="filtro_reportes">Estado:</label>
+                <select name="filtro_reportes" id="filtro_reportes" onchange="this.form.submit()">
+                    <option value="todas" <?= ($filtro_reportes === 'todas') ? 'selected' : '' ?>>Todas las preguntas</option>
+                    <option value="reportadas" <?= ($filtro_reportes === 'reportadas') ? 'selected' : '' ?>>Reportadas</option>
+                    <option value="no_reportadas" <?= ($filtro_reportes === 'no_reportadas') ? 'selected' : '' ?>>No Reportadas</option>
+                </select>
+            </form>
+
             <form method="get" class="buscar-form">
                 <input type="hidden" name="controller" value="editor">
                 <input type="hidden" name="method" value="gestionarPreguntas">
+                <input type="hidden" name="filtro_reportes" value="<?= htmlspecialchars($filtro_reportes) ?>">
+                <input type="hidden" name="categoria_id" value="<?= htmlspecialchars($categoria_id) ?>">
 
                 <label for="buscar_id">Buscar por ID:</label>
                 <input type="number" name="buscar_id" id="buscar_id" value="<?= htmlspecialchars($buscar_id) ?>" placeholder="Ingrese ID">
@@ -62,19 +79,27 @@ verificarRol("Editor");
                 <tbody>
                 <?php
                 $filtradas = $preguntas;
-                if ($buscar_id !== '') {
+                if ($buscar_id !== '' && $filtro_reportes === 'todas' && empty($categoria_id)) {
+                    $filtradas = array_filter($preguntas, function($p) use ($buscar_id) {
+                        return $p['id'] == $buscar_id;
+                    });
+                } else if ($buscar_id !== '') {
                     $filtradas = array_filter($preguntas, function($p) use ($buscar_id) {
                         return $p['id'] == $buscar_id;
                     });
                 }
                 ?>
                 <?php if (empty($filtradas)): ?>
-                    <tr><td colspan="5" class="no-resultados">No se encontraron preguntas.</td></tr>
+                    <tr><td colspan="5" class="no-resultados">No se encontraron preguntas que coincidan con los filtros.</td></tr>
                 <?php else: ?>
-                    <?php foreach ($filtradas as $p): ?>
-                        <tr id="pregunta-<?= $p['id'] ?>" data-id="<?= $p['id'] ?>">
+                    <?php foreach ($filtradas as $p):
+                        $esReportada = $p['reportes_count'] > 0;
+                        $claseReporte = $esReportada ? 'fila-reportada' : '';
+                        $reporteIcono = $esReportada ? '<i class="fa-solid fa-triangle-exclamation reporte-icono" title="Reportada: ' . $p['reportes_count'] . ' veces"></i>' : '';
+                        ?>
+                        <tr id="pregunta-<?= $p['id'] ?>" data-id="<?= $p['id'] ?>" class="<?= $claseReporte ?>">
                             <td><?= $p['id'] ?></td>
-                            <td class="editable" data-field="pregunta"><?= htmlspecialchars($p['pregunta']) ?></td>
+                            <td class="editable" data-field="pregunta"><?= $reporteIcono ?> <?= htmlspecialchars($p['pregunta']) ?></td>
                             <td class="editable" data-field="respuestas">
                                 <div class="opciones">
                                     <?php for ($i = 1; $i <= 4; $i++): ?>
@@ -84,6 +109,11 @@ verificarRol("Editor");
                             </td>
                             <td class="editable" data-field="correcta"><?= htmlspecialchars($p['respuesta_correcta']) ?></td>
                             <td class="acciones">
+                                <?php if ($esReportada): ?>
+                                    <a href="index.php?controller=editor&method=preguntasReportadas&id=<?= $p['id'] ?>" class="btn-reporte-info">
+                                        Reporte (<?= $p['reportes_count'] ?>)
+                                    </a>
+                                <?php endif; ?>
                                 <button class="btn-editar" onclick="habilitarEdicion(<?= $p['id'] ?>)">Editar</button>
                                 <button class="btn-borrar" onclick="abrirModal('eliminacion', <?= $p['id'] ?>)">Borrar</button>
                             </td>

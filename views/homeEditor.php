@@ -36,7 +36,11 @@ verificarRol("Editor");
                     </a>
 
                     <a href="index.php?controller=editor&method=gestionarCategorias" class="nav-item">
-                        <span class="icon"><i class="fa-solid fa-tags"></i></span> Categorías
+                        <span class="icon"><i class="fa-solid fa-tags"></i></span> Gestionar Categorías
+                    </a>
+
+                    <a href="index.php?controller=editor&method=crearCategoria" class="nav-item create-btn">
+                        <span class="icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span> Crear Categoría
                     </a>
 
                     <a href="index.php?controller=editor&method=preguntasReportadas" class="nav-item">
@@ -73,7 +77,7 @@ verificarRol("Editor");
                             <p>Administra los temas y colores de las categorías.</p>
                         </a>
 
-                        <a href="index.php?controller=editor&method=crearCategoria" class="card">
+                        <a href="index.php?controller=editor&method=crearCategoria" class="card highlight-card">
                             <i class="fa-solid fa-wand-magic-sparkles"></i>
                             <h3>Nueva Categoría</h3>
                             <p>Define una nueva área de conocimiento.</p>

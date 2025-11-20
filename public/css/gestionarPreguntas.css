@@ -34,7 +34,7 @@
 .gestionar-preguntas-page .filtros-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 20px;
     align-items: flex-end;
     background: var(--bg-panel);
@@ -45,12 +45,12 @@
 }
 
 .gestionar-preguntas-page .filtro-form,
-.gestionar-preguntas-page .buscar-form {
+.gestionar-preguntas-page .buscar-form,
+.gestionar-preguntas-page .filtro-reportes-form {
     display: flex;
-    align-items: center;
-    gap: 15px;
-    width: 100%;
-    max-width: 450px;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 180px;
 }
 
 .gestionar-preguntas-page label {
@@ -60,6 +60,7 @@
 }
 
 .gestionar-preguntas-page .filtro-form select,
+.gestionar-preguntas-page .filtro-reportes-form select,
 .gestionar-preguntas-page .buscar-form input[type="number"] {
     padding: 10px 15px;
     border-radius: 8px;
@@ -69,6 +70,7 @@
     flex: 1;
     font-family: 'Poppins', sans-serif;
     transition: 0.3s;
+    height: 40px;
 }
 
 .gestionar-preguntas-page input:focus,
@@ -87,6 +89,8 @@
     cursor: pointer;
     font-weight: bold;
     transition: 0.3s;
+    height: 40px;
+    align-self: flex-end;
 }
 
 .gestionar-preguntas-page .buscar-form button:hover {
@@ -148,6 +152,48 @@
     background: rgba(40, 40, 70, 0.9);
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
+
+.fila-reportada {
+    background: rgba(255, 82, 82, 0.15) !important;
+    border-left: 5px solid var(--danger-color);
+    box-shadow: 0 0 10px rgba(255, 82, 82, 0.2);
+}
+
+.fila-reportada:hover {
+    background: rgba(255, 82, 82, 0.25) !important;
+    transform: scale(1.01);
+}
+
+.fila-reportada td {
+    color: var(--text-main);
+}
+
+.reporte-icono {
+    color: var(--danger-color);
+    margin-right: 8px;
+    font-size: 1.1em;
+}
+
+.btn-reporte-info {
+    background: var(--danger-color);
+    color: white;
+    border: 1px solid var(--danger-color);
+    margin-right: 5px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-size: 0.85em;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-reporte-info:hover {
+    background: #d32f2f;
+    box-shadow: 0 0 15px rgba(255, 82, 82, 0.4);
+}
+/* FIN NUEVO */
 
 .gestionar-preguntas-page .tabla-preguntas td {
     padding: 15px;
@@ -342,7 +388,8 @@
     padding: 10px 15px;
 }
 
-.gestionar-preguntas-page .filtro-form select {
+.gestionar-preguntas-page .filtro-form select,
+.gestionar-preguntas-page .filtro-reportes-form select {
     background-color: var(--bg-panel);
 }
 
@@ -357,9 +404,24 @@
     }
 
     .gestionar-preguntas-page .filtro-form,
-    .gestionar-preguntas-page .buscar-form {
-        flex-direction: column;
-        align-items: stretch;
+    .gestionar-preguntas-page .buscar-form,
+    .gestionar-preguntas-page .filtro-reportes-form {
+        width: 100%;
+        max-width: none;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .gestionar-preguntas-page .filtro-form label,
+    .gestionar-preguntas-page .filtro-reportes-form label,
+    .gestionar-preguntas-page .buscar-form label {
+        min-width: 60px;
+        text-align: right;
+    }
+
+    .gestionar-preguntas-page .buscar-form button {
+        align-self: auto;
+        width: 100px;
     }
 
     .tabla-container {
@@ -367,7 +429,7 @@
     }
 
     .gestionar-preguntas-page .tabla-preguntas {
-        min-width: 600px;
+        min-width: 700px;
     }
 
     .gestionar-preguntas-page .tabla-preguntas th,
