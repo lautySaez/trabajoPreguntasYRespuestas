@@ -739,13 +739,15 @@ CREATE TABLE InformePreguntas (
 );
 
 CREATE TABLE reportes (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    pregunta_id INT NOT NULL,
-    usuario_id INT NOT NULL,
-    motivo TEXT NOT NULL,
-    fecha_reporte TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (pregunta_id) REFERENCES preguntas(id),
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+     id INT AUTO_INCREMENT PRIMARY KEY,
+     pregunta_id INT NOT NULL,
+     usuario_id INT NOT NULL,
+     motivo TEXT NOT NULL,
+     fecha_reporte TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+     estado ENUM('Activo', 'Resuelto') DEFAULT 'Activo' NOT NULL,
+     FOREIGN KEY (pregunta_id) REFERENCES preguntas(id),
+     FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
+     INDEX idx_estado (estado)
 );
 
 CREATE TABLE ranking_jugadores
