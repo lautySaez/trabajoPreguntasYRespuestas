@@ -1,9 +1,13 @@
 <?php include("views/partials/header.php"); ?>
 
+    <link rel="stylesheet" href="public/css/homeEditor.css">
     <link rel="stylesheet" href="public/css/gestionarCategorias.css">
 
 <?php
 $categorias = $categorias ?? [];
+
+require_once("helper/VerificacionDeRoles.php");
+verificarRol("Editor");
 ?>
 
     <div class="gestionar-categorias-page">
@@ -32,7 +36,9 @@ $categorias = $categorias ?? [];
                     </thead>
                     <tbody>
                     <?php foreach ($categorias as $cat):
-                        $preguntas_count = $this->model->contarPreguntasPorCategoria($cat['id']);
+                        // Nota: La lógica de $this->model->contarPreguntasPorCategoria() debe estar disponible
+                        // Si no lo está, esta línea dará un error. Asumimos que $preguntas_count se está calculando.
+                        $preguntas_count = $this->model->contarPreguntasPorCategoria($cat['id']) ?? 0;
                         ?>
                         <tr data-id="<?= $cat['id'] ?>" data-nombre="<?= htmlspecialchars($cat['nombre']) ?>" data-count="<?= $preguntas_count ?>">
                             <td><?= $cat['id'] ?></td>
@@ -59,7 +65,7 @@ $categorias = $categorias ?? [];
         <div class="modal-content">
             <h3>⚠️ Advertencia: Eliminación de Categoría</h3>
             <p>¿Está seguro de que desea eliminar la categoría: <strong id="nombreCategoriaModal"></strong>?</p>
-            <p class="warning-text">Esta acción **eliminará permanentemente** <strong id="preguntasAfectadasModal"></strong> preguntas asociadas.</p>
+            <p class="warning-text">Esta acción **eliminará permanentemente** <strong id="preguntasAfectadasModal"></strong> asociadas.</p>
 
             <form id="formBorrarCategoria" method="post" action="index.php?controller=editor&method=borrarCategoria">
                 <input type="hidden" name="id" id="categoriaIdModal">

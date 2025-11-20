@@ -11,13 +11,10 @@
 
 .gestionar-preguntas-page {
     width: 100%;
-    min-height: 100vh;
     padding: 40px 5%;
     display: flex;
     flex-direction: column;
     gap: 30px;
-    background-color: var(--bg-dark);
-    background-image: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
     color: var(--text-main);
     font-family: 'Poppins', sans-serif;
     box-sizing: border-box;
@@ -337,6 +334,16 @@
     text-align: center;
     font-style: italic;
     padding: 30px !important;
+}
+
+.gestionar-preguntas-page .filtro-form select option {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    padding: 10px 15px;
+}
+
+.gestionar-preguntas-page .filtro-form select {
+    background-color: var(--bg-panel);
 }
 
 @media (max-width: 768px) {

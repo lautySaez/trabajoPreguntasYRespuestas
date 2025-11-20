@@ -8,11 +8,6 @@
     --text-muted: #bbbbdd;
 }
 
-body {
-    background-color: var(--bg-dark);
-    font-family: 'Poppins', sans-serif;
-}
-
 .gestionar-categorias-page {
     padding: 40px;
     max-width: 1200px;

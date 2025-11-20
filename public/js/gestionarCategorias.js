@@ -1,5 +1,4 @@
 function abrirModalCategoria(id, nombre, count) {
-    // 1. Asigna el ID de la categoría a un campo oculto del formulario de eliminación.
     const idInput = document.getElementById('categoriaIdModal');
     if (idInput) {
         idInput.value = id;

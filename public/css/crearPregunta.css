@@ -10,14 +10,6 @@
     --danger-color: #ff5252;
 }
 
-body {
-    background-color: var(--bg-dark);
-    color: var(--text-main);
-    font-family: 'Poppins', sans-serif;
-    margin: 0;
-    padding: 0;
-}
-
 .crear-pregunta-page {
     max-width: 700px;
     margin: 50px auto;
@@ -77,7 +69,7 @@ body {
 }
 
 .form-crear-pregunta select option {
-    background-color: #1f1f3a;
+    background-color: var(--bg-dark);
     color: #fff;
 }
 

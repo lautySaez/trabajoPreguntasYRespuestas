@@ -9,12 +9,6 @@
     --success-color: #00e676;
 }
 
-body {
-    background-color: var(--bg-dark);
-    color: var(--text-main);
-    font-family: 'Poppins', sans-serif;
-}
-
 .crear-categoria-page {
     padding: 40px 20px;
     max-width: 900px;
@@ -39,27 +33,34 @@ body {
 }
 
 fieldset {
-    border: none;
-    padding: 0;
-    margin: 0 0 30px 0;
+    margin: 0 0 35px 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.categoria-data {
+    border-color: var(--primary-cyan);
 }
 
 legend {
     font-size: 1.4em;
     color: var(--primary-cyan);
-    border-bottom: 2px solid rgba(0, 188, 212, 0.2);
-    width: 100%;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
+    width: auto;
+    padding: 0 10px;
+    margin-bottom: 0;
     font-weight: 600;
+    background: #1f1f3a;
+    border-radius: 5px;
 }
 
 label {
     display: block;
     margin-bottom: 8px;
-    color: var(--text-muted);
+    color: var(--primary-cyan);
     font-weight: 500;
     font-size: 0.95em;
+    margin-top: 15px;
 }
 
 input[type="text"],
@@ -86,10 +87,12 @@ input:focus, textarea:focus {
 }
 
 input[type="color"] {
-    height: 50px;
-    padding: 5px;
+    height: 40px;
+    padding: 2px;
     cursor: pointer;
     width: 100%;
+    border-radius: 8px;
+    background: transparent;
 }
 
 textarea {
@@ -119,17 +122,8 @@ textarea {
     font-size: 1.2em;
 }
 
-.respuestas-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    margin-bottom: 15px;
-}
-
-.respuesta-correcta-highlight {
-    border-color: var(--success-color) !important;
-    background-color: rgba(0, 230, 118, 0.1) !important;
-    box-shadow: 0 0 10px rgba(0, 230, 118, 0.3) !important;
+.pregunta-box input[type="text"] {
+    margin-bottom: 10px;
 }
 
 hr {
@@ -155,6 +149,7 @@ hr {
     border-radius: 8px;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 0 10px rgba(0, 188, 212, 0.3);
 }
 
 .btn-confirmar:hover {
@@ -177,11 +172,16 @@ hr {
 .btn-cancelar:hover {
     border-color: #fff;
     color: #fff;
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 @media (max-width: 768px) {
-    .respuestas-grid {
-        grid-template-columns: 1fr;
+    .crear-categoria-page {
+        padding: 20px;
+    }
+
+    .form-completo {
+        padding: 20px;
     }
 
     .submit-container {
