@@ -97,7 +97,7 @@ if (!$usuario) {
                 </div>
 
                 <div class="chart-card">
-                    <h3>Ciudades con más partidas</h3>
+                    <h3>Ciudades con más jugadores</h3>
                     <canvas id="chart-lugares"></canvas>
                 </div>
             </section>

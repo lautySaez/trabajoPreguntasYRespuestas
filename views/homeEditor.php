@@ -1,7 +1,7 @@
 <?php include("views/partials/header.php"); ?>
 
     <link rel="stylesheet" href="public/css/homeEditor.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <?php
 $usuario = $_SESSION["usuario"] ?? null;
@@ -9,31 +9,86 @@ require_once("helper/VerificacionDeRoles.php");
 verificarRol("Editor");
 ?>
 
-<div class="editor-dashboard">
-    <?php if ($usuario && $usuario["rol"] === "Editor"): ?>
-        <div class="perfil-section">
-            <h1>Editor</h1>
-            <h2>Bienvenido <?= htmlspecialchars($usuario["nombre"]) ?>!</h2>
+    <div class="editor-dashboard-container">
+        <?php if ($usuario && $usuario["rol"] === "Editor"): ?>
 
-            <?php if (!empty($usuario["foto_perfil"])): ?>
-                <img src="<?= htmlspecialchars($usuario["foto_perfil"]) ?>" alt="Foto de perfil" class="foto-perfil">
-            <?php endif; ?>
-        </div>
+            <aside class="sidebar-menu">
+                <div class="perfil-section">
+                    <h1>Panel Editor</h1>
+                    <h2>Hola, <?= htmlspecialchars($usuario["nombre"]) ?></h2>
 
-        <div class="cards-container">
-            <a href="index.php?controller=editor&method=preguntasReportadas" class="card">
-                <h3>Preguntas Reportadas</h3>
-                <p>Revisá, editá o eliminá las preguntas que fueron reportadas por los usuarios.</p>
-            </a>
+                    <?php if (!empty($usuario["foto_perfil"])): ?>
+                        <img src="<?= htmlspecialchars($usuario["foto_perfil"]) ?>" alt="Perfil" class="foto-perfil">
+                    <?php else: ?>
+                        <div class="foto-perfil-placeholder">
+                            <i class="fa-solid fa-user-astronaut"></i>
+                        </div>
+                    <?php endif; ?>
+                </div>
 
-            <a href="index.php?controller=editor&method=gestionarPreguntas" class="card">
-                <h3>Gestión de Preguntas</h3>
-                <p>Creá nuevas preguntas o editá las existentes del juego.</p>
-            </a>
-        </div>
-    <?php else: ?>
-        <p class="error-msg">Error: no se encontró información del editor.</p>
-    <?php endif; ?>
-</div>
+                <nav class="dashboard-nav">
+                    <a href="index.php?controller=editor&method=gestionarPreguntas" class="nav-item">
+                        <span class="icon"><i class="fa-solid fa-list-check"></i></span> Gestionar Preguntas
+                    </a>
+
+                    <a href="index.php?controller=editor&method=crearPregunta" class="nav-item create-btn">
+                        <span class="icon"><i class="fa-solid fa-plus"></i></span> Crear Pregunta
+                    </a>
+
+                    <a href="index.php?controller=editor&method=gestionarCategorias" class="nav-item">
+                        <span class="icon"><i class="fa-solid fa-tags"></i></span> Categorías
+                    </a>
+
+                    <a href="index.php?controller=editor&method=preguntasReportadas" class="nav-item">
+                        <span class="icon"><i class="fa-solid fa-triangle-exclamation"></i></span> Reportes
+                    </a>
+                </nav>
+            </aside>
+
+            <main class="dashboard-content" id="dashboardContent">
+                <div id="bubblesContainer" class="bubbles-container"></div>
+
+                <div class="content-wrapper">
+                    <div class="header-pro">
+                        <h2>Centro de Control</h2>
+                        <p>Selecciona una acción para comenzar a trabajar.</p>
+                    </div>
+
+                    <div class="cards-container">
+                        <a href="index.php?controller=editor&method=gestionarPreguntas" class="card">
+                            <i class="fa-solid fa-file-pen"></i>
+                            <h3>Gestión de Preguntas</h3>
+                            <p>Edita, elimina o revisa el banco de preguntas actual.</p>
+                        </a>
+
+                        <a href="index.php?controller=editor&method=crearPregunta" class="card highlight-card">
+                            <i class="fa-solid fa-circle-plus"></i>
+                            <h3>Crear Nueva Pregunta</h3>
+                            <p>Añade nuevo contenido y desafíos al juego.</p>
+                        </a>
+
+                        <a href="index.php?controller=editor&method=gestionarCategorias" class="card">
+                            <i class="fa-solid fa-layer-group"></i>
+                            <h3>Gestión de Categorías</h3>
+                            <p>Administra los temas y colores de las categorías.</p>
+                        </a>
+
+                        <a href="index.php?controller=editor&method=crearCategoria" class="card">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            <h3>Nueva Categoría</h3>
+                            <p>Define una nueva área de conocimiento.</p>
+                        </a>
+                    </div>
+                </div>
+            </main>
+
+        <?php else: ?>
+            <div class="error-container">
+                <p class="error-msg">Error: Acceso denegado o sesión no válida.</p>
+            </div>
+        <?php endif; ?>
+    </div>
+
+    <script src="public/js/homeEditor.js"></script>
 
 <?php include("views/partials/footer.php"); ?>

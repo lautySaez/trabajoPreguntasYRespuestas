@@ -19,6 +19,60 @@ class EditorController
         }
     }
 
+    public function gestionarCategorias()
+    {
+        $categorias = $this->model->obtenerCategorias();
+
+        include(__DIR__ . "/../views/gestionarCategorias.php");
+    }
+
+    public function crearCategoria()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            // 1. Crear la Categoría
+            $nombre = $_POST['nombre'] ?? '';
+            $color = $_POST['color'] ?? '#FFFFFF';
+            $icono = $_POST['icono'] ?? '❓';
+            $descripcion = $_POST['descripcion'] ?? '';
+
+            if (!empty($nombre)) {
+                $categoria_id = $this->model->crearCategoria($nombre, $color, $icono, $descripcion);
+
+                for ($i = 1; $i <= 3; $i++) {
+                    if (isset($_POST["pregunta_$i"]) && !empty($_POST["pregunta_$i"])) {
+                        $this->model->crearPregunta(
+                            $categoria_id,
+                            $_POST["pregunta_$i"],
+                            $_POST["r{$i}_1"] ?? '',
+                            $_POST["r{$i}_2"] ?? '',
+                            $_POST["r{$i}_3"] ?? '',
+                            $_POST["r{$i}_4"] ?? '',
+                            $_POST["correcta_$i"] ?? 1
+                        );
+                    }
+                }
+
+                header("Location: index.php?controller=editor&method=gestionarCategorias");
+                exit();
+            }
+        }
+
+        include(__DIR__ . "/../views/crearCategorias.php");
+    }
+
+    public function borrarCategoria()
+    {
+        $id = $_POST['id'] ?? null;
+
+        if ($id) {
+            $this->model->borrarCategoria($id);
+        }
+
+        header("Location: index.php?controller=editor&method=gestionarCategorias");
+        exit();
+    }
+
     public function gestionarPreguntas()
     {
         $categoria_id = $_GET["categoria_id"] ?? null;
@@ -119,5 +173,10 @@ class EditorController
         }
 
         include(__DIR__ . "/../views/crearPregunta.php");
+    }
+
+    public function index()
+    {
+        include(__DIR__ . "/../views/homeEditor.php");
     }
 }

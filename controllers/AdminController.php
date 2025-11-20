@@ -82,22 +82,43 @@ class AdminController {
     }
 
     public function statsJson() {
+        ini_set('display_errors', 0);
+        error_reporting(E_ALL);
+
+        if (ob_get_length()) ob_clean();
+
         header('Content-Type: application/json; charset=utf-8');
 
-        $payload = [
-            'total_preguntas' => $this->model->contarPreguntas(),
-            'total_partidas'  => $this->model->contarPartidas(),
-            'por_categoria'   => $this->model->preguntasPorCategoria(),
-            'top_faciles'     => $this->model->top10PreguntasMasFaciles(),
-            'top_jugadores'   => $this->model->mejoresJugadores(10),
-            'lugares'         => $this->model->lugaresDondeJuegan(500),
-            'edades'          => $this->model->distribucionEdades(),
-            'genero'          => $this->model->distribucionGenero(),
-            'informes'        => $this->model->obtenerInformes(100),
-            'reportes'        => $this->model->obtenerReportesJugadores(100)
-        ];
+        try {
+            $payload = [
+                'total_preguntas' => $this->model->contarPreguntas() ?? 0,
+                'total_partidas'  => $this->model->contarPartidas() ?? 0,
+                'por_categoria'   => $this->model->preguntasPorCategoria() ?? [],
+                'top_faciles'     => $this->model->top10PreguntasMasFaciles() ?? [],
+                'top_jugadores'   => $this->model->mejoresJugadores(10) ?? [],
+                'lugares'         => $this->model->lugaresDondeJuegan(500) ?? [],
+                'edades'          => $this->model->distribucionEdades() ?? [],
+                'genero'          => $this->model->distribucionGenero() ?? [],
+                'informes'        => $this->model->obtenerInformes(100) ?? [],
+                'reportes'        => $this->model->obtenerReportesJugadores(100) ?? []
+            ];
 
-        echo json_encode($payload);
+            $json = json_encode($payload);
+
+            if ($json === false) {
+                throw new Exception("Error de codificación JSON: " . json_last_error_msg());
+            }
+
+            echo $json;
+
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'error' => true,
+                'mensaje' => "Fallo en statsJson: " . $e->getMessage()
+            ]);
+        }
+
         exit;
     }
 

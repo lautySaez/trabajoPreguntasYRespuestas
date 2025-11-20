@@ -1,5 +1,5 @@
 <?php
-class EditorModel {
+class editorModel {
     private $conexion;
 
     public function __construct($conexion) {
@@ -10,6 +10,38 @@ class EditorModel {
         $stmt = $this->conexion->prepare("SELECT * FROM categorias");
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function obtenerCategoriaPorId($id) {
+        $stmt = $this->conexion->prepare("SELECT * FROM categorias WHERE id = ? LIMIT 1");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_assoc();
+    }
+
+    public function crearCategoria($nombre, $color = '#FFFFFF', $icono = '❓', $descripcion = '', $activa = 1) {
+        $stmt = $this->conexion->prepare("
+            INSERT INTO categorias (nombre, color, icono, descripcion, activa)
+            VALUES (?, ?, ?, ?, ?)
+        ");
+        $stmt->bind_param("ssssi", $nombre, $color, $icono, $descripcion, $activa);
+        $stmt->execute();
+        return $this->conexion->insert_id;
+    }
+
+    public function borrarCategoria($id) {
+        $stmt = $this->conexion->prepare("DELETE FROM categorias WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        return $stmt->affected_rows > 0;
+    }
+
+    public function contarPreguntasPorCategoria($categoria_id) {
+        $stmt = $this->conexion->prepare("SELECT COUNT(*) as total FROM preguntas WHERE categoria_id = ?");
+        $stmt->bind_param("i", $categoria_id);
+        $stmt->execute();
+        $resultado = $stmt->get_result()->fetch_assoc();
+        return $resultado['total'] ?? 0;
     }
 
     public function obtenerPreguntasPorCategoria($categoria_id = null) {

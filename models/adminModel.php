@@ -82,8 +82,7 @@ class adminModel {
         $sql = "SELECT id,
                    pregunta,
                    COALESCE(porcentaje_acierto, 0) AS porcentaje_acierto,
-                   nivel_dificultad,
-                   veces_mostrada
+                   nivel_dificultad
             FROM preguntas
             ORDER BY COALESCE(porcentaje_acierto, 0) DESC
             LIMIT 10";
@@ -113,12 +112,16 @@ class adminModel {
         return (int)($res['total'] ?? 0);
     }
     public function lugaresDondeJuegan($limit = 50) {
-        $sql = "SELECT COALESCE(u.pais,'Desconocido') AS pais, COALESCE(u.ciudad,'Desconocido') AS ciudad, COUNT(DISTINCT pt.usuario_id) AS cantidad
-                FROM partidas pt
-                LEFT JOIN usuarios u ON u.id = pt.usuario_id
+        $sql = "SELECT 
+                    COALESCE(pais,'Desconocido') AS pais, 
+                    COALESCE(ciudad,'Desconocido') AS ciudad, 
+                    COUNT(id) AS cantidad
+                FROM usuarios
+                WHERE pais IS NOT NULL AND ciudad IS NOT NULL AND pais != '' AND ciudad != ''
                 GROUP BY pais, ciudad
                 ORDER BY cantidad DESC
                 LIMIT ?";
+
         $stmt = $this->conexion->prepare($sql);
         $stmt->bind_param("i", $limit);
         $stmt->execute();
