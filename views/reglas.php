@@ -15,7 +15,7 @@
         <li>Si finalizás como perdedor se restan -3 puntos.</li>
     </ul>
 
-    <a href="index.php?controller=partida&method=mostrarRuleta" class="boton-partida">Comenzar</a>
+    <a href="ruleta" class="boton-partida">Comenzar</a>
 </div>
 
 <?php include("views/partials/footer.php"); ?>

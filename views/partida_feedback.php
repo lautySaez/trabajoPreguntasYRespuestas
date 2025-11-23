@@ -50,10 +50,11 @@
             <a href="index.php?controller=partida&method=mostrarRuleta" class="btn btn-ruleta">Girar ruleta</a>
             <?php unset($_SESSION['ronda_completada']); ?>
         <?php elseif ($haySiguiente): ?>
+        <!-- Sgte Pregunta-->
             <a href="index.php?controller=partida&method=continuarRonda" class="btn btn-siguiente">Siguiente pregunta</a>
+        <!-- Ruleta -->
             <a href="index.php?controller=partida&method=mostrarRuleta" class="btn btn-ruleta">Cambiar categoría</a>
         <?php else: ?>
-        <!-- Ruleta -->
             <a href="index.php?controller=partida&method=mostrarRuleta" class="btn btn-ruleta">Girar ruleta</a>
         <?php endif; ?>
         <!-- Reportar -->

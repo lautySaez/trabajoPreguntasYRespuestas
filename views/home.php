@@ -17,7 +17,7 @@
             <h2>¡Bienvenido de vuelta!</h2>
             <p>¿Estás listo para poner a prueba tus conocimientos?</p>
             
-            <a href="index.php?controller=partida&method=mostrarModo" class="boton-partida">Iniciar una Partida</a>
+            <a href="modo" class="boton-partida">Iniciar una Partida</a>
 
             <div class="map-section">
                 <h3>Encuentra tu contrincante</h3>

@@ -23,7 +23,7 @@
         </div>
 
         <div class="main-menu">
-            <a href="index.php?controller=RankingController&method=verRankings" class="menu-item">
+            <a href="rankings" class="menu-item">
                 🏆 Rankings
             </a>
         </div>
@@ -46,11 +46,11 @@
             </div>
             
             <div class="user-dropdown" id="userDropdown">
-                <a href="index.php?controller=UsuarioController&method=perfil" class="dropdown-item">
+                <a href="perfil" class="dropdown-item">
                     <i class="icon">⚙</i>
                     <span>Perfil</span>
                 </a>
-                <a href="index.php?controller=partida&method=mostrarModo" class="dropdown-item">
+                <a href="modo" class="dropdown-item">
                     <i class="icon">🎮</i>
                     <span>Iniciar Partida</span>
                 </a>
