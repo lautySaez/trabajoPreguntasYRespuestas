@@ -637,24 +637,19 @@ a:hover {
     background-color: #357ABD;
 }
 
-.boton-reportar {
-    position: fixed;
-    bottom: 3em;
-    left: 1em;
-    background-color: #e94a4a;
-    color: #fff;
-    padding: 12px 25px;
+.main-menu {
+    margin-right: 1em;
+}
+
+.main-menu .menu-item {
+    font-size: 18px;
+    padding: 10px 15px;
+    background: #005fcc;
+    color: white;
     border-radius: 8px;
-    font-weight: bold;
-    font-size: 1rem;
     text-decoration: none;
-    text-align: center;
-    transition: 0.3s;
-    cursor: pointer;
-    border: none;
-    outline: none;
-    background: #e94a4a;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
+}
+
+.main-menu .menu-item:hover {
+    background: #003f8a;
 }

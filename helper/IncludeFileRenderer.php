@@ -2,9 +2,7 @@
 
 class IncludeFileRenderer
 {
-    public function __construct()
-    {
-    }
+    public function __construct(){ }
 
     public function render($template, $data = null)
     {

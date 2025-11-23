@@ -2,6 +2,7 @@
 class UsuarioController
 {
     private $usuarioModel;
+    private $base_url = "http://localhost/trabajoPreguntasYRespuestas/";
 
     public function __construct($usuarioModel)
     {
@@ -10,7 +11,15 @@ class UsuarioController
             session_start();
         }
     }
-
+    protected function render($viewName, $data = []) {
+        extract($data);
+        $viewPath = __DIR__ . "/../views/" . $viewName . ".php";
+        if (file_exists($viewPath)) {
+            include $viewPath;
+        } else {
+            echo "Error: Vista no encontrada ($viewName).";
+        }
+    }
     public function perfil()
     {
         $usuario = $_SESSION['usuario'] ?? null;
@@ -20,7 +29,35 @@ class UsuarioController
             exit;
         }
 
-        include("views/perfil.php");
+        $datos_perfil = $this->usuarioModel->obtenerPerfilPublico($usuario['nombre_usuario']);
+
+        $url_publica = $this->base_url . "/index.php?controller=UsuarioController&method=publico&username=" . urlencode($usuario['nombre_usuario']);
+
+        $data = [
+            'usuario' => $usuario,
+            'datos_perfil' => $datos_perfil,
+            'qr_url' => $url_publica
+        ];
+
+        $this->render('perfil', $data);
+    }
+
+    public function publico() {
+        $username = $_GET['username'] ?? null;
+
+        if (!$username) {
+            $this->render('errorView', ['mensaje' => 'Usuario no especificado.']);
+            return;
+        }
+
+        $datos = $this->usuarioModel->obtenerPerfilPublico($username);
+
+        if (!$datos) {
+            $this->render('errorView', ['mensaje' => 'El perfil de este usuario no está disponible o no existe.']);
+            return;
+        }
+
+        $this->render('perfilPublico', ['datos' => $datos]);
     }
 
     public function confirmarPassword()
@@ -68,7 +105,7 @@ class UsuarioController
         }
 
         $usuario = $_SESSION['usuario'];
-        include("views/configurar_perfil.php");
+        $this->render("configurar_perfil", ['usuario' => $usuario]);
     }
 
     public function actualizarPerfil()
@@ -133,7 +170,7 @@ class UsuarioController
             exit;
         }
 
-        include("views/elegir_avatar.php");
+        $this->render("elegir_avatar", ['usuario' => $usuario]);
     }
 
 }

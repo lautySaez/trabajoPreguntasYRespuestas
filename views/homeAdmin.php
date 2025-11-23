@@ -1,76 +1,140 @@
 <?php include("views/partials/header.php"); ?>
 
-<link rel="stylesheet" href="public/css/homeAdmin.css">
+    <link rel="stylesheet" href="public/css/adminDashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <?php
 if (session_status() === PHP_SESSION_NONE) session_start();
+$usuario = $_SESSION['usuario'] ?? null;
 
-if (isset($_SESSION["usuario"])) {
-    $usuario = $_SESSION["usuario"];
-} else {
+if (!$usuario) {
     header("Location: index.php?controller=LoginController&method=inicioSesion");
     exit;
 }
 ?>
 
-<?php
-require_once("helper/VerificacionDeRoles.php");
-verificarRol("Administrador");
-?>
-    <h1>Panel del Administrador</h1>
- 
-<div class="admin-container">
-    <?php if ($usuario && $usuario["rol"] === "Administrador"): ?>
-        <h2>Bienvenido <?= htmlspecialchars($usuario["nombre"]) ?>!</h2>
-        <p>Tu email: <?= htmlspecialchars($usuario["email"]) ?></p>
+    <div class="admin-wrapper">
+        <aside class="sidebar">
+            <div class="brand">Deberes · Admin</div>
 
-        <?php if (!empty($usuario["foto_perfil"])): ?>
-            <img src="<?= htmlspecialchars($usuario["foto_perfil"]) ?>" alt="Foto de perfil" class="foto-perfil">
-        <?php endif; ?>
-        <br>
-        <h3>Usuarios Registrados:</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Avatar</th>
-                    <th>Nombre de Usuario</th>
-                    <th>Email</th>
-                    <th>Rol</th>
-                    <th>Estado</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (!empty($usuarios)): ?>
-                    <?php foreach ($usuarios as $u): ?>
-                        <tr>
-                            <td style="text-align:center;">
-                                <?php if (!empty($u["foto_perfil"])): ?>
-                                    <img src="<?= htmlspecialchars($u["foto_perfil"]) ?>" alt="Avatar" width="50" height="50" style="border-radius:50%;">
-                                <?php else: ?>
-                                    <div style="
-                                        width:50px;
-                                        height:50px;
-                                        border-radius:50%;
-                                        background-color:#ccc;
-                                        display:inline-block;
-                                    "></div>
-                                <?php endif; ?>
-                            </td>
-                            <td><?= htmlspecialchars($u["nombre_usuario"]) ?></td>
-                            <td><?= htmlspecialchars($u["email"]) ?></td>
-                            <td><?= htmlspecialchars($u["rol"]) ?></td>                           
-                            <td><?= htmlspecialchars($u["estado_registro"] ?? 'Desconocido') ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <tr><td colspan="4">No hay usuarios registrados.</td></tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
+            <nav>
+                <a href="index.php?controller=admin&method=homeAdmin" class="active">
+                    <i class="fa fa-chart-line"></i> Dashboard
+                </a>
 
-    <?php else: ?>
-        <p>Error: no se encontró información del administrador.</p>
-    <?php endif; ?>
-</div>
+                <a href="index.php?controller=admin&method=gestionUsuarios">
+                    <i class="fa fa-users"></i> Gestión de Jugadores
+                </a>
+                <a href="index.php?controller=admin&method=informes">
+                    <i class="fa fa-flag"></i> Informes de Editores
+                </a>
+                <a href="index.php?controller=admin&method=reportes">
+                    <i class="fa fa-exclamation-circle"></i> Reportes de Jugadores
+                </a>
+            </nav>
+
+            <div class="sidebar-actions">
+                <button class="btn-sidebar-action" id="btn-print">
+                    <i class="fa fa-print"></i> Imprimir Dashboard
+                </button>
+                <button class="btn-sidebar-action" id="btn-export-pdf">
+                    <i class="fa fa-file-pdf"></i> Exportar PDF
+                </button>
+            </div>
+            <div class="sidebar-user">
+                <small>Conectado como</small>
+                <strong><?= htmlspecialchars($usuario['nombre_usuario']) ?></strong>
+            </div>
+        </aside>
+
+        <main class="content">
+
+            <header class="topbar">
+                <h1>Panel Administrativo</h1>
+
+                <div class="user-info">
+                    <?php if (!empty($usuario['foto_perfil'])): ?>
+                        <img src="<?= htmlspecialchars($usuario['foto_perfil']) ?>" class="avatar">
+                    <?php else: ?>
+                        <div class="avatar placeholder"><?= strtoupper(substr($usuario['nombre_usuario'],0,1)) ?></div>
+                    <?php endif; ?>
+
+                    <div>
+                        <div><?= htmlspecialchars($usuario['nombre']) ?></div>
+                        <small><?= htmlspecialchars($usuario['email']) ?></small>
+                    </div>
+            </header>
+
+            <section class="kpi-grid">
+                <div class="kpi-card">
+                    <span>Total preguntas</span>
+                    <strong id="kpi-total-preguntas">--</strong>
+                </div>
+                <div class="kpi-card">
+                    <span>Categorías</span>
+                    <strong id="kpi-categorias">--</strong>
+                </div>
+                <div class="kpi-card">
+                    <span>Partidas</span>
+                    <strong id="kpi-partidas">--</strong>
+                </div>
+            </section>
+
+            <section class="chart-grid">
+                <div class="chart-card">
+                    <h3>Distribución por edades</h3>
+                    <canvas id="chart-edades"></canvas>
+                </div>
+
+                <div class="chart-card">
+                    <h3>Distribución por género</h3>
+                    <canvas id="chart-genero"></canvas>
+                </div>
+
+                <div class="chart-card">
+                    <h3>Preguntas por categoría</h3>
+                    <canvas id="chart-categorias"></canvas>
+                </div>
+
+                <div class="chart-card">
+                    <h3>Ciudades con más jugadores</h3>
+                    <canvas id="chart-lugares"></canvas>
+                </div>
+            </section>
+
+            <section class="table-grid" id="printable-area">
+
+                <div class="table-card" id="top-jugadores-table-card">
+                    <h3>Top 10 jugadores</h3>
+                    <table>
+                        <thead>
+                        <tr><th>Avatar</th><th>Usuario</th><th>Puntos</th><th>Partidas</th></tr>
+                        </thead>
+                        <tbody id="top-jugadores-body">
+                        <tr><td colspan="4">Cargando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-card small">
+                    <h3>Preguntas más fáciles</h3>
+                    <ul id="top-faciles-list" class="compact-list"></ul>
+                </div>
+
+                <div class="table-card small">
+                    <h3>Últimos informes</h3>
+                    <ul id="ultimos-informes-list" class="compact-list"></ul>
+                </div>
+
+            </section>
+
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="public/js/adminDashboard.js"></script>
 
 <?php include("views/partials/footer.php"); ?>

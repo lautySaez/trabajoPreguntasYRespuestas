@@ -22,6 +22,12 @@
             <h1><a href="index.php">AciertaYaa</a></h1>
         </div>
 
+        <div class="main-menu">
+            <a href="rankings" class="menu-item">
+                🏆 Rankings
+            </a>
+        </div>
+
         <?php if ($usuario): ?>
         <div class="user-section">
             <div class="user-info" onclick="toggleUserMenu()">
@@ -40,9 +46,13 @@
             </div>
             
             <div class="user-dropdown" id="userDropdown">
-                <a href="index.php?controller=UsuarioController&method=perfil" class="dropdown-item">
+                <a href="perfil" class="dropdown-item">
                     <i class="icon">⚙</i>
                     <span>Perfil</span>
+                </a>
+                <a href="modo" class="dropdown-item">
+                    <i class="icon">🎮</i>
+                    <span>Iniciar Partida</span>
                 </a>
                 <a href="index.php?controller=LoginController&method=logout" class="dropdown-item logout">
                     <i class="icon">🚪</i>

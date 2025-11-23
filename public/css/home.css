@@ -267,3 +267,20 @@
     border-radius: 50%;
     cursor: pointer;
 }
+
+.main-menu {
+    margin-right: 1em;
+}
+
+.main-menu .menu-item {
+    font-size: 18px;
+    padding: 10px 15px;
+    background: #005fcc;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+.main-menu .menu-item:hover {
+    background: #003f8a;
+}

@@ -304,10 +304,8 @@ class LoginController
         $usuario = $_SESSION["usuario"];
         $ultimaPartida = null;
 
-        // Normalizar rol a minúsculas
         $rol = strtolower($usuario['rol'] ?? '');
 
-        // Si es jugador, obtener su última partida
         if ($rol === 'jugador') {
             $ultimasPartidas = $this->partidaModel->getUltimasPartidas($usuario['id'], 5);
         }
@@ -371,8 +369,4 @@ class LoginController
         include("views/inicioSesion.php");
     }
 
-    public function iniciarNuevaPartida()
-    {
-
-    }
 }

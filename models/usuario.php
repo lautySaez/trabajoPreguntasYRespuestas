@@ -38,7 +38,6 @@ class Usuario
     $query = "INSERT INTO usuarios (nombre, fecha_nacimiento, sexo, pais, ciudad, email, password, nombre_usuario, rol, foto_perfil, estado_registro, token_verificacion)
           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $this->conexion->prepare($query);
-    // Tipos: 11 strings + 1 int (token)
     $stmt->bind_param("sssssssssssi", $nombre, $fecha_nacimiento, $sexo, $pais, $ciudad, $email, $passwordHash, $nombre_usuario, $rol, $foto_perfil, $estado_registro, $token_activacion);
 
         return $stmt->execute();
@@ -166,6 +165,32 @@ class Usuario
     }
 
     return $usuarios;
+    }
+
+
+    public function obtenerPerfilPublico($username)
+    {
+        $sql = "SELECT 
+                u.id, 
+                u.nombre_usuario, 
+                u.foto_perfil,
+                IFNULL(SUM(p.puntaje), 0) AS puntos_totales,
+                COUNT(p.id) AS partidas_jugadas
+            FROM usuarios u
+            LEFT JOIN partidas p ON p.usuario_id = u.id
+            WHERE u.nombre_usuario = ? AND u.estado_registro != 'Bloqueado'
+            GROUP BY u.id, u.nombre_usuario, u.foto_perfil";
+
+        $stmt = $this->conexion->prepare($sql);
+
+        if ($stmt === false) {
+            error_log("Error al preparar 'obtenerPerfilPublico': " . $this->conexion->error);
+            return null;
+        }
+
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_assoc();
     }
 
 }

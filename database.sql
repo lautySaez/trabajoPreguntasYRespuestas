@@ -15,7 +15,7 @@ CREATE TABLE usuarios (
     foto_perfil VARCHAR(255) DEFAULT NULL,
     rol ENUM('Jugador', 'Administrador', 'Editor') DEFAULT 'Jugador',
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    estado_registro ENUM('Activo', 'Inactivo') DEFAULT 'Inactivo',
+    estado_registro ENUM('Activo', 'Inactivo', 'Bloqueado') DEFAULT 'Inactivo',
     token_verificacion INT DEFAULT NULL
 );
 
@@ -87,7 +87,6 @@ CREATE TABLE preguntas (
     INDEX idx_dificultad (nivel_dificultad),
     INDEX idx_activa (activa)
 );
-
 
 DELETE FROM preguntas;
 INSERT INTO preguntas (categoria_id, pregunta, respuesta_1, respuesta_2, respuesta_3, respuesta_4, respuesta_correcta) VALUES
@@ -740,21 +739,33 @@ CREATE TABLE InformePreguntas (
 );
 
 CREATE TABLE reportes (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    pregunta_id INT NOT NULL,
-    usuario_id INT NOT NULL,
-    motivo TEXT NOT NULL,
-    fecha_reporte TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (pregunta_id) REFERENCES preguntas(id),
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+     id INT AUTO_INCREMENT PRIMARY KEY,
+     pregunta_id INT NOT NULL,
+     usuario_id INT NOT NULL,
+     motivo TEXT NOT NULL,
+     fecha_reporte TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+     estado ENUM('Activo', 'Resuelto') DEFAULT 'Activo' NOT NULL,
+     FOREIGN KEY (pregunta_id) REFERENCES preguntas(id),
+     FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
+     INDEX idx_estado (estado)
 );
 
--- Registro de preguntas respondidas por cada usuario para evitar repetición
+CREATE TABLE ranking_jugadores
+(
+    id             INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario     INT NOT NULL,
+    id_avatar      INT       DEFAULT NULL,
+    puntaje_total  INT       DEFAULT 0,
+    actualizado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios (id)
+
+);
+
 CREATE TABLE IF NOT EXISTS preguntas_usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     usuario_id INT NOT NULL,
     pregunta_id INT NOT NULL,
-    correcta TINYINT(1) NOT NULL, -- 1 si respondió correctamente, 0 caso contrario
+    correcta TINYINT(1) NOT NULL,
     fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY uniq_usuario_pregunta (usuario_id, pregunta_id),
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,

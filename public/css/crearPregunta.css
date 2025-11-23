@@ -1,120 +1,146 @@
-.crear-pregunta-page * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+:root {
+    --primary-cyan: #00bcd4;
+    --primary-hover: #33e1f5;
+    --success-green: #00e676;
+    --bg-dark: #12121f;
+    --bg-panel: rgba(31, 31, 58, 0.8);
+    --input-bg: rgba(255, 255, 255, 0.05);
+    --text-main: #ffffff;
+    --text-muted: #bbbbdd;
+    --danger-color: #ff5252;
 }
 
 .crear-pregunta-page {
     max-width: 700px;
-    margin: 40px auto;
-    padding: 30px;
-    background: rgba(255, 255, 255, 0.1);
+    margin: 50px auto;
+    padding: 40px;
+    background: var(--bg-panel);
     backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-radius: 16px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-    color: #f9fafb;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
 }
 
 .crear-pregunta-page h1 {
     text-align: center;
-    margin-bottom: 30px;
-    font-size: 28px;
+    margin-bottom: 40px;
+    font-size: 2em;
     font-weight: 700;
+    color: var(--primary-cyan);
+    text-shadow: 0 0 15px rgba(0, 188, 212, 0.3);
 }
 
 .form-crear-pregunta label {
     display: block;
-    margin-top: 15px;
-    font-weight: 600;
-    color: #f1f1f1;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--primary-cyan);
+    font-size: 0.95em;
 }
 
 .form-crear-pregunta input[type="text"],
 .form-crear-pregunta textarea,
 .form-crear-pregunta select {
     width: 100%;
-    padding: 10px 12px;
-    margin-top: 5px;
-    border-radius: 12px;
-    border: 1px solid rgba(255,255,255,0.3);
-    background: rgba(255,255,255,0.05);
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--input-bg);
     color: #fff;
-    font-size: 14px;
-    transition: 0.3s;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
 }
 
-.form-crear-pregunta input::placeholder,
-.form-crear-pregunta textarea::placeholder {
-    color: rgba(255,255,255,0.7);
-}
-
-.form-crear-pregunta select {
-    color: #000;
-    background-color: #fff;
-}
-
-.form-crear-pregunta select option {
-    color: #000;
-    background-color: #fff;
+.form-crear-pregunta ::placeholder {
+    color: rgba(255, 255, 255, 0.3);
 }
 
 .form-crear-pregunta input:focus,
 .form-crear-pregunta textarea:focus,
 .form-crear-pregunta select:focus {
-    border-color: #4CAF50;
+    border-color: var(--primary-cyan);
+    background: rgba(255, 255, 255, 0.1);
     outline: none;
+    box-shadow: 0 0 10px rgba(0, 188, 212, 0.2);
+}
+
+.form-crear-pregunta select option {
+    background-color: var(--bg-dark);
+    color: #fff;
 }
 
 textarea {
     resize: vertical;
-    min-height: 100px;
+    min-height: 120px;
 }
 
 .respuestas {
-    margin-top: 10px;
+    margin-top: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .respuesta-item {
     display: flex;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
+    gap: 15px;
+}
+
+.respuesta-item:last-child {
+    margin-bottom: 0;
 }
 
 .respuesta-item input[type="text"] {
     flex: 1;
-    margin-right: 15px;
-    border-radius: 12px;
+    margin-right: 0;
 }
 
 .check-container {
+    display: block;
     position: relative;
-    display: inline-block;
-    width: 25px;
-    height: 25px;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    margin: 0 !important;
+    flex-shrink: 0;
 }
 
 .check-container input {
+    position: absolute;
     opacity: 0;
-    width: 0;
+    cursor: pointer;
     height: 0;
+    width: 0;
 }
 
 .checkmark {
     position: absolute;
     top: 0;
     left: 0;
-    height: 25px;
-    width: 25px;
-    background-color: rgba(255,255,255,0.1);
+    height: 30px;
+    width: 30px;
+    background-color: rgba(255, 255, 255, 0.1);
     border-radius: 50%;
-    border: 1px solid rgba(255,255,255,0.3);
-    transition: 0.3s;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.check-container:hover input ~ .checkmark {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: #fff;
 }
 
 .check-container input:checked ~ .checkmark {
-    background-color: #4CAF50;
-    border-color: #4CAF50;
+    background-color: var(--success-green);
+    border-color: var(--success-green);
+    box-shadow: 0 0 15px var(--success-green);
 }
 
 .checkmark::after {
@@ -128,60 +154,72 @@ textarea {
 }
 
 .check-container .checkmark::after {
-    left: 9px;
-    top: 5px;
+    left: 10px;
+    top: 6px;
     width: 6px;
     height: 12px;
-    border: solid white;
-    border-width: 0 2px 2px 0;
+    border: solid #12121f;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
     transform: rotate(45deg);
 }
 
 .form-buttons {
-    margin-top: 20px;
+    margin-top: 40px;
     display: flex;
-    justify-content: flex-start;
-    gap: 15px;
+    justify-content: flex-end;
+    gap: 20px;
 }
 
 .btn-guardar, .btn-cancelar {
-    padding: 12px 25px;
-    border: none;
-    border-radius: 12px;
+    padding: 12px 30px;
+    border-radius: 50px;
     cursor: pointer;
-    font-weight: 600;
-    font-size: 14px;
-    transition: 0.3s;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: all 0.3s ease;
     text-decoration: none;
     text-align: center;
+    display: inline-block;
 }
 
 .btn-guardar {
-    background: linear-gradient(135deg, #4a90e2 0%, #357ABD 100%);
-    color: #fff;
+    background-color: var(--primary-cyan);
+    color: #12121f;
+    border: none;
+    box-shadow: 0 0 10px rgba(0, 188, 212, 0.3);
 }
 
 .btn-guardar:hover {
-    background: linear-gradient(135deg, #357ABD 0%, #2e62a3 100%);
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(0, 188, 212, 0.5);
 }
 
 .btn-cancelar {
-    background: linear-gradient(135deg, #e94a4a 0%, #c92f2f 100%);
-    color: #fff;
+    background-color: transparent;
+    color: var(--text-muted);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .btn-cancelar:hover {
-    background: linear-gradient(135deg, #c92f2f 0%, #a82525 100%);
+    border-color: var(--text-main);
+    color: var(--text-main);
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 @media (max-width: 768px) {
     .crear-pregunta-page {
-        margin: 20px 15px;
-        padding: 20px;
+        margin: 20px;
+        padding: 25px;
     }
 
     .form-buttons {
-        flex-direction: column;
-        gap: 10px;
+        flex-direction: column-reverse;
+    }
+
+    .btn-guardar, .btn-cancelar {
+        width: 100%;
     }
 }
