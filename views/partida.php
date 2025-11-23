@@ -27,6 +27,7 @@
     Terminar partida
 </a>
 
-<script src="public/js/temporizador.js"></script>
+<?php $ts = time(); ?>
+<script src="public/js/temporizador.js?v=<?= $ts ?>"></script>
 
 <?php include("views/partials/footer.php"); ?>

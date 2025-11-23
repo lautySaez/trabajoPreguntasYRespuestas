@@ -38,6 +38,12 @@ class PartidaController
 
     public function mostrarRuleta()
     {
+        // Bloquear acceso a ruleta si la partida fue finalizada por error o timeout
+        if (!empty($_SESSION['partida_finalizada'])) {
+            // Forzar al usuario a terminar la partida antes de iniciar otra
+            header("Location: index.php?controller=partida&method=terminarPartida");
+            exit();
+        }
         include("views/ruleta.php");
     }
 
@@ -46,9 +52,21 @@ class PartidaController
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
+        // Si la partida está finalizada, no permitir reinicio sin terminar
+        if (!empty($_SESSION['partida_finalizada'])) {
+            header("Location: index.php?controller=partida&method=terminarPartida");
+            exit();
+        }
 
-        if (isset($_SESSION["partida_finalizada"])) {
-            unset($_SESSION["partida_finalizada"]);
+        // Evitar cambio de pregunta por refresco mientras hay una pregunta activa sin responder
+        if (!empty($_SESSION['preguntas']) && isset($_SESSION['pregunta_actual'])) {
+            $preguntas = $_SESSION['preguntas'];
+            $indice = $_SESSION['pregunta_actual'];
+            $preguntaActual = $preguntas[$indice] ?? null;
+            if ($preguntaActual) {
+                include("views/partida.php");
+                return;
+            }
         }
 
         if (!isset($_SESSION["usuario"]["id"])) {
@@ -120,15 +138,20 @@ class PartidaController
         $esCorrecta = ($respuestaSeleccionada == $correcta);
         if ($esCorrecta) {
             $_SESSION["puntaje"] += 2;
-            if (isset($_SESSION["partida_finalizada"])) {
-                unset($_SESSION["partida_finalizada"]);
-            }
+            // Fin de ronda por respuesta correcta: limpiar preguntas para permitir nuevo giro
+            unset($_SESSION["preguntas"]);
+            unset($_SESSION["pregunta_actual"]);
+            unset($_SESSION["categoria_ronda"]);
         } else {
             $_SESSION["puntaje"] -= 1;
             $_SESSION["partida_finalizada"] = true;
             if (isset($pregunta['id'])) {
                 $this->partidaModel->registrarIncorrectaPregunta($pregunta['id']);
             }
+            // Limpiar preguntas al finalizar por error
+            unset($_SESSION["preguntas"]);
+            unset($_SESSION["pregunta_actual"]);
+            unset($_SESSION["categoria_ronda"]);
         }
 
         if (isset($_SESSION['usuario']['id']) && isset($pregunta['id'])) {
@@ -137,21 +160,7 @@ class PartidaController
 
         $this->partidaModel->actualizarPuntaje($partidaId, $_SESSION["puntaje"]);
 
-        if (!$esCorrecta) {
-            unset($_SESSION["preguntas"]);
-            unset($_SESSION["pregunta_actual"]);
-            unset($_SESSION["categoria_ronda"]);
-        } else {
-            $total = count($preguntas);
-            if ($indice + 1 < $total) {
-                $_SESSION["pregunta_actual"] = $indice + 1;
-            } else {
-                unset($_SESSION["preguntas"]);
-                unset($_SESSION["pregunta_actual"]);
-                unset($_SESSION["categoria_ronda"]);
-                $_SESSION['ronda_completada'] = true;
-            }
-        }
+        // Ya no se avanza a siguiente pregunta en misma ronda.
 
         $preguntaActual = $pregunta;
         $respuestaSeleccionadaId = (int)$respuestaSeleccionada;
@@ -159,42 +168,7 @@ class PartidaController
         include("views/partida_feedback.php");
     }
 
-    public function continuarRonda() {
-        $preguntas = $_SESSION["preguntas"] ?? [];
-        $indice = $_SESSION["pregunta_actual"] ?? null;
-        if (!$preguntas || $indice === null) {
-            header("Location: index.php?controller=partida&method=mostrarRuleta");
-            exit();
-        }
-        $preguntaActual = $preguntas[$indice];
-        if (isset($preguntaActual['id'])) {
-            $this->partidaModel->registrarEntregaPregunta($preguntaActual['id']);
-        }
-        include("views/partida.php");
-    }
-
-    public function siguientePregunta() {
-        $preguntas = $_SESSION["preguntas"] ?? [];
-        $indice = $_SESSION["pregunta_actual"] ?? 0;
-        $partidaId = $_SESSION["partida_id"] ?? null;
-
-        if (!$preguntas || $partidaId === null) {
-            header("Location: index.php?controller=partida&method=mostrarRuleta");
-            exit();
-        }
-
-        $_SESSION["pregunta_actual"]++;
-
-        if ($_SESSION["pregunta_actual"] >= count($preguntas)) {
-            // Fin de partida
-            $this->partidaModel->actualizarPuntaje($partidaId, $_SESSION["puntaje"]);
-            header("Location: index.php?controller=partida&method=terminarPartida");
-            exit();
-        } else {
-            $preguntaActual = $preguntas[$_SESSION["pregunta_actual"]];
-            include("views/partida.php");
-        }
-    }
+    // Métodos de ronda continua eliminados (continuarRonda / siguientePregunta)
 
     public function terminarPartida()
     {
@@ -206,6 +180,7 @@ class PartidaController
         unset($_SESSION["partida_id"]);
         unset($_SESSION["puntaje"]);
         unset($_SESSION["partida_finalizada"]);
+        unset($_SESSION["tiempo_agotado"]);
     }
 
     public function obtenerCategorias() {
@@ -297,6 +272,35 @@ class PartidaController
         }
         echo "<script>alert('¡Pregunta reportada! La partida se ha finalizado.'); window.location = 'index.php?controller=partida&method=terminarPartida';</script>";
         exit;
+    }
+
+    public function tiempoAgotado() {
+        $indice = $_SESSION["pregunta_actual"] ?? null;
+        $preguntas = $_SESSION["preguntas"] ?? [];
+        $partidaId = $_SESSION["partida_id"] ?? null;
+        if ($indice === null || !$preguntas || !$partidaId) {
+            header("Location: index.php?controller=partida&method=mostrarRuleta");
+            exit();
+        }
+        $pregunta = $preguntas[$indice];
+        $correcta = $pregunta["respuesta_correcta"];
+        $_SESSION["puntaje"] = ($_SESSION["puntaje"] ?? 0) - 1;
+        $_SESSION["partida_finalizada"] = true;
+        $_SESSION["tiempo_agotado"] = true;
+        if (isset($_SESSION['usuario']['id']) && isset($pregunta['id'])) {
+            $this->partidaModel->registrarIncorrectaPregunta($pregunta['id']);
+            $this->partidaModel->registrarPreguntaUsuario($_SESSION['usuario']['id'], $pregunta['id'], false);
+        }
+        if ($partidaId) {
+            $this->partidaModel->actualizarPuntaje($partidaId, $_SESSION["puntaje"]);
+        }
+        unset($_SESSION["preguntas"]);
+        unset($_SESSION["pregunta_actual"]);
+        unset($_SESSION["categoria_ronda"]);
+        $preguntaActual = $pregunta;
+        $respuestaCorrectaId = (int)$correcta;
+        $respuestaSeleccionadaId = 0; // No respondió
+        include("views/partida_feedback.php");
     }
 
 }
