@@ -66,6 +66,7 @@
     gap: 14px;
     margin-top: 25px;
     justify-content: center;
+    align-items: center;
 }
 
 .acciones-post-respuesta .btn {
@@ -143,4 +144,24 @@
     color: #222;
     padding: 15px;
     border-radius: 10px;
+}
+
+/* tras agregar reportar */
+.form-reportar-inline {
+    display: inline-block;
+}
+
+.btn-reportar {
+    background: #ff4747;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+}
+
+form.form-reportar {
+    padding: 0px;
+    box-shadow: none;
+    width: fit-content;
 }

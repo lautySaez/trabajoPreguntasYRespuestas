@@ -53,8 +53,15 @@
             <a href="index.php?controller=partida&method=continuarRonda" class="btn btn-siguiente">Siguiente pregunta</a>
             <a href="index.php?controller=partida&method=mostrarRuleta" class="btn btn-ruleta">Cambiar categoría</a>
         <?php else: ?>
+        <!-- Ruleta -->
             <a href="index.php?controller=partida&method=mostrarRuleta" class="btn btn-ruleta">Girar ruleta</a>
         <?php endif; ?>
+        <!-- Reportar -->
+        <form method="POST" action="index.php?controller=partida&method=reportarPregunta" class="form-reportar">
+            <input type="hidden" name="id_pregunta" value="<?= $preguntaActual["id"] ?>">
+            <button type="submit" class="boton-reportar">Reportar</button>
+        </form>
+        <!-- Terminar -->
         <a href="index.php?controller=partida&method=terminarPartida" class="btn btn-terminar">Terminar partida</a>
     </div>
 
