@@ -8,7 +8,7 @@ class RankingController {
     }
 
     public function verRankings() {
-        $top3 = $this->rankingModel->obtenerTopJugadores(3);
+        $top3 = $this->rankingModel->obtenerTopJugadores(5);
         include("views/rankings.php");
     }
 }

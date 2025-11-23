@@ -10,7 +10,7 @@ class Ranking {
     }
 
     // Obtiene top N jugadores
-    public function obtenerTopJugadores($limite = 3)
+    public function obtenerTopJugadores($limite = 5)
     {
         $sql = "
             SELECT 

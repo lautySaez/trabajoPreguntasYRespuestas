@@ -248,6 +248,15 @@
     min-width: 80px;
 }
 
+/* fila clickeable a perfil publico */
+.rank-fila {
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.rank-fila:hover {
+    background: #f2f2f2;
+}
 
 /* avatares */
 .rank-avatar {

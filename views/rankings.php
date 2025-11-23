@@ -15,7 +15,7 @@ $rankingJugadores = $rankingJugadores ?? [];
         <h2>📊 Los Mas Rankeados</h2>
         <!-- Filtro -->
             <div class="filtros-container">
-                <form method="GET" class="ranking-filter">
+                <form method="GET" class="filtro-form">
                     <input type="hidden" name="controller" value="RankingController">
                     <input type="hidden" name="method" value="verRankings">
 
@@ -40,7 +40,7 @@ $rankingJugadores = $rankingJugadores ?? [];
                 <tbody>
                     <?php if (!empty($top3)): ?>
                         <?php foreach ($top3 as $i => $jugador): ?>
-                            <tr>
+                            <tr class="rank-fila" onclick="window.location.href='index.php?controller=UsuarioController&method=publico&username=<?= urlencode($jugador['nombre_usuario']) ?>'">
                                 <td><?= $i + 1 ?></td>
                                 <td>
                                     <?php if (!empty($jugador["foto_perfil"])): ?>
