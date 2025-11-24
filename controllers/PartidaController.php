@@ -104,17 +104,19 @@ class PartidaController
             $partidaId = $_SESSION["partida_id"];
         }
 
-        $preguntas = $this->partidaModel->obtenerPreguntasPorCategoriaId($categoria_id, $usuarioId, 1000);
-        if (empty($preguntas)) {
+        // Selección adaptativa de UNA sola pregunta
+        $preguntaSeleccionada = $this->partidaModel->obtenerPreguntaAdaptativaPorCategoriaId($categoria_id, $usuarioId);
+        if (!$preguntaSeleccionada) {
             $_SESSION['flash_error'] = 'No quedan preguntas disponibles en esta categoría para vos. Elegí otra categoría.';
             header("Location: index.php?controller=partida&method=mostrarRuleta");
             exit();
         }
-        $_SESSION["preguntas"] = $preguntas;
+        // Estructura de sesión mantiene formato de array para compatibilidad con responderPregunta
+        $_SESSION["preguntas"] = [$preguntaSeleccionada];
         $_SESSION["pregunta_actual"] = 0;
         $_SESSION["categoria_ronda"] = $categoria_id;
 
-        $preguntaActual = $preguntas[0];
+        $preguntaActual = $preguntaSeleccionada;
         if (isset($preguntaActual['id'])) {
             $this->partidaModel->registrarEntregaPregunta($preguntaActual['id']);
             // Registrar inicio de ventana de tiempo en nueva tabla de tracking

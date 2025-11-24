@@ -247,4 +247,147 @@ class PartidaModel {
         $ahora = time();
         return ($ahora - $inicio) > $limiteSegundos;
     }
+
+    /* ===================== ADAPTIVE DIFFICULTY ===================== */
+    public function getMetricasUsuario($usuarioId) {
+        // Puntaje histórico total
+        $stmt = $this->conexion->prepare("SELECT COALESCE(SUM(puntaje),0) AS total_puntaje FROM partidas WHERE usuario_id = ?");
+        $stmt->bind_param("i", $usuarioId);
+        $stmt->execute();
+        $puntajeRow = $stmt->get_result()->fetch_assoc();
+        $puntajeHistorico = (int)($puntajeRow['total_puntaje'] ?? 0);
+
+        // Últimas 10 respuestas
+        $stmt2 = $this->conexion->prepare("SELECT correcta FROM preguntas_usuarios WHERE usuario_id = ? ORDER BY fecha DESC LIMIT 10");
+        $stmt2->bind_param("i", $usuarioId);
+        $stmt2->execute();
+        $result2 = $stmt2->get_result();
+        $totalRecientes = 0; $aciertosRecientes = 0;
+        while ($r = $result2->fetch_assoc()) {
+            $totalRecientes++;
+            if ((int)$r['correcta'] === 1) $aciertosRecientes++;
+        }
+        $ratioReciente = $totalRecientes > 0 ? ($aciertosRecientes / $totalRecientes) : 0.0;
+
+        // Totales globales (para fallback)
+        $stmt3 = $this->conexion->prepare("SELECT COUNT(*) AS total, SUM(correcta) AS aciertos FROM preguntas_usuarios WHERE usuario_id = ?");
+        $stmt3->bind_param("i", $usuarioId);
+        $stmt3->execute();
+        $row3 = $stmt3->get_result()->fetch_assoc();
+        $totalGlobal = (int)($row3['total'] ?? 0);
+        $aciertosGlobal = (int)($row3['aciertos'] ?? 0);
+        $ratioGlobal = $totalGlobal > 0 ? ($aciertosGlobal / $totalGlobal) : 0.0;
+
+        return [
+            'puntaje_historico' => $puntajeHistorico,
+            'ratio_reciente' => $ratioReciente, // 0..1
+            'total_global' => $totalGlobal,
+            'ratio_global' => $ratioGlobal,
+            'total_recientes' => $totalRecientes
+        ];
+    }
+
+    public function obtenerPreguntaAdaptativaPorCategoriaId($categoriaId, $usuarioId) {
+        // Obtener preguntas candidatas no respondidas
+        $stmt = $this->conexion->prepare("SELECT p.* FROM preguntas p LEFT JOIN preguntas_usuarios pu ON pu.pregunta_id = p.id AND pu.usuario_id = ? WHERE p.categoria_id = ? AND pu.pregunta_id IS NULL AND p.activa = 1");
+        $stmt->bind_param("ii", $usuarioId, $categoriaId);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $faciles = []; $medias = []; $dificiles = [];
+        while ($p = $res->fetch_assoc()) {
+            // Asegurar respuestas array
+            $p['respuestas'] = [
+                ['id'=>1,'texto'=>$p['respuesta_1']],
+                ['id'=>2,'texto'=>$p['respuesta_2']],
+                ['id'=>3,'texto'=>$p['respuesta_3']],
+                ['id'=>4,'texto'=>$p['respuesta_4']]
+            ];
+            $nivel = $p['nivel_dificultad'] ?? 'Medio';
+            switch ($nivel) {
+                case 'Fácil': $faciles[] = $p; break;
+                case 'Difícil': $dificiles[] = $p; break;
+                default: $medias[] = $p; break;
+            }
+        }
+        if (empty($faciles) && empty($medias) && empty($dificiles)) {
+            return null; // no hay preguntas disponibles
+        }
+
+        $m = $this->getMetricasUsuario($usuarioId);
+        $H = $m['puntaje_historico'];
+        $R = $m['ratio_reciente']; // 0..1
+        $totalGlobal = $m['total_global'];
+
+        // Base por puntaje histórico
+        if ($H < 50) {
+            $pf = 0.60; $pm = 0.30; $pd = 0.10;
+        } elseif ($H < 150) {
+            $pf = 0.40; $pm = 0.40; $pd = 0.20;
+        } elseif ($H < 300) {
+            $pf = 0.30; $pm = 0.45; $pd = 0.25;
+        } else {
+            $pf = 0.20; $pm = 0.45; $pd = 0.35;
+        }
+
+        // Fallback pocos datos globales (<5 preguntas históricas)
+        if ($totalGlobal < 5) {
+            $pf = 0.60; $pm = 0.30; $pd = 0.10;
+        }
+
+        // Ajuste por desempeño reciente
+        if ($R >= 0.80) {
+            // subir difícil +5 puntos (tomando de fácil principalmente)
+            $delta = 0.05;
+            if ($pf > $delta) { $pf -= $delta; $pd += $delta; }
+            else { $pm -= $delta; $pd += $delta; }
+        } elseif ($R < 0.50 && $totalGlobal >= 5) {
+            // bajar difícil -5 y mover a fácil
+            $delta = 0.05;
+            if ($pd > $delta) { $pd -= $delta; $pf += $delta; }
+        }
+        if ($R < 0.30 && $H >= 150) {
+            // Fuerza mínimo 50% fáciles para recuperación
+            $pf = max($pf, 0.50);
+            // Rebalancear restantes proporcionalmente
+            $resto = 1 - $pf;
+            $ratioMedio = 0.7; // 70% del resto medias, 30% difíciles
+            $pm = $resto * $ratioMedio;
+            $pd = $resto - $pm;
+        }
+
+        // Limites máximos / mínimos
+        $pdMax = ($R >= 0.90) ? 0.45 : 0.40;
+        if ($pd > $pdMax) {
+            $exceso = $pd - $pdMax; $pd = $pdMax; $pf += $exceso; // añadir exceso a fáciles
+        }
+        // Normalizar por si ajustes desbordaron
+        $suma = $pf + $pm + $pd;
+        if ($suma != 1.0 && $suma > 0) { $pf /= $suma; $pm /= $suma; $pd /= $suma; }
+
+        // Selección de bucket ponderado
+        $r = mt_rand() / mt_getrandmax();
+        $bucket = 'Fácil';
+        if ($r < $pf) { $bucket = 'Fácil'; }
+        elseif ($r < $pf + $pm) { $bucket = 'Medio'; }
+        else { $bucket = 'Difícil'; }
+
+        // Obtener lista del bucket elegido
+        switch ($bucket) {
+            case 'Fácil': $lista = $faciles; break;
+            case 'Medio': $lista = $medias; break;
+            case 'Difícil': $lista = $dificiles; break;
+            default: $lista = $medias; break;
+        }
+        // Fallback si bucket vacío
+        if (empty($lista)) {
+            if (!empty($medias)) $lista = $medias;
+            elseif (!empty($faciles)) $lista = $faciles;
+            else $lista = $dificiles; // algo habrá
+        }
+
+        // Elegir una pregunta aleatoria
+        $count = count($lista);
+        $idx = $count > 1 ? rand(0, $count - 1) : 0;
+        return $lista[$idx];
+    }
 }
