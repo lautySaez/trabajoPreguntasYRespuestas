@@ -51,7 +51,6 @@ $__categoriasActivas = $__sugModel->obtenerCategoriasActivas();
             </div>
             <!-- Sin botón de ruleta al fallar o expirar tiempo -->
         <?php else: ?>
-            <div class="mensaje-exito">Respuesta correcta.</div>
             <a href="index.php?controller=partida&method=mostrarRuleta" class="btn btn-ruleta">Girar ruleta</a>
         <?php endif; ?>
         <!-- Sugerir nueva pregunta -->
@@ -60,7 +59,7 @@ $__categoriasActivas = $__sugModel->obtenerCategoriasActivas();
         <form method="POST" action="index.php?controller=partida&method=reportarPregunta" class="form-reportar">
             <input type="hidden" name="id_pregunta" value="<?= $preguntaActual["id"] ?>">
             <button type="button" class="boton-reportar" onclick="abrirModalReporte()">
-            Reportar</button>
+                Reportar</button>
         </form>
         <!-- Popup Reporte -->
         <div id="modalReporte" class="modal-reporte">
@@ -104,11 +103,13 @@ $__categoriasActivas = $__sugModel->obtenerCategoriasActivas();
         <button type="button" class="modal-cerrar" id="cerrarModalSug">×</button>
         <h3>Sugerir Pregunta</h3>
         <?php
-        $flashSugError = $_SESSION['flash_error'] ?? null; unset($_SESSION['flash_error']);
-        $sugData = $_SESSION['sug_data'] ?? null; unset($_SESSION['sug_data']);
+        $flashSugError = $_SESSION['flash_error'] ?? null;
+        unset($_SESSION['flash_error']);
+        $sugData = $_SESSION['sug_data'] ?? null;
+        unset($_SESSION['sug_data']);
         $shouldOpen = $flashSugError ? 'true' : 'false';
         ?>
-        <?php if($flashSugError): ?>
+        <?php if ($flashSugError): ?>
             <div class="sug-error"><?= htmlspecialchars($flashSugError) ?></div>
         <?php endif; ?>
         <form id="formSugerencia" method="post" action="index.php?controller=SugerenciaController&method=guardar">
@@ -116,7 +117,7 @@ $__categoriasActivas = $__sugModel->obtenerCategoriasActivas();
             <select name="categoria_id" id="categoria_id" required>
                 <option value="">-- Seleccione --</option>
                 <?php foreach ($__categoriasActivas as $c): ?>
-                    <option value="<?= (int)$c['id'] ?>" <?= ($sugData && (int)$sugData['categoria_id']===(int)$c['id'])? 'selected':'' ?>><?= htmlspecialchars($c['nombre']) ?></option>
+                    <option value="<?= (int)$c['id'] ?>" <?= ($sugData && (int)$sugData['categoria_id'] === (int)$c['id']) ? 'selected' : '' ?>><?= htmlspecialchars($c['nombre']) ?></option>
                 <?php endforeach; ?>
             </select>
             <label for="preguntaTexto">Pregunta</label>
@@ -125,19 +126,19 @@ $__categoriasActivas = $__sugModel->obtenerCategoriasActivas();
                 <legend>Respuestas (marque la correcta)</legend>
                 <div class="fila-resp">
                     <input type="text" name="respuesta_1" maxlength="120" required placeholder="Respuesta 1" value="<?= $sugData ? htmlspecialchars($sugData['r1']) : '' ?>">
-                    <input type="radio" name="respuesta_correcta" value="1" required <?= ($sugData && (int)$sugData['correcta']===1)?'checked':'' ?>>
+                    <input type="radio" name="respuesta_correcta" value="1" required <?= ($sugData && (int)$sugData['correcta'] === 1) ? 'checked' : '' ?>>
                 </div>
                 <div class="fila-resp">
                     <input type="text" name="respuesta_2" maxlength="120" required placeholder="Respuesta 2" value="<?= $sugData ? htmlspecialchars($sugData['r2']) : '' ?>">
-                    <input type="radio" name="respuesta_correcta" value="2" <?= ($sugData && (int)$sugData['correcta']===2)?'checked':'' ?>>
+                    <input type="radio" name="respuesta_correcta" value="2" <?= ($sugData && (int)$sugData['correcta'] === 2) ? 'checked' : '' ?>>
                 </div>
                 <div class="fila-resp">
                     <input type="text" name="respuesta_3" maxlength="120" required placeholder="Respuesta 3" value="<?= $sugData ? htmlspecialchars($sugData['r3']) : '' ?>">
-                    <input type="radio" name="respuesta_correcta" value="3" <?= ($sugData && (int)$sugData['correcta']===3)?'checked':'' ?>>
+                    <input type="radio" name="respuesta_correcta" value="3" <?= ($sugData && (int)$sugData['correcta'] === 3) ? 'checked' : '' ?>>
                 </div>
                 <div class="fila-resp">
                     <input type="text" name="respuesta_4" maxlength="120" required placeholder="Respuesta 4" value="<?= $sugData ? htmlspecialchars($sugData['r4']) : '' ?>">
-                    <input type="radio" name="respuesta_correcta" value="4" <?= ($sugData && (int)$sugData['correcta']===4)?'checked':'' ?>>
+                    <input type="radio" name="respuesta_correcta" value="4" <?= ($sugData && (int)$sugData['correcta'] === 4) ? 'checked' : '' ?>>
                 </div>
             </fieldset>
             <input type="hidden" name="from_modal" value="1">
@@ -152,40 +153,176 @@ $__categoriasActivas = $__sugModel->obtenerCategoriasActivas();
 </div>
 
 <style>
-.btn.btn-sugerir {background:#5a5ad1;color:#fff;padding:8px 14px;border:none;border-radius:4px;cursor:pointer;}
-.modal-sugerencia {position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:9999;}
-.modal-contenido {background:#fff;width:520px;max-width:95%;padding:20px 24px;border-radius:8px;box-shadow:0 8px 28px rgba(0,0,0,.25);position:relative;}
-.modal-contenido h3 {margin-top:0;font-size:1.3rem;}
-.modal-contenido label {margin-top:12px;display:block;font-weight:600;}
-.modal-contenido input[type=text], .modal-contenido select {width:100%;padding:8px;margin-top:4px;border:1px solid #ccc;border-radius:4px;}
-fieldset.sug-respuestas {border:1px solid #ddd;padding:10px 12px;margin-top:14px;border-radius:6px;}
-.fila-resp {display:flex;gap:10px;align-items:center;margin-top:8px;}
-.fila-resp input[type=text]{flex:1;}
-.acciones-modal {display:flex;gap:12px;margin-top:18px;}
-.acciones-modal .btn {background:#2c7a2c;color:#fff;padding:8px 14px;border:none;border-radius:4px;cursor:pointer;}
-.acciones-modal .btn.secundario {background:#777;}
-.modal-cerrar {position:absolute;top:8px;right:10px;background:transparent;border:none;font-size:1.4rem;cursor:pointer;}
-.nota-limite {font-size:.8rem;color:#555;margin-top:10px;}
-.sug-error {background:#ffe0e0;color:#b00000;padding:10px 12px;border:1px solid #e5b4b4;border-radius:6px;font-size:.8rem;margin-bottom:8px;}
-@media (max-width:600px){.modal-contenido{width:95%;}}
+    .btn.btn-sugerir {
+        background: #d39a41;
+        color: #fff;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.3s;
+        border: unset;
+    }
+
+    .btn.btn-sugerir:hover {
+        transform: translateY(-2px);
+    }
+
+    .boton-reportar {
+        background-color: #4a90e2;
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.3s;
+        font-size: 14px;
+    }
+    .boton-reportar:hover {
+        transform: translateY(-2px);
+    }
+
+    .modal-sugerencia {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, .55);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+    }
+
+    .modal-contenido {
+        background: #fff;
+        width: 520px;
+        max-width: 95%;
+        padding: 20px 24px;
+        border-radius: 8px;
+        box-shadow: 0 8px 28px rgba(0, 0, 0, .25);
+        position: relative;
+    }
+
+    .modal-contenido h3 {
+        margin-top: 0;
+        font-size: 1.3rem;
+    }
+
+    .modal-contenido label {
+        margin-top: 12px;
+        display: block;
+        font-weight: 600;
+    }
+
+    .modal-contenido input[type=text],
+    .modal-contenido select {
+        width: 100%;
+        padding: 8px;
+        margin-top: 4px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    fieldset.sug-respuestas {
+        border: 1px solid #ddd;
+        padding: 10px 12px;
+        margin-top: 14px;
+        border-radius: 6px;
+    }
+
+    .fila-resp {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-top: 8px;
+    }
+
+    .fila-resp input[type=text] {
+        flex: 1;
+    }
+
+    .acciones-modal {
+        display: flex;
+        gap: 12px;
+        margin-top: 18px;
+    }
+
+    .acciones-modal .btn {
+        background: #2c7a2c;
+        color: #fff;
+        padding: 8px 14px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .acciones-modal .btn.secundario {
+        background: #777;
+    }
+
+    .modal-cerrar {
+        position: absolute;
+        top: 8px;
+        right: 10px;
+        background: transparent;
+        border: none;
+        font-size: 1.4rem;
+        cursor: pointer;
+    }
+
+    .nota-limite {
+        font-size: .8rem;
+        color: #555;
+        margin-top: 10px;
+    }
+
+    .sug-error {
+        background: #ffe0e0;
+        color: #b00000;
+        padding: 10px 12px;
+        border: 1px solid #e5b4b4;
+        border-radius: 6px;
+        font-size: .8rem;
+        margin-bottom: 8px;
+    }
+
+    @media (max-width:600px) {
+        .modal-contenido {
+            width: 95%;
+        }
+    }
 </style>
 
 <script>
- (function(){
-     const btn = document.getElementById('btnAbrirSugerencia');
-     const modal = document.getElementById('modalSugerencia');
-     const cerrar = document.getElementById('cerrarModalSug');
-     const cancelar = document.getElementById('cancelarSugerencia');
-     function abrir(){ modal.style.display='flex'; }
-     function cerrarModal(){ modal.style.display='none'; }
-     btn && btn.addEventListener('click', abrir);
-     cerrar && cerrar.addEventListener('click', cerrarModal);
-     cancelar && cancelar.addEventListener('click', cerrarModal);
-     window.addEventListener('keydown', e=>{ if(e.key==='Escape') cerrarModal(); });
-     modal && modal.addEventListener('click', e=>{ if(e.target===modal) cerrarModal(); });
-     const shouldOpen = <?= $shouldOpen ?>;
-     if(shouldOpen){ abrir(); }
- })();
+    (function() {
+        const btn = document.getElementById('btnAbrirSugerencia');
+        const modal = document.getElementById('modalSugerencia');
+        const cerrar = document.getElementById('cerrarModalSug');
+        const cancelar = document.getElementById('cancelarSugerencia');
+
+        function abrir() {
+            modal.style.display = 'flex';
+        }
+
+        function cerrarModal() {
+            modal.style.display = 'none';
+        }
+        btn && btn.addEventListener('click', abrir);
+        cerrar && cerrar.addEventListener('click', cerrarModal);
+        cancelar && cancelar.addEventListener('click', cerrarModal);
+        window.addEventListener('keydown', e => {
+            if (e.key === 'Escape') cerrarModal();
+        });
+        modal && modal.addEventListener('click', e => {
+            if (e.target === modal) cerrarModal();
+        });
+        const shouldOpen = <?= $shouldOpen ?>;
+        if (shouldOpen) {
+            abrir();
+        }
+    })();
 </script>
 <script src="public/js/feedback.js" defer></script>
 <?php include("views/partials/footer.php"); ?>
