@@ -32,29 +32,20 @@
 
     <div class="acciones-post-respuesta">
         <?php
-        $hayError = !empty($_SESSION['partida_finalizada']);
-        $rondaCompletada = !empty($_SESSION['ronda_completada']);
-        $preguntasSesion = $_SESSION['preguntas'] ?? [];
-        $indiceSiguiente = $_SESSION['pregunta_actual'] ?? null;
-        $haySiguiente = (!$hayError && !$rondaCompletada && $preguntasSesion && $indiceSiguiente !== null);
+        $partidaFinalizada = !empty($_SESSION['partida_finalizada']);
+        $tiempoAgotado = !empty($_SESSION['tiempo_agotado']);
         ?>
-        <?php if ($hayError): ?>
+        <?php if ($partidaFinalizada): ?>
             <div class="mensaje-fin">
-                Respuesta incorrecta. La ronda termina aquí.
+                <?php if ($tiempoAgotado): ?>
+                    Tiempo agotado. La ronda termina aquí.
+                <?php else: ?>
+                    Respuesta incorrecta. La ronda termina aquí.
+                <?php endif; ?>
             </div>
-            <a href="index.php?controller=partida&method=mostrarRuleta" class="btn btn-ruleta">Girar ruleta</a>
-        <?php elseif ($rondaCompletada): ?>
-            <div class="mensaje-exito">
-                ¡Completaste todas las preguntas de la categoría sin errores!
-            </div>
-            <a href="index.php?controller=partida&method=mostrarRuleta" class="btn btn-ruleta">Girar ruleta</a>
-            <?php unset($_SESSION['ronda_completada']); ?>
-        <?php elseif ($haySiguiente): ?>
-        <!-- Sgte Pregunta-->
-            <a href="index.php?controller=partida&method=continuarRonda" class="btn btn-siguiente">Siguiente pregunta</a>
-        <!-- Ruleta -->
-            <a href="index.php?controller=partida&method=mostrarRuleta" class="btn btn-ruleta">Cambiar categoría</a>
+            <!-- Sin botón de ruleta al fallar o expirar tiempo -->
         <?php else: ?>
+            <div class="mensaje-exito">Respuesta correcta.</div>
             <a href="index.php?controller=partida&method=mostrarRuleta" class="btn btn-ruleta">Girar ruleta</a>
         <?php endif; ?>
         <!-- Reportar -->
@@ -87,8 +78,14 @@
 
     <div class="puntaje-actual">
         Puntaje acumulado: <strong><?= (int)($_SESSION['puntaje'] ?? 0) ?></strong>
-        <?php if (!empty($_SESSION['partida_finalizada'])): ?>
-            <div class="nota-eliminado">La ronda terminó por respuesta incorrecta.</div>
+        <?php if ($partidaFinalizada): ?>
+            <div class="nota-eliminado">
+                <?php if ($tiempoAgotado): ?>
+                    Fin de ronda por tiempo agotado.
+                <?php else: ?>
+                    La ronda terminó por respuesta incorrecta.
+                <?php endif; ?>
+            </div>
         <?php endif; ?>
     </div>
 </div>

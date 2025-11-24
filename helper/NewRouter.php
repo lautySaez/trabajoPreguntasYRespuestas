@@ -38,12 +38,15 @@ class NewRouter
 
     private function executeMethodFromController($controller, $methodName)
     {
+        // Determine target method: explicit if exists, else default only if default exists on that controller.
         $method = $this->getMethodName($controller, $methodName);
-
         if (!method_exists($controller, $method)) {
+            // If requested method invalid and default also missing, abort with clear error instead of calling unrelated default.
+            if (!method_exists($controller, $this->defaultMethod)) {
+                throw new RuntimeException('Método "' . $methodName . '" no encontrado en ' . get_class($controller) . ' y el método por defecto "' . $this->defaultMethod . '" tampoco existe.');
+            }
             $method = $this->defaultMethod;
         }
-
         call_user_func([$controller, $method]);
     }
 
@@ -60,8 +63,8 @@ class NewRouter
 
     private function getMethodName($controller, $methodName)
     {
-        if (!empty($methodName) && method_exists($controller, $methodName)) {
-            return $methodName;
+        if (!empty($methodName)) {
+            return $methodName; // devolver explícito; validación después
         }
         return $this->defaultMethod;
     }
