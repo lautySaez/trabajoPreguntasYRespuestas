@@ -17,6 +17,9 @@ CREATE TABLE usuarios (
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     estado_registro ENUM('Activo', 'Inactivo', 'Bloqueado') DEFAULT 'Inactivo',
     token_verificacion INT DEFAULT NULL
+    total_vistas INT NOT NULL DEFAULT 0,
+    total_aciertos INT NOT NULL DEFAULT 0,
+    nivel_jugador ENUM('Newbie','Normal','Pro') NOT NULL DEFAULT 'Normal'
 );
 
 INSERT INTO
