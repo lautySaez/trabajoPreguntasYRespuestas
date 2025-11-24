@@ -157,7 +157,6 @@ class PartidaController
             unset($_SESSION["pregunta_actual"]);
             unset($_SESSION["categoria_ronda"]);
         } else {
-            $_SESSION["puntaje"] -= 1;
             $_SESSION["partida_finalizada"] = true;
             if (isset($pregunta['id'])) {
                 $this->partidaModel->registrarIncorrectaPregunta($pregunta['id']);
@@ -259,34 +258,49 @@ class PartidaController
             session_start();
         }
 
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['id_pregunta'])) {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['id_pregunta']) || 
+        !isset($_POST['motivo'])) {
             header("Location: index.php?controller=partida&method=mostrarModo");
             exit;
         }
 
-        $id_pregunta = intval($_POST['id_pregunta']);
+        $pregunta_id = intval($_POST['id_pregunta']);
+        $motivo_usuario = trim($_POST['motivo']);
 
-        $id_usuario = null;
-        if (isset($_SESSION['usuario']) && isset($_SESSION['usuario']['id'])) {
-            $id_usuario = intval($_SESSION['usuario']['id']);
+        if ($motivo_usuario === "") {
+            $motivo_usuario = "Sin motivo específico.";
         }
 
-        if (!$id_usuario) {
+        if (!isset($_SESSION['usuario']) || !isset($_SESSION['usuario']['id'])) {
             header("Location: index.php?controller=LoginController&method=inicioSesion");
             exit;
         }
+
+        $usuario_id = intval($_SESSION['usuario']['id']);
 
         require_once("models/Reporte.php");
         $reporteModel = new Reporte();
 
         try {
-            $reporteModel->crearReporte($id_pregunta, $id_usuario, "Reportada por el usuario durante la partida");
+            $reporteModel->crearReporte(
+                $pregunta_id,
+                $usuario_id,
+                $motivo_usuario
+            );
+
         } catch (Exception $e) {
             error_log("Error al crear reporte: " . $e->getMessage());
-            echo "<script>alert('No se pudo enviar el reporte. Intentá nuevamente.'); window.location='index.php?controller=partida&method=terminarPartida';</script>";
+            echo "<script>
+                    alert('No se pudo enviar el reporte. Intentá nuevamente.');
+                    window.location='index.php?controller=partida&method=terminarPartida';
+                </script>";
             exit;
         }
-        echo "<script>alert('¡Pregunta reportada! La partida se ha finalizado.'); window.location = 'index.php?controller=partida&method=terminarPartida';</script>";
+
+        echo "<script>
+                alert('¡Pregunta reportada! La partida se ha finalizado.');
+                window.location='index.php?controller=partida&method=terminarPartida';
+            </script>";
         exit;
     }
 

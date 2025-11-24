@@ -19,7 +19,8 @@
     
     <div class="header-container">
         <div class="logo-section">
-            <h1><a href="index.php">AciertaYaa</a></h1>
+            <h1><a href="index.php">AciertaYa</a>
+            </h1>
         </div>
 
         <div class="main-menu">

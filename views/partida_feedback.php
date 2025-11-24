@@ -59,8 +59,27 @@ $__categoriasActivas = $__sugModel->obtenerCategoriasActivas();
         <!-- Reportar -->
         <form method="POST" action="index.php?controller=partida&method=reportarPregunta" class="form-reportar">
             <input type="hidden" name="id_pregunta" value="<?= $preguntaActual["id"] ?>">
-            <button type="submit" class="boton-reportar">Reportar</button>
+            <button type="button" class="boton-reportar" onclick="abrirModalReporte()">
+            Reportar</button>
         </form>
+        <!-- Popup Reporte -->
+        <div id="modalReporte" class="modal-reporte">
+            <div class="modal-contenido">
+                <h3>Reportar pregunta</h3>
+
+                <form id="formReporte" method="POST" action="index.php?controller=partida&method=reportarPregunta">
+                    <input type="hidden" name="id_pregunta" value="<?= $preguntaActual["id"] ?>">
+
+                    <label for="motivo">Motivo del reporte:</label>
+                    <textarea name="motivo" id="motivo"></textarea>
+
+                    <div class="modal-botones">
+                        <button type="submit" class="btn-enviar">Enviar reporte</button>
+                        <button type="button" class="btn-cancelar" onclick="cerrarModalReporte()">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
         <!-- Terminar -->
         <a href="index.php?controller=partida&method=terminarPartida" class="btn btn-terminar">Terminar partida</a>
     </div>
