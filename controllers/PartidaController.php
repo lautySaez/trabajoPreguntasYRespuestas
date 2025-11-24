@@ -157,6 +157,10 @@ class PartidaController
             exit();
         }
 
+        if ($respuestaSeleccionada === "timeout") {
+            $esCorrecta = -1;
+        }
+
         $pregunta = $preguntas[$indice];
         $correcta = $pregunta["respuesta_correcta"];
 
@@ -189,6 +193,14 @@ class PartidaController
             $this->partidaModel->registrarPreguntaUsuario($_SESSION['usuario']['id'], $pregunta['id'], $esCorrecta);
             // Cerrar tracking de tiempo
             $this->partidaModel->cerrarPreguntaTiempo($_SESSION['usuario']['id'], $pregunta['id'], $esCorrecta ? 'correcta' : 'incorrecta');
+        }
+
+        if (isset($_SESSION['usuario']['id'])) {
+            $usuarioId = $_SESSION['usuario']['id'];
+
+            $usuarioModel = new Usuario($this->partidaModel->getConexion());
+
+            $usuarioModel->actualizarEstadisticasJugador($usuarioId, $esCorrecta);
         }
 
         $this->partidaModel->actualizarPuntaje($partidaId, $_SESSION["puntaje"]);

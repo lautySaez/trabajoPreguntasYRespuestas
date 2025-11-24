@@ -14,8 +14,11 @@
         <?php endforeach; ?>
     </div>
 
-    <div id="temporizador" class="badge bg-danger fs-5 mt-2">
-    </div>
+    <div id="temporizador" class="badge bg-danger fs-5 mt-2"></div>
+
+    <form id="form-timeout" method="POST" action="index.php?controller=partida&method=responderPregunta">
+        <input type="hidden" name="respuesta" value="timeout">
+    </form>
 
 <?php else: ?>
     <p>No hay preguntas disponibles para esta categoría.</p>
@@ -23,9 +26,7 @@
 
 </div>
 
-<a href="index.php?controller=partida&method=terminarPartida" class="boton-flotante">
-    Terminar partida
-</a>
+<a href="index.php?controller=partida&method=terminarPartida" class="boton-flotante">Terminar partida</a>
 
 <?php $ts = time(); ?>
 <script>window.tiempoRestante = <?= isset($tiempoRestante) ? (int)$tiempoRestante : 10 ?>;</script>

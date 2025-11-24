@@ -653,3 +653,8 @@ a:hover {
 .main-menu .menu-item:hover {
     background: #003f8a;
 }
+
+/* timeout oculto en partida */
+#form-timeout {
+    display: none !important;
+}
