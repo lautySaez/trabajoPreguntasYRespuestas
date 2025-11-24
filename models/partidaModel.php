@@ -248,6 +248,16 @@ class PartidaModel {
         return ($ahora - $inicio) > $limiteSegundos;
     }
 
+    public function obtenerSegundosTranscurridos($usuarioId, $preguntaId) {
+        $stmt = $this->conexion->prepare("SELECT inicio FROM preguntas_tiempos WHERE usuario_id = ? AND pregunta_id = ? AND fin IS NULL ORDER BY id DESC LIMIT 1");
+        $stmt->bind_param("ii", $usuarioId, $preguntaId);
+        $stmt->execute();
+        $res = $stmt->get_result()->fetch_assoc();
+        if (!$res) return null;
+        $inicio = strtotime($res['inicio']);
+        return time() - $inicio;
+    }
+
     /* ===================== ADAPTIVE DIFFICULTY ===================== */
     public function getMetricasUsuario($usuarioId) {
         // Puntaje histórico total

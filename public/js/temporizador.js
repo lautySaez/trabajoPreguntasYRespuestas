@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const temporizador = document.getElementById('temporizador');
     if (!temporizador) return;
 
-    let tiempo = 10;
+    let tiempo = (typeof window.tiempoRestante === 'number') ? window.tiempoRestante : 10;
     let expirado = false;
 
     const deshabilitarRespuestas = () => {
@@ -17,6 +17,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Un solo redirect GET evita doble invocación que limpiaba la sesión antes de mostrar feedback
         window.location.href = 'index.php?controller=partida&method=tiempoAgotado&t=' + Date.now();
     };
+
+    if (tiempo <= 0) {
+        temporizador.textContent = 'Tiempo agotado';
+        deshabilitarRespuestas();
+        finalizarPorTiempo();
+        return;
+    }
 
     const countdown = setInterval(() => {
         temporizador.textContent = 'Tiempo restante: ' + tiempo + ' segundos';

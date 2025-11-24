@@ -28,6 +28,7 @@
 </a>
 
 <?php $ts = time(); ?>
+<script>window.tiempoRestante = <?= isset($tiempoRestante) ? (int)$tiempoRestante : 10 ?>;</script>
 <script src="public/js/temporizador.js?v=<?= $ts ?>"></script>
 
 <?php include("views/partials/footer.php"); ?>

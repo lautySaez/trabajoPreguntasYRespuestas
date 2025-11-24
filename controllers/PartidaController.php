@@ -64,6 +64,22 @@ class PartidaController
             $indice = $_SESSION['pregunta_actual'];
             $preguntaActual = $preguntas[$indice] ?? null;
             if ($preguntaActual) {
+                // Calcular tiempo restante server-side (persistencia tras refresh)
+                $usuarioIdTmp = $_SESSION['usuario']['id'] ?? null;
+                $tiempoRestante = 10; // default
+                if ($usuarioIdTmp && isset($preguntaActual['id'])) {
+                    $transcurridos = $this->partidaModel->obtenerSegundosTranscurridos($usuarioIdTmp, $preguntaActual['id']);
+                    if ($transcurridos !== null) {
+                        $limite = 10; // mismo límite usado en temporizador
+                        $restanteCalc = max(0, $limite - $transcurridos);
+                        $tiempoRestante = $restanteCalc;
+                        if ($tiempoRestante <= 0) {
+                            // Fuerza timeout si el refresh ocurre luego del vencimiento
+                            $this->tiempoAgotado();
+                            return;
+                        }
+                    }
+                }
                 include("views/partida.php");
                 return;
             }
@@ -117,6 +133,8 @@ class PartidaController
         $_SESSION["categoria_ronda"] = $categoria_id;
 
         $preguntaActual = $preguntaSeleccionada;
+        // Tiempo restante inicial completo al ser nueva entrega
+        $tiempoRestante = 10;
         if (isset($preguntaActual['id'])) {
             $this->partidaModel->registrarEntregaPregunta($preguntaActual['id']);
             // Registrar inicio de ventana de tiempo en nueva tabla de tracking
