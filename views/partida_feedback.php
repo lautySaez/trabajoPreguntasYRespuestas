@@ -187,5 +187,5 @@ fieldset.sug-respuestas {border:1px solid #ddd;padding:10px 12px;margin-top:14px
      if(shouldOpen){ abrir(); }
  })();
 </script>
-
+<script src="public/js/feedback.js" defer></script>
 <?php include("views/partials/footer.php"); ?>
