@@ -161,6 +161,14 @@ class PartidaController
             $this->partidaModel->registrarPreguntaUsuario($_SESSION['usuario']['id'], $pregunta['id'], $esCorrecta);
         }
 
+        if (isset($_SESSION['usuario']['id'])) {
+            $usuarioId = $_SESSION['usuario']['id'];
+
+            $usuarioModel = new Usuario($this->partidaModel->getConexion());
+
+            $usuarioModel->actualizarEstadisticasJugador($usuarioId, $esCorrecta);
+        }
+
         $this->partidaModel->actualizarPuntaje($partidaId, $_SESSION["puntaje"]);
 
         // Ya no se avanza a siguiente pregunta en misma ronda.

@@ -193,4 +193,92 @@ class Usuario
         return $stmt->get_result()->fetch_assoc();
     }
 
+    /*Estadísticas y nivel de jugador*/
+    public function actualizarEstadisticasJugador(int $usuarioId, bool $acierto): void
+    {
+        $this->conexion->begin_transaction();
+
+        try {
+            $stmt = $this->conexion->prepare("
+                UPDATE usuarios
+                SET total_vistas = total_vistas + 1,
+                    total_aciertos = total_aciertos + ?
+                WHERE id = ?
+            ");
+            $aciertoInt = $acierto ? 1 : 0;
+            $stmt->bind_param("ii", $aciertoInt, $usuarioId);
+            $stmt->execute();
+            $stmt->close();
+
+            $this->recalcularNivelJugador($usuarioId);
+
+            $this->conexion->commit();
+        } catch (Exception $e) {
+            $this->conexion->rollback();
+            error_log("Error actualizarEstadisticasJugador: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Recalcula y guarda el nivel del jugador según su win-rate:
+     * ratio = total_aciertos / total_vistas
+     *
+     * - ratio < 0.3 -> Newbie
+     * - 0.3 <= ratio < 0.6 -> Normal
+     * - ratio >= 0.6 -> Pro
+     *
+     * param int $usuarioId
+     * return void
+     */
+    public function recalcularNivelJugador(int $usuarioId): void
+    {
+        $stmt = $this->conexion->prepare("
+            SELECT total_vistas, total_aciertos
+            FROM usuarios
+            WHERE id = ?
+            LIMIT 1
+        ");
+        $stmt->bind_param("i", $usuarioId);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $fila = $res->fetch_assoc();
+        $stmt->close();
+
+        if (!$fila) return;
+
+        $vistas = (int)($fila['total_vistas'] ?? 0);
+        $aciertos = (int)($fila['total_aciertos'] ?? 0);
+
+        // Jugador nuevo: mantener 'Normal' por default
+        if ($vistas === 0) {
+            $nivel = 'Normal';
+        } else {
+            $ratio = $aciertos / $vistas;
+            if ($ratio < 0.3) $nivel = 'Newbie';
+            elseif ($ratio < 0.6) $nivel = 'Normal';
+            else $nivel = 'Pro';
+        }
+
+        $stmt2 = $this->conexion->prepare("UPDATE usuarios SET nivel_jugador = ? WHERE id = ?");
+        $stmt2->bind_param("si", $nivel, $usuarioId);
+        $stmt2->execute();
+        $stmt2->close();
+    }
+
+    /**
+     * Devuelve el nivel actual del jugador.
+     *
+     * param int $usuarioId
+     * return string|null  ('Newbie','Normal','Pro') o null si no existe
+     */
+    public function obtenerNivelJugador(int $usuarioId): ?string
+    {
+        $stmt = $this->conexion->prepare("SELECT nivel_jugador FROM usuarios WHERE id = ? LIMIT 1");
+        $stmt->bind_param("i", $usuarioId);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $fila = $res->fetch_assoc();
+        $stmt->close();
+        return $fila['nivel_jugador'] ?? null;
+    }
 }

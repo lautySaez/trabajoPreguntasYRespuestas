@@ -11,6 +11,10 @@ class PartidaModel {
         $this->asegurarTablaPreguntasUsuarios();
     }
 
+    public function getConexion() {
+        return $this->conexion;
+    }
+
     public function getCategoriaIdPorNombre($nombre) {
         $nombreNormalizado = trim($nombre);
         $stmt = $this->conexion->prepare("SELECT id FROM categorias WHERE LOWER(nombre) = LOWER(?) LIMIT 1");

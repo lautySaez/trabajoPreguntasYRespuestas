@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const temporizador = document.getElementById('temporizador');
     if (!temporizador) return;
 
-    let tiempo = 10;
+    let tiempo = 20;
     let expirado = false;
 
     const deshabilitarRespuestas = () => {
