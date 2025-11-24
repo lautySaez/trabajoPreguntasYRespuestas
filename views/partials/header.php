@@ -19,7 +19,7 @@
     
     <div class="header-container">
         <div class="logo-section">
-            <h1><a href="index.php?controller=LoginController&method=home">AciertaYa</a>
+            <h1><a href="index.php">AciertaYa</a>
             </h1>
         </div>
 
