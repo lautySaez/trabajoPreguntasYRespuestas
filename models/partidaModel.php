@@ -9,6 +9,7 @@ class PartidaModel {
         $this->conexion = $db->getConexion();
         $this->asegurarColumnasEstadisticas();
         $this->asegurarTablaPreguntasUsuarios();
+        $this->asegurarTablaPreguntasTiempos();
     }
 
     public function getCategoriaIdPorNombre($nombre) {
@@ -199,5 +200,51 @@ class PartidaModel {
             )";
             $this->conexion->query($ddl);
         }
+    }
+
+    private function asegurarTablaPreguntasTiempos() {
+        $res = $this->conexion->query("SHOW TABLES LIKE 'preguntas_tiempos'");
+        if ($res && $res->num_rows === 0) {
+            $ddl = "CREATE TABLE preguntas_tiempos (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                partida_id INT NOT NULL,
+                usuario_id INT NOT NULL,
+                pregunta_id INT NOT NULL,
+                inicio DATETIME DEFAULT CURRENT_TIMESTAMP,
+                fin DATETIME NULL,
+                resultado ENUM('correcta','incorrecta','timeout') NULL,
+                duracion_segundos INT NULL,
+                INDEX idx_usuario_pregunta (usuario_id, pregunta_id),
+                INDEX idx_partida (partida_id),
+                FOREIGN KEY (partida_id) REFERENCES partidas(id) ON DELETE CASCADE,
+                FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+                FOREIGN KEY (pregunta_id) REFERENCES preguntas(id) ON DELETE CASCADE
+            )";
+            $this->conexion->query($ddl);
+        }
+    }
+
+    public function registrarInicioPreguntaTiempo($partidaId, $usuarioId, $preguntaId) {
+        $stmt = $this->conexion->prepare("INSERT INTO preguntas_tiempos (partida_id, usuario_id, pregunta_id) VALUES (?,?,?)");
+        $stmt->bind_param("iii", $partidaId, $usuarioId, $preguntaId);
+        $stmt->execute();
+        return $this->conexion->insert_id;
+    }
+
+    public function cerrarPreguntaTiempo($usuarioId, $preguntaId, $resultado) {
+        $stmt = $this->conexion->prepare("UPDATE preguntas_tiempos SET fin = NOW(), resultado = ?, duracion_segundos = TIMESTAMPDIFF(SECOND, inicio, NOW()) WHERE usuario_id = ? AND pregunta_id = ? AND fin IS NULL ORDER BY id DESC LIMIT 1");
+        $stmt->bind_param("sii", $resultado, $usuarioId, $preguntaId);
+        $stmt->execute();
+    }
+
+    public function excedioTiempo($usuarioId, $preguntaId, $limiteSegundos) {
+        $stmt = $this->conexion->prepare("SELECT inicio FROM preguntas_tiempos WHERE usuario_id = ? AND pregunta_id = ? AND fin IS NULL ORDER BY id DESC LIMIT 1");
+        $stmt->bind_param("ii", $usuarioId, $preguntaId);
+        $stmt->execute();
+        $res = $stmt->get_result()->fetch_assoc();
+        if (!$res) return false; // si no hay registro no forzamos timeout
+        $inicio = strtotime($res['inicio']);
+        $ahora = time();
+        return ($ahora - $inicio) > $limiteSegundos;
     }
 }

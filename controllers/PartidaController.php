@@ -117,6 +117,10 @@ class PartidaController
         $preguntaActual = $preguntas[0];
         if (isset($preguntaActual['id'])) {
             $this->partidaModel->registrarEntregaPregunta($preguntaActual['id']);
+            // Registrar inicio de ventana de tiempo en nueva tabla de tracking
+            if (isset($_SESSION['partida_id']) && isset($_SESSION['usuario']['id'])) {
+                $this->partidaModel->registrarInicioPreguntaTiempo($_SESSION['partida_id'], $_SESSION['usuario']['id'], $preguntaActual['id']);
+            }
         }
         include("views/partida.php");
     }
@@ -126,6 +130,7 @@ class PartidaController
         $indice = $_SESSION["pregunta_actual"] ?? 0;
         $preguntas = $_SESSION["preguntas"] ?? [];
         $partidaId = $_SESSION["partida_id"] ?? null;
+        $usuarioId = $_SESSION['usuario']['id'] ?? null;
 
         if ($respuestaSeleccionada === null || !$preguntas || !$partidaId) {
             header("Location: index.php?controller=partida&method=mostrarRuleta");
@@ -134,6 +139,13 @@ class PartidaController
 
         $pregunta = $preguntas[$indice];
         $correcta = $pregunta["respuesta_correcta"];
+
+        // Verificación servidor del tiempo transcurrido (anti-manipulación del temporizador cliente)
+        if ($usuarioId && isset($pregunta['id']) && $this->partidaModel->excedioTiempo($usuarioId, $pregunta['id'], 10)) {
+            // Tratar como timeout real
+            $this->tiempoAgotado();
+            return;
+        }
 
         $esCorrecta = ($respuestaSeleccionada == $correcta);
         if ($esCorrecta) {
@@ -156,6 +168,8 @@ class PartidaController
 
         if (isset($_SESSION['usuario']['id']) && isset($pregunta['id'])) {
             $this->partidaModel->registrarPreguntaUsuario($_SESSION['usuario']['id'], $pregunta['id'], $esCorrecta);
+            // Cerrar tracking de tiempo
+            $this->partidaModel->cerrarPreguntaTiempo($_SESSION['usuario']['id'], $pregunta['id'], $esCorrecta ? 'correcta' : 'incorrecta');
         }
 
         $this->partidaModel->actualizarPuntaje($partidaId, $_SESSION["puntaje"]);
@@ -290,6 +304,8 @@ class PartidaController
         if (isset($_SESSION['usuario']['id']) && isset($pregunta['id'])) {
             $this->partidaModel->registrarIncorrectaPregunta($pregunta['id']);
             $this->partidaModel->registrarPreguntaUsuario($_SESSION['usuario']['id'], $pregunta['id'], false);
+            // Cerrar tracking de tiempo con resultado timeout
+            $this->partidaModel->cerrarPreguntaTiempo($_SESSION['usuario']['id'], $pregunta['id'], 'timeout');
         }
         if ($partidaId) {
             $this->partidaModel->actualizarPuntaje($partidaId, $_SESSION["puntaje"]);
