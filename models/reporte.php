@@ -40,17 +40,17 @@ class Reporte
         return $resultado->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function crearReporte($id_pregunta, $id_usuario, $motivo) {
+    public function crearReporte($pregunta_id, $usuario_id, $motivo) {
         $stmt = $this->conn->prepare("
-            INSERT INTO reportes (id_pregunta, id_usuario, motivo, fecha_reporte, revisado)
-            VALUES (?, ?, ?, NOW(), 0)
+            INSERT INTO reportes (pregunta_id, usuario_id, motivo, fecha_reporte, estado)
+            VALUES (?, ?, ?, NOW(), 'Activo')
         ");
 
         if (!$stmt) {
             die("Error al preparar la consulta: " . $this->conn->error);
         }
 
-        $stmt->bind_param("iis", $id_pregunta, $id_usuario, $motivo);
+        $stmt->bind_param("iis", $pregunta_id, $usuario_id, $motivo);
 
         if (!$stmt->execute()) {
             die("Error al ejecutar la inserción: " . $stmt->error);

@@ -14,55 +14,56 @@
 <div class="home-container">
     <?php if ($usuario): ?>
         <div class="welcome-section">
-            <h2>¡Bienvenido de vuelta!</h2>
+            <h1>¡Bienvenido de vuelta!</h1>
             <p>¿Estás listo para poner a prueba tus conocimientos?</p>
             
             <a href="modo" class="boton-partida">Iniciar una Partida</a>
 
-            <div class="map-section">
-                <h3>Encuentra tu contrincante</h3>
-                <p class="map-description">Explora el mapa y encuentra jugadores cerca de ti para desafiar</p>
-                
-                <div class="map-container">
-                    <div id="mapa-contrincantes" class="mapa-home"></div>
+            <div class="contenido-principal">
+                <?php if (!empty($ultimasPartidas)): ?>
+                <div class="ultimas-partidas mt-4">
+                    <h2>Tus últimas partidas</h2>
+                    <table class="tabla-categorias">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Puntaje</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($ultimasPartidas as $partida): ?>
+                            <tr>
+                                <td><?= date("d/m/Y H:i", strtotime($partida["fecha_inicio"])) ?></td>
+                                <td><?= htmlspecialchars($partida["puntaje"]) ?></td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+                <?php else: ?>
+                <p class="mt-3">No has jugado ninguna partida todavía.</p>
+                <?php endif; ?>
 
-                    <div class="map-info-panel">
-                        <div class="online-players">
-                            <span class="indicator-online"></span>
-                            <span>Jugadores en línea: <strong id="players-count">12</strong></span>
-                        </div>
-                        <div class="map-controls">
-                            <button class="btn-find-nearby">Buscar cercanos</button>
-                            <button class="btn-refresh-map">Actualizar</button>
+                <div class="map-section">
+                    <h3>Encuentra tu contrincante</h3>
+                    <p class="map-description">Explora el mapa y encuentra jugadores cerca de ti para desafiar</p>
+                    
+                    <div class="map-container">
+                        <div id="mapa-contrincantes" class="mapa-home"></div>
+
+                        <div class="map-info-panel">
+                            <div class="online-players">
+                                <span class="indicator-online"></span>
+                                <span>Jugadores en línea: <strong id="players-count">12</strong></span>
+                            </div>
+                            <div class="map-controls">
+                                <button class="btn-find-nearby">Buscar cercanos</button>
+                                <button class="btn-refresh-map">Actualizar</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-                            <?php if (!empty($ultimasPartidas)): ?>
-            <div class="ultimas-partidas mt-4">
-                <h4>Tus últimas partidas</h4>
-                <table class="table table-striped table-bordered">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Puntaje</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($ultimasPartidas as $partida): ?>
-                        <tr>
-                            <td><?= date("d/m/Y H:i", strtotime($partida["fecha_inicio"])) ?></td>
-                            <td><?= htmlspecialchars($partida["puntaje"]) ?></td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-            <?php else: ?>
-            <p class="mt-3">No has jugado ninguna partida todavía.</p>
-            <?php endif; ?>
-
         </div>
     <?php else: ?>
         <div class="error-section">
