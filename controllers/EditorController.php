@@ -175,7 +175,8 @@ class EditorController
     public function resolverReporte()
     {
         $pregunta_id = $_POST['pregunta_id'] ?? null;
-        $motivo = $_POST['motivo_resolucion'] ?? 'Marcar como resuelto (Reporte inválido o corregido externamente).';
+        $motivoIngresado = trim($_POST['motivo_resolucion'] ?? '');
+        $motivo = $motivoIngresado !== '' ? $motivoIngresado : 'Marcado resuelto sin motivo.';
 
         if ($pregunta_id) {
             $this->model->marcarReporteComoResuelto($pregunta_id, $motivo);
