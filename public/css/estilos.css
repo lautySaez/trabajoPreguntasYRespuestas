@@ -308,7 +308,7 @@ form label {
 
 form input,
 form select {
-    width: 100%;
+    /*width: 100%;*/
     padding: 8px 10px;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -570,7 +570,7 @@ a:hover {
 
 .boton-flotante {
     position: fixed;
-    bottom: 2em;
+
     right: 2em;
     background-color: #e94a4a;
     color: #fff;
