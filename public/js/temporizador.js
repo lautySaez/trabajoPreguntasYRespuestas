@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (tiempo < 0) {
             clearInterval(countdown);
-            window.location.href = "index.php?controller=partida&method=siguientePregunta";
+            document.getElementById("form-timeout").submit();
         }
     }, 1000);
 
