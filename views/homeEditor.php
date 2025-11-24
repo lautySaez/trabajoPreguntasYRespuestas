@@ -46,6 +46,9 @@ verificarRol("Editor");
                     <a href="index.php?controller=editor&method=preguntasReportadas" class="nav-item">
                         <span class="icon"><i class="fa-solid fa-triangle-exclamation"></i></span> Reportes
                     </a>
+                    <a href="index.php?controller=SugerenciaController&method=pendientes" class="nav-item">
+                        <span class="icon"><i class="fa-solid fa-lightbulb"></i></span> Sugerencias Pendientes
+                    </a>
                 </nav>
             </aside>
 
@@ -81,6 +84,11 @@ verificarRol("Editor");
                             <i class="fa-solid fa-wand-magic-sparkles"></i>
                             <h3>Nueva Categoría</h3>
                             <p>Define una nueva área de conocimiento.</p>
+                        </a>
+                        <a href="index.php?controller=SugerenciaController&method=pendientes" class="card">
+                            <i class="fa-solid fa-lightbulb"></i>
+                            <h3>Revisar Sugerencias</h3>
+                            <p>Aprueba o rechaza preguntas aportadas por jugadores.</p>
                         </a>
                     </div>
                 </div>

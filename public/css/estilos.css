@@ -250,7 +250,7 @@ h2 {
 form {
     background: none;
     color: #222;
-    /*padding: 40px 50px;*/
+    padding: 40px 50px;
     border-radius: 12px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
     width: 100%;
@@ -308,7 +308,7 @@ form label {
 
 form input,
 form select {
-    width: 100%;
+    /*width: 100%;*/
     padding: 8px 10px;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -570,7 +570,7 @@ a:hover {
 
 .boton-flotante {
     position: fixed;
-    bottom: 2em;
+
     right: 2em;
     background-color: #e94a4a;
     color: #fff;

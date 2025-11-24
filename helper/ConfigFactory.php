@@ -10,6 +10,7 @@ include_once("controllers/UsuarioController.php");
 include_once("controllers/EditorController.php");
 include_once("controllers/AdminController.php");
 include_once("controllers/RankingController.php");
+include_once("controllers/SugerenciaController.php");
 
 // modelos
 include_once("models/usuario.php");
@@ -44,6 +45,7 @@ class ConfigFactory
         $this->objetos["EditorController"] = new EditorController($this->conexion->getConexion());
         $this->objetos["AdminController"] = new AdminController($this->conexion->getConexion());
         $this->objetos["RankingController"] = new RankingController($rankingModel);
+        $this->objetos["SugerenciaController"] = new SugerenciaController();
 
         $this->objetos["router"] = new NewRouter($this, "LoginController", "inicioSesion");
     }
