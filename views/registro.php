@@ -1,6 +1,6 @@
 <?php include("views/partials/header.php"); ?>
 
-    <link rel="stylesheet" href="public/css/registro.css">
+    <link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/registro.css">
 
     <div class="registro-container">
         <div class="registro-card">
@@ -11,7 +11,7 @@
                 <p class="error-message"><?= htmlspecialchars($error) ?></p>
             <?php endif; ?>
 
-            <form id="formRegistro" action="index.php?controller=LoginController&method=registrarUsuario" method="POST">
+            <form id="formRegistro" action="/trabajoPreguntasYRespuestas/login/registrarUsuario" method="POST">
 
                 <div class="form-group">
                     <label>Nombre completo:</label>
@@ -80,7 +80,7 @@
                     <button type="submit" id="btnRegistrarme" disabled class="btn-registro">Registrarme</button>
                 </div>
                 <div class="form-group full-width centered">
-                    <p style="text-align: center;width: 100%;">¿Ya tienes cuenta? <a href="index.php?controller=LoginController&method=index">Inicia sesión</a></p>
+                    <p style="text-align: center;width: 100%;">¿Ya tienes cuenta? <a href="/trabajoPreguntasYRespuestas/login">Inicia sesión</a></p>
                 </div>
             </form>
 
@@ -105,6 +105,6 @@
         </div>
     </div>
 
-    <script src="public/js/registro.js" defer></script>
+    <script src="/trabajoPreguntasYRespuestas/public/js/registro.js" defer></script>
 
 <?php include("views/partials/footer.php"); ?>

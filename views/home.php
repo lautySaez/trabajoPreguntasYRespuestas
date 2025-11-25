@@ -1,6 +1,6 @@
 <?php include("views/partials/header.php"); ?>
 
-<link rel="stylesheet" href="public/css/home.css">
+<link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/home.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
 <style>
@@ -17,7 +17,7 @@
             <h1>¡Bienvenido de vuelta!</h1>
             <p>¿Estás listo para poner a prueba tus conocimientos?</p>
             
-            <a href="modo" class="boton-partida">Iniciar una Partida</a>
+            <a href="/trabajoPreguntasYRespuestas/modo" class="boton-partida">Iniciar una Partida</a>
 
             <div class="contenido-principal">
                 <?php if (!empty($ultimasPartidas)): ?>
@@ -68,7 +68,7 @@
     <?php else: ?>
         <div class="error-section">
             <p>Error: no se encontró información del usuario.</p>
-            <a href="index.php?controller=LoginController&method=inicioSesion" class="boton-login">Iniciar Sesión</a>
+            <a href="/trabajoPreguntasYRespuestas/login" class="boton-login">Iniciar Sesión</a>
         </div>
     <?php endif; ?>
 </div>
@@ -88,6 +88,6 @@
 
         window.inicializarMapaEdge();
     </script>
-    <script src="public/js/home.js" type="text/javascript"></script>
+    <script src="/trabajoPreguntasYRespuestas/public/js/home.js" type="text/javascript"></script>
 
 <?php include("views/partials/footer.php"); ?>

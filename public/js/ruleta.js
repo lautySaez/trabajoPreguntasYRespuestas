@@ -112,7 +112,8 @@ function mostrarResultado(gradosFinal) {
     const categoria = categorias[index].nombre;
 
     categoriaTexto.textContent = `📚 Categoría elegida: ${categoria}`;
-    btnIniciar.href = `index.php?controller=partida&method=iniciarPartida&categoria=${encodeURIComponent(categoria)}`;
+    // Ruta limpia hacia iniciarPartida conservando parámetro categoria
+    btnIniciar.href = `/trabajoPreguntasYRespuestas/partida/iniciarPartida?categoria=${encodeURIComponent(categoria)}`;
 
     resultado.style.display = "flex";
     resultado.classList.add("resultado-activo");

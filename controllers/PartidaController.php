@@ -23,10 +23,10 @@ class PartidaController
     {
         if (isset($_POST["modo"])) {
             $_SESSION["modo_juego"] = $_POST["modo"];
-            header("Location: index.php?controller=partida&method=mostrarReglas");
+            header("Location: /trabajoPreguntasYRespuestas/partida/mostrarReglas");
             exit();
         } else {
-            header("Location: index.php?controller=partida&method=mostrarModo");
+            header("Location: /trabajoPreguntasYRespuestas/partida/mostrarModo");
             exit();
         }
     }
@@ -36,12 +36,27 @@ class PartidaController
         include("views/reglas.php");
     }
 
+    // Alias cortos para rutas /partida/ruleta, /partida/modo, /partida/reglas
+    // Evitan RuntimeException si el usuario accede con el nombre corto.
+    public function ruleta()
+    {
+        $this->mostrarRuleta();
+    }
+    public function modo()
+    {
+        $this->mostrarModo();
+    }
+    public function reglas()
+    {
+        $this->mostrarReglas();
+    }
+
     public function mostrarRuleta()
     {
         // Bloquear acceso a ruleta si la partida fue finalizada por error o timeout
         if (!empty($_SESSION['partida_finalizada'])) {
             // Forzar al usuario a terminar la partida antes de iniciar otra
-            header("Location: index.php?controller=partida&method=terminarPartida");
+            header("Location: /trabajoPreguntasYRespuestas/partida/terminarPartida");
             exit();
         }
         include("views/ruleta.php");
@@ -54,7 +69,7 @@ class PartidaController
         }
         // Si la partida está finalizada, no permitir reinicio sin terminar
         if (!empty($_SESSION['partida_finalizada'])) {
-            header("Location: index.php?controller=partida&method=terminarPartida");
+            header("Location: /trabajoPreguntasYRespuestas/partida/terminarPartida");
             exit();
         }
 
@@ -86,21 +101,21 @@ class PartidaController
         }
 
         if (!isset($_SESSION["usuario"]["id"])) {
-            header("Location: index.php?controller=LoginController&method=inicioSesion");
+            header("Location: /trabajoPreguntasYRespuestas/login");
             exit();
         }
 
         $categoria = $_GET["categoria"] ?? null;
         if (!$categoria) {
             $_SESSION['flash_error'] = 'Debe elegir una categoría girando la ruleta.';
-            header("Location: index.php?controller=partida&method=mostrarRuleta");
+            header("Location: /trabajoPreguntasYRespuestas/partida/mostrarRuleta");
             exit();
         }
 
         $categoria_id = $this->partidaModel->getCategoriaIdPorNombre($categoria);
         if (!$categoria_id) {
             $_SESSION['flash_error'] = 'Categoría no válida: ' . htmlspecialchars($categoria);
-            header("Location: index.php?controller=partida&method=mostrarRuleta");
+            header("Location: /trabajoPreguntasYRespuestas/partida/mostrarRuleta");
             exit();
         }
 
@@ -113,7 +128,7 @@ class PartidaController
                 $_SESSION["puntaje"] = 0;
             } catch (Exception $e) {
                 $_SESSION['flash_error'] = $e->getMessage();
-                header("Location: index.php?controller=partida&method=mostrarRuleta");
+                header("Location: /trabajoPreguntasYRespuestas/partida/mostrarRuleta");
                 exit();
             }
         } else {
@@ -124,7 +139,7 @@ class PartidaController
         $preguntaSeleccionada = $this->partidaModel->obtenerPreguntaAdaptativaPorCategoriaId($categoria_id, $usuarioId);
         if (!$preguntaSeleccionada) {
             $_SESSION['flash_error'] = 'No quedan preguntas disponibles en esta categoría para vos. Elegí otra categoría.';
-            header("Location: index.php?controller=partida&method=mostrarRuleta");
+            header("Location: /trabajoPreguntasYRespuestas/partida/mostrarRuleta");
             exit();
         }
         // Estructura de sesión mantiene formato de array para compatibilidad con responderPregunta
@@ -153,12 +168,12 @@ class PartidaController
         $usuarioId = $_SESSION['usuario']['id'] ?? null;
 
         if ($respuestaSeleccionada === null || !$preguntas || !$partidaId) {
-            header("Location: index.php?controller=partida&method=mostrarRuleta");
+            header("Location: /trabajoPreguntasYRespuestas/partida/mostrarRuleta");
             exit();
         }
 
         if ($respuestaSeleccionada === "timeout") {
-            $esCorrecta = -1;
+            $esCorrecta = 0;
         }
 
         $pregunta = $preguntas[$indice];
@@ -290,7 +305,7 @@ class PartidaController
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['id_pregunta']) || 
         !isset($_POST['motivo'])) {
-            header("Location: index.php?controller=partida&method=mostrarModo");
+            header("Location: /trabajoPreguntasYRespuestas/partida/mostrarModo");
             exit;
         }
 
@@ -302,7 +317,7 @@ class PartidaController
         }
 
         if (!isset($_SESSION['usuario']) || !isset($_SESSION['usuario']['id'])) {
-            header("Location: index.php?controller=LoginController&method=inicioSesion");
+            header("Location: /trabajoPreguntasYRespuestas/login");
             exit;
         }
 
@@ -339,7 +354,7 @@ class PartidaController
         $preguntas = $_SESSION["preguntas"] ?? [];
         $partidaId = $_SESSION["partida_id"] ?? null;
         if ($indice === null || !$preguntas || !$partidaId) {
-            header("Location: index.php?controller=partida&method=mostrarRuleta");
+            header("Location: /trabajoPreguntasYRespuestas/partida/mostrarRuleta");
             exit();
         }
         $pregunta = $preguntas[$indice];

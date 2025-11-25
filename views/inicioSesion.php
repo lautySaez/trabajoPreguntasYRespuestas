@@ -1,6 +1,6 @@
 <?php include("views/partials/header.php"); ?>
 
-<link rel="stylesheet" href="public/css/inicioSesion.css">
+<link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/inicioSesion.css">
 
 <main class="login-container">
     <div class="login-card">
@@ -10,7 +10,7 @@
             <p class="error-message"><?= htmlspecialchars($error) ?></p>
         <?php endif; ?>
 
-        <form action="index.php?controller=LoginController&method=login" method="POST">
+        <form action="/trabajoPreguntasYRespuestas/login" method="POST">
             <div class="form-group">
                 <label for="nombre_usuario">Nombre de usuario</label>
                 <input type="text" id="nombre_usuario" name="nombre_usuario" placeholder="Ingresa tu usuario" required>
@@ -26,12 +26,12 @@
 
         <p class="register-link">
             ¿No tienes cuenta?
-            <a href="index.php?controller=LoginController&method=registro">Regístrate</a>
+            <a href="/trabajoPreguntasYRespuestas/login/registro">Regístrate</a>
         </p>
     </div>
 </main>
 
-<script src="public/js/inicioSesion.js" defer></script>
+<script src="/trabajoPreguntasYRespuestas/public/js/inicioSesion.js" defer></script>
 <?php include("views/partials/footer.php"); ?>
 
 

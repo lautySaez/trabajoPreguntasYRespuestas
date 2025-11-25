@@ -53,7 +53,7 @@ class EditorController
                     }
                 }
 
-                header("Location: index.php?controller=editor&method=gestionarCategorias");
+                header("Location: /trabajoPreguntasYRespuestas/editor/gestionarCategorias");
                 exit();
             }
         }
@@ -69,7 +69,7 @@ class EditorController
             $this->model->borrarCategoria($id);
         }
 
-        header("Location: index.php?controller=editor&method=gestionarCategorias");
+        header("Location: /trabajoPreguntasYRespuestas/editor/gestionarCategorias");
         exit();
     }
 
@@ -124,7 +124,7 @@ class EditorController
             $this->model->registrarInforme($id, 'Edición', $motivo, $pregunta_para_informe);
             $this->model->marcarReporteComoResuelto($id, "Resuelto al corregir la pregunta: " . $motivo);
 
-            header("Location: index.php?controller=editor&method=gestionarPreguntas");
+            header("Location: /trabajoPreguntasYRespuestas/editor/gestionarPreguntas");
             exit();
         }
     }
@@ -152,7 +152,7 @@ class EditorController
 
         }
 
-        header("Location: index.php?controller=editor&method=gestionarPreguntas");
+        header("Location: /trabajoPreguntasYRespuestas/editor/gestionarPreguntas");
     }
 
     public function preguntasReportadas()
@@ -181,10 +181,10 @@ class EditorController
         if ($pregunta_id) {
             $this->model->marcarReporteComoResuelto($pregunta_id, $motivo);
 
-            header("Location: index.php?controller=editor&method=preguntasReportadas&filtro_estado=Activo");
+            header("Location: /trabajoPreguntasYRespuestas/editor/preguntasReportadas?filtro_estado=Activo");
             exit();
         }
-        header("Location: index.php?controller=editor&method=preguntasReportadas");
+        header("Location: /trabajoPreguntasYRespuestas/editor/preguntasReportadas");
     }
 
     public function crearPregunta()
@@ -201,7 +201,7 @@ class EditorController
                 $_POST["r4"],
                 $_POST["correcta"]
             );
-            header("Location: index.php?controller=editor&method=gestionarPreguntas");
+            header("Location: /trabajoPreguntasYRespuestas/editor/gestionarPreguntas");
             exit();
         }
 

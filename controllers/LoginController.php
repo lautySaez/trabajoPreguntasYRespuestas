@@ -52,20 +52,8 @@ class LoginController
         if (isset($_SESSION["usuario"])) {
             $usuario = $_SESSION["usuario"];
             $rol = $usuario["rol"];
-
-            switch ($rol) {
-                case "Administrador":
-                    include("views/homeAdmin.php");
-                    return;
-                case "Editor":
-                    include("views/homeEditor.php");
-                    return;
-                case "Jugador":
-                default:
-                    include("views/home.php");
-                    return;
-            }
-            $rol = $_SESSION["usuario"]["rol"];
+            // Usar los métodos específicos para cada rol para que
+            // se carguen los datos necesarios (ej: últimas partidas del jugador).
             $this->redirectHomePorRol($rol);
             return;
         }
@@ -241,7 +229,7 @@ class LoginController
                 );
 
                 if ($exito) {
-                    header("Location: index.php?controller=LoginController&method=elegirAvatar&usuario=" . urlencode($nombre_usuario));
+                    header("Location: /trabajoPreguntasYRespuestas/login/elegirAvatar?usuario=" . urlencode($nombre_usuario));
                     exit();
                 } else {
                     $error = "El usuario o el email ya existen.";
@@ -258,7 +246,7 @@ class LoginController
         $usuario = $_SESSION['usuario'] ?? null;
 
         if (!$usuario) {
-            header("Location: index.php?controller=LoginController&method=inicioSesion");
+            header("Location: /trabajoPreguntasYRespuestas/login");
             exit();
         }
 
@@ -273,7 +261,7 @@ class LoginController
             $usuario = $_SESSION['usuario'] ?? null;
 
             if (!$usuario) {
-                header("Location: index.php?controller=LoginController&method=inicioSesion");
+                header("Location: /trabajoPreguntasYRespuestas/login");
                 exit();
             }
 
@@ -286,7 +274,7 @@ class LoginController
                 $_SESSION['usuario']['foto_perfil'] = $foto_perfil;
             }
 
-            header("Location: index.php?controller=LoginController&method=home");
+            header("Location: /trabajoPreguntasYRespuestas/home");
             exit();
         }
     }
@@ -365,8 +353,19 @@ class LoginController
 
     public function logout()
     {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        // Vaciar datos de sesión y destruir
+        $_SESSION = [];
+        if (ini_get("session.use_cookies")) {
+            $params = session_get_cookie_params();
+            setcookie(session_name(), '', time() - 42000, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
+        }
         session_destroy();
-        include("views/inicioSesion.php");
+        // Redirigir a la ruta limpia de login
+        header("Location: /trabajoPreguntasYRespuestas/login");
+        exit;
     }
 
 }

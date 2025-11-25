@@ -1,6 +1,6 @@
 <?php include("views/partials/header.php"); ?>
 
-    <link rel="stylesheet" href="public/css/homeEditor.css">
+    <link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/homeEditor.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <?php
@@ -27,26 +27,26 @@ verificarRol("Editor");
                 </div>
 
                 <nav class="dashboard-nav">
-                    <a href="index.php?controller=editor&method=gestionarPreguntas" class="nav-item">
+                    <a href="/trabajoPreguntasYRespuestas/editor/gestionarPreguntas" class="nav-item">
                         <span class="icon"><i class="fa-solid fa-list-check"></i></span> Gestionar Preguntas
                     </a>
 
-                    <a href="index.php?controller=editor&method=crearPregunta" class="nav-item create-btn">
+                    <a href="/trabajoPreguntasYRespuestas/editor/crearPregunta" class="nav-item create-btn">
                         <span class="icon"><i class="fa-solid fa-plus"></i></span> Crear Pregunta
                     </a>
 
-                    <a href="index.php?controller=editor&method=gestionarCategorias" class="nav-item">
+                    <a href="/trabajoPreguntasYRespuestas/editor/gestionarCategorias" class="nav-item">
                         <span class="icon"><i class="fa-solid fa-tags"></i></span> Gestionar Categorías
                     </a>
 
-                    <a href="index.php?controller=editor&method=crearCategoria" class="nav-item create-btn">
+                    <a href="/trabajoPreguntasYRespuestas/editor/crearCategoria" class="nav-item create-btn">
                         <span class="icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span> Crear Categoría
                     </a>
 
-                    <a href="index.php?controller=editor&method=preguntasReportadas" class="nav-item">
+                    <a href="/trabajoPreguntasYRespuestas/editor/preguntasReportadas" class="nav-item">
                         <span class="icon"><i class="fa-solid fa-triangle-exclamation"></i></span> Reportes
                     </a>
-                    <a href="index.php?controller=SugerenciaController&method=pendientes" class="nav-item">
+                    <a href="/trabajoPreguntasYRespuestas/sugerencia/pendientes" class="nav-item create-btn">
                         <span class="icon"><i class="fa-solid fa-lightbulb"></i></span> Sugerencias Pendientes
                     </a>
                 </nav>
@@ -62,30 +62,30 @@ verificarRol("Editor");
                     </div>
 
                     <div class="cards-container">
-                        <a href="index.php?controller=editor&method=gestionarPreguntas" class="card">
+                        <a href="/trabajoPreguntasYRespuestas/editor/gestionarPreguntas" class="card">
                             <i class="fa-solid fa-file-pen"></i>
                             <h3>Gestión de Preguntas</h3>
                             <p>Edita, elimina o revisa el banco de preguntas actual.</p>
                         </a>
 
-                        <a href="index.php?controller=editor&method=crearPregunta" class="card highlight-card">
+                        <a href="/trabajoPreguntasYRespuestas/editor/crearPregunta" class="card highlight-card">
                             <i class="fa-solid fa-circle-plus"></i>
                             <h3>Crear Nueva Pregunta</h3>
                             <p>Añade nuevo contenido y desafíos al juego.</p>
                         </a>
 
-                        <a href="index.php?controller=editor&method=gestionarCategorias" class="card">
+                        <a href="/trabajoPreguntasYRespuestas/editor/gestionarCategorias" class="card">
                             <i class="fa-solid fa-layer-group"></i>
                             <h3>Gestión de Categorías</h3>
                             <p>Administra los temas y colores de las categorías.</p>
                         </a>
 
-                        <a href="index.php?controller=editor&method=crearCategoria" class="card highlight-card">
+                        <a href="/trabajoPreguntasYRespuestas/editor/crearCategoria" class="card highlight-card">
                             <i class="fa-solid fa-wand-magic-sparkles"></i>
                             <h3>Nueva Categoría</h3>
                             <p>Define una nueva área de conocimiento.</p>
                         </a>
-                        <a href="index.php?controller=SugerenciaController&method=pendientes" class="card">
+                        <a href="/trabajoPreguntasYRespuestas/sugerencia/pendientes" class="card">
                             <i class="fa-solid fa-lightbulb"></i>
                             <h3>Revisar Sugerencias</h3>
                             <p>Aprueba o rechaza preguntas aportadas por jugadores.</p>
@@ -101,6 +101,6 @@ verificarRol("Editor");
         <?php endif; ?>
     </div>
 
-    <script src="public/js/homeEditor.js"></script>
+    <script src="/trabajoPreguntasYRespuestas/public/js/homeEditor.js"></script>
 
 <?php include("views/partials/footer.php"); ?>

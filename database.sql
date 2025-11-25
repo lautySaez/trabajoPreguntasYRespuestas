@@ -723,7 +723,7 @@ CREATE TABLE InformePreguntas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     pregunta_id INT NULL,
     editor_id INT NULL,
-    tipo_accion ENUM('Edición', 'Eliminación', 'Reporte Resuelto') NOT NULL,
+    tipo_accion ENUM('Edición', 'Eliminación','Reporte Resuelto') NOT NULL,
     motivo TEXT NOT NULL,
     fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     pregunta TEXT,
@@ -733,10 +733,8 @@ CREATE TABLE InformePreguntas (
     r4 TEXT,
     correcta INT,
     categoria_id INT,
-
     FOREIGN KEY (pregunta_id) REFERENCES preguntas(id) ON DELETE SET NULL,
     FOREIGN KEY (editor_id) REFERENCES usuarios(id) ON DELETE SET NULL,
-
     INDEX (tipo_accion),
     INDEX (fecha)
 );
