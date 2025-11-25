@@ -1,6 +1,6 @@
 <?php include("views/partials/header.php"); ?>
 
-<link rel="stylesheet" href="public/css/elegir_avatar.css">
+<link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/elegir_avatar.css">
 
 <?php
 $usuario = $_SESSION['usuario'] ?? null;
@@ -18,7 +18,7 @@ $desdePerfil = !empty($_SESSION['permitir_configuracion']);
     <?= $desdePerfil ? "Selecciona uno para actualizar tu avatar" : "Selecciona uno para continuar al inicio de sesión" ?>
 </p>
 
-<form action="index.php?controller=<?= $desdePerfil ? 'UsuarioController' : 'LoginController' ?>&method=<?= $desdePerfil ? 'elegirAvatar' : 'guardarAvatar' ?>" method="POST">
+<form action="/trabajoPreguntasYRespuestas/<?= $desdePerfil ? 'usuario/elegirAvatar' : 'login/guardarAvatar' ?>" method="POST">
     <?php if (!$desdePerfil): ?>
         <input type="hidden" name="nombre_usuario" value="<?= htmlspecialchars($usuario['nombre_usuario'] ?? '') ?>">
     <?php endif; ?>
@@ -26,8 +26,8 @@ $desdePerfil = !empty($_SESSION['permitir_configuracion']);
 
     <div class="avatar-container">
         <?php foreach ($avatares as $avatar): ?>
-            <div class="avatar" data-avatar="public/img/<?= $avatar ?>">
-                <img src="public/img/<?= $avatar ?>" alt="Avatar">
+            <div class="avatar" data-avatar="/trabajoPreguntasYRespuestas/public/img/<?= $avatar ?>">
+                <img src="/trabajoPreguntasYRespuestas/public/img/<?= $avatar ?>" alt="Avatar">
             </div>
         <?php endforeach; ?>
     </div>
@@ -35,6 +35,6 @@ $desdePerfil = !empty($_SESSION['permitir_configuracion']);
     <button type="submit" class="btn-confirmar" disabled id="btnConfirmar">Confirmar selección</button>
 </form>
 
-<script src="public/js/elegir_avatar.js" defer></script>
+<script src="/trabajoPreguntasYRespuestas/public/js/elegir_avatar.js" defer></script>
 
 <?php include("views/partials/footer.php"); ?>

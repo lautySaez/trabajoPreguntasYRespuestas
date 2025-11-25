@@ -25,7 +25,7 @@ class UsuarioController
         $usuario = $_SESSION['usuario'] ?? null;
 
         if (!$usuario) {
-            header("Location: index.php?controller=LoginController&method=inicioSesion");
+            header("Location: /trabajoPreguntasYRespuestas/login");
             exit;
         }
 
@@ -43,7 +43,8 @@ class UsuarioController
     }
 
     public function publico() {
-        $username = $_GET['username'] ?? null;
+        // Compatibilidad: aceptar username desde 'username' o desde 'extra' (ruta /usuario/publico/{username})
+        $username = $_GET['username'] ?? ($_GET['extra'] ?? null);
 
         if (!$username) {
             $this->render('errorView', ['mensaje' => 'Usuario no especificado.']);
@@ -63,7 +64,7 @@ class UsuarioController
     public function confirmarPassword()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header("Location: index.php?controller=UsuarioController&method=perfil");
+            header("Location: /trabajoPreguntasYRespuestas/usuario/perfil");
             exit;
         }
 
@@ -72,7 +73,7 @@ class UsuarioController
         $usuarioSesion = $_SESSION['usuario'] ?? null;
         if (!$usuarioSesion) {
 
-            header("Location: index.php?controller=LoginController&method=inicioSesion");
+            header("Location: /trabajoPreguntasYRespuestas/login");
             exit;
         }
 
@@ -82,17 +83,17 @@ class UsuarioController
 
         if (!$usuarioBD) {
             $_SESSION['error'] = "Usuario no encontrado.";
-            header("Location: index.php?controller=UsuarioController&method=perfil");
+            header("Location: /trabajoPreguntasYRespuestas/usuario/perfil");
             exit;
         }
 
         if (password_verify($password, $usuarioBD['password'])) {
             $_SESSION['permitir_configuracion'] = true;
-            header("Location: index.php?controller=UsuarioController&method=configurarPerfil");
+            header("Location: /trabajoPreguntasYRespuestas/usuario/configurarPerfil");
             exit;
         } else {
             $_SESSION['error'] = "Contraseña actual incorrecta.";
-            header("Location: index.php?controller=UsuarioController&method=perfil");
+            header("Location: /trabajoPreguntasYRespuestas/usuario/perfil");
             exit;
         }
     }
@@ -100,7 +101,7 @@ class UsuarioController
     public function configurarPerfil()
     {
         if (empty($_SESSION['permitir_configuracion'])) {
-            header("Location: index.php?controller=UsuarioController&method=perfil");
+            header("Location: /trabajoPreguntasYRespuestas/usuario/perfil");
             exit;
         }
 
@@ -121,7 +122,7 @@ class UsuarioController
 
             if ($password && $password !== $repassword) {
                 $_SESSION['error'] = "Las contraseñas no coinciden.";
-                header("Location: index.php?controller=UsuarioController&method=configurarPerfil");
+                header("Location: /trabajoPreguntasYRespuestas/usuario/configurarPerfil");
                 exit;
             }
 
@@ -139,7 +140,7 @@ class UsuarioController
             $_SESSION['usuario'] = $this->usuarioModel->obtenerPorId($id);
 
             unset($_SESSION['permitir_configuracion']);
-            header("Location: index.php?controller=UsuarioController&method=perfil");
+            header("Location: /trabajoPreguntasYRespuestas/usuario/perfil");
             exit;
         }
     }
@@ -147,7 +148,7 @@ class UsuarioController
     public function elegirAvatar()
     {
         if (empty($_SESSION['permitir_configuracion'])) {
-            header("Location: index.php?controller=UsuarioController&method=perfil");
+            header("Location: /trabajoPreguntasYRespuestas/usuario/perfil");
             exit;
         }
 
@@ -166,7 +167,7 @@ class UsuarioController
                 $_SESSION['usuario'] = $this->usuarioModel->obtenerPorId($usuario['id']);
             }
 
-            header("Location: index.php?controller=UsuarioController&method=configurarPerfil");
+            header("Location: /trabajoPreguntasYRespuestas/usuario/configurarPerfil");
             exit;
         }
 

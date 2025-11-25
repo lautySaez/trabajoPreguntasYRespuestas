@@ -1,6 +1,6 @@
 <?php include("views/partials/header-nologin.php"); ?>
 
-<link rel="stylesheet" href="public/css/validarRegistroUsuario.css">
+<link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/validarRegistroUsuario.css">
 
 <main class="register-container">
     <div class="register-card">
@@ -10,7 +10,7 @@
             <p class="error-message"><?= htmlspecialchars($error) ?></p>
         <?php endif; ?>
 
-        <form action="index.php?controller=LoginController&method=validarRegistrarUsuario" method="POST" enctype="multipart/form-data">
+        <form action="/trabajoPreguntasYRespuestas/login/validarRegistrarUsuario" method="POST" enctype="multipart/form-data">
             <p class="info-text">Por favor ingrese el código de verificación que se le envió a su casilla de correo:</p>
 
             <div class="form-group">

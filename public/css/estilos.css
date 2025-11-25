@@ -250,7 +250,7 @@ h2 {
 form {
     background: none;
     color: #222;
-    padding: 40px 50px;
+    
     border-radius: 12px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
     width: 100%;
@@ -258,7 +258,7 @@ form {
 }
 
 form[action*="login"] {
-    max-width: 420px;
+    /*max-width: 420px;*/
     padding: 35px 40px;
 }
 

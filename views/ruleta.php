@@ -1,6 +1,6 @@
 <?php include("views/partials/header.php"); ?>
 
-    <link rel="stylesheet" href="public/css/ruleta.css">
+    <link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/ruleta.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
 <?php if (!empty($_SESSION['flash_error'])): ?>
@@ -21,7 +21,7 @@
             </div>
 
             <audio id="sonidoRuleta" preload="auto">
-                <source src="public/audios/ruleta_girando.mp3" type="audio/mpeg">
+                <source src="/trabajoPreguntasYRespuestas/public/audios/ruleta_girando.mp3" type="audio/mpeg">
             </audio>
             <button id="boton-girar">Girar</button>
         </div>
@@ -34,6 +34,6 @@
         </div>
     </div>
 
-    <script src="public/js/ruleta.js?v=20251117" type="text/javascript"></script>
+    <script src="/trabajoPreguntasYRespuestas/public/js/ruleta.js?v=20251117" type="text/javascript"></script>
 
 <?php include("views/partials/footer.php"); ?>

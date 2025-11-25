@@ -60,7 +60,7 @@ class AdminController {
                     $this->model->actualizarRolUsuario($id, $nuevoRol);
                 }
 
-                header("Location: index.php?controller=admin&method=gestionUsuarios");
+                header("Location: /trabajoPreguntasYRespuestas/admin/gestionUsuarios");
                 exit;
             }
         }
@@ -164,7 +164,7 @@ class AdminController {
                     $stmt->bind_param("i", $id);
                     $stmt->execute();
                 }
-                header("Location: index.php?controller=admin&method=reportes");
+                header("Location: /trabajoPreguntasYRespuestas/admin/reportes");
                 exit;
             }
         }

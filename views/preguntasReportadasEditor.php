@@ -1,7 +1,7 @@
 <?php include("views/partials/header.php"); ?>
 
-    <link rel="stylesheet" href="public/css/homeEditor.css">
-    <link rel="stylesheet" href="public/css/preguntasReportadasEditor.css">
+    <link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/homeEditor.css">
+    <link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/preguntasReportadasEditor.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <?php
@@ -20,11 +20,11 @@ verificarRol("Editor");
         <h1><i class="fa-solid fa-triangle-exclamation"></i> Gestión de Preguntas Reportadas</h1>
 
         <div class="tabs-reportes">
-            <a href="index.php?controller=editor&method=preguntasReportadas&filtro_estado=Activo"
+            <a href="/trabajoPreguntasYRespuestas/editor/preguntasReportadas?filtro_estado=Activo"
                class="tab <?= ($filtro_estado === 'Activo' ? 'active' : '') ?>">
                 Activos
             </a>
-            <a href="index.php?controller=editor&method=preguntasReportadas&filtro_estado=Resuelto"
+            <a href="/trabajoPreguntasYRespuestas/editor/preguntasReportadas?filtro_estado=Resuelto"
                class="tab <?= ($filtro_estado === 'Resuelto' ? 'active' : '') ?>">
                 Resueltos
             </a>
@@ -42,7 +42,7 @@ verificarRol("Editor");
                 </div>
 
                 <div class="acciones-detalle">
-                    <a href="index.php?controller=editor&method=gestionarPreguntas&filtro_reportes=reportadas&buscar_id=<?= $pregunta_id ?>"
+                    <a href="/trabajoPreguntasYRespuestas/editor/gestionarPreguntas?filtro_reportes=reportadas&buscar_id=<?= $pregunta_id ?>"
                        class="btn-gestionar">
                         <i class="fa-solid fa-pen-to-square"></i> Revisar Pregunta
                     </a>
@@ -55,7 +55,7 @@ verificarRol("Editor");
                         </button>
                     <?php endif; ?>
 
-                    <a href="index.php?controller=editor&method=preguntasReportadas" class="btn-volver">
+                    <a href="/trabajoPreguntasYRespuestas/editor/preguntasReportadas" class="btn-volver">
                         <i class="fa-solid fa-arrow-left"></i> Volver al Listado
                     </a>
                 </div>
@@ -110,10 +110,10 @@ verificarRol("Editor");
                                 <td class="reportes-count"><?= $reporte['total_reportes'] ?></td>
                                 <td><?= date('d/m/Y H:i', strtotime($reporte['ultimo_reporte'])) ?></td>
                                 <td class="acciones">
-                                    <a href="index.php?controller=editor&method=preguntasReportadas&id=<?= $reporte['pregunta_id'] ?>" class="btn-detalles">
+                                    <a href="/trabajoPreguntasYRespuestas/editor/preguntasReportadas?id=<?= $reporte['pregunta_id'] ?>" class="btn-detalles">
                                         <i class="fa-solid fa-eye"></i> Ver Detalles
                                     </a>
-                                    <a href="index.php?controller=editor&method=gestionarPreguntas&filtro_reportes=reportadas&buscar_id=<?= $reporte['pregunta_id'] ?>"
+                                    <a href="/trabajoPreguntasYRespuestas/editor/gestionarPreguntas?filtro_reportes=reportadas&buscar_id=<?= $reporte['pregunta_id'] ?>"
                                        class="btn-gestionar-pregunta">
                                         <i class="fa-solid fa-pen-to-square"></i> Gestionar
                                     </a>
@@ -137,7 +137,7 @@ verificarRol("Editor");
         <div class="modal-content">
             <h3>Marcar Reporte como Resuelto</h3>
             <p>Esta acción marcará todos los **reportes activos** de esta pregunta como resueltos. Úsala cuando hayas corregido la pregunta o consideres que el reporte es inválido.</p>
-            <form id="formResolucion" method="post" action="index.php?controller=editor&method=resolverReporte">
+            <form id="formResolucion" method="post" action="/trabajoPreguntasYRespuestas/editor/resolverReporte">
                 <input type="hidden" name="pregunta_id" id="preguntaIdResolucion">
                 <textarea name="motivo_resolucion" placeholder="Motivo de la resolución (Ej: Pregunta corregida, Reporte inválido, etc.)"></textarea>
                 <div class="modal-buttons">
