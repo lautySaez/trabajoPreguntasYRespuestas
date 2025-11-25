@@ -11,7 +11,7 @@ class SugerenciaController {
 
     public function mostrarFormulario() {
         if (!isset($_SESSION['usuario']['id'])) {
-            header("Location: index.php?controller=LoginController&method=inicioSesion");
+            header("Location: /trabajoPreguntasYRespuestas/login");
             exit();
         }
         $categorias = $this->model->obtenerCategoriasActivas();
@@ -21,11 +21,11 @@ class SugerenciaController {
     public function guardar() {
         if (session_status() === PHP_SESSION_NONE) session_start();
         if (!isset($_SESSION['usuario']['id'])) {
-            header("Location: index.php?controller=LoginController&method=inicioSesion");
+            header("Location: /trabajoPreguntasYRespuestas/login");
             exit();
         }
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header("Location: index.php?controller=SugerenciaController&method=mostrarFormulario");
+            header("Location: /trabajoPreguntasYRespuestas/sugerencia/mostrarFormulario");
             exit();
         }
 
@@ -69,7 +69,7 @@ class SugerenciaController {
             if ($fromModal && $origin) {
                 header("Location: $origin");
             } else {
-                header("Location: index.php?controller=SugerenciaController&method=mostrarFormulario");
+                header("Location: /trabajoPreguntasYRespuestas/sugerencia/mostrarFormulario");
             }
             exit();
         }
@@ -90,7 +90,7 @@ class SugerenciaController {
             if ($fromModal && $origin) {
                 header("Location: $origin");
             } else {
-                header("Location: index.php?controller=SugerenciaController&method=mostrarFormulario");
+                header("Location: /trabajoPreguntasYRespuestas/sugerencia/mostrarFormulario");
             }
             exit();
         }
@@ -103,7 +103,7 @@ class SugerenciaController {
         $rol = $_SESSION['usuario']['rol'] ?? null;
         $rolLower = strtolower($rol ?? '');
         if (!$rol || !in_array($rolLower, ['editor','admin'])) {
-            header("Location: index.php?controller=LoginController&method=inicioSesion");
+            header("Location: /trabajoPreguntasYRespuestas/login");
             exit();
         }
     }
@@ -126,7 +126,7 @@ class SugerenciaController {
         } else {
             $_SESSION['flash_error'] = 'No se pudo aprobar (ya procesada o inexistente).';
         }
-        header("Location: index.php?controller=SugerenciaController&method=pendientes");
+        header("Location: /trabajoPreguntasYRespuestas/sugerencia/pendientes");
         exit();
     }
 
@@ -139,7 +139,7 @@ class SugerenciaController {
         } else {
             $_SESSION['flash_error'] = 'No se pudo rechazar (ya procesada o inexistente).';
         }
-        header("Location: index.php?controller=SugerenciaController&method=pendientes");
+        header("Location: /trabajoPreguntasYRespuestas/sugerencia/pendientes");
         exit();
     }
 }

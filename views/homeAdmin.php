@@ -1,6 +1,6 @@
 <?php include("views/partials/header.php"); ?>
 
-    <link rel="stylesheet" href="public/css/adminDashboard.css">
+    <link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/adminDashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <?php
@@ -8,7 +8,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 $usuario = $_SESSION['usuario'] ?? null;
 
 if (!$usuario) {
-    header("Location: index.php?controller=LoginController&method=inicioSesion");
+    header("Location: /trabajoPreguntasYRespuestas/login");
     exit;
 }
 ?>
@@ -18,17 +18,17 @@ if (!$usuario) {
             <div class="brand">Deberes · Admin</div>
 
             <nav>
-                <a href="index.php?controller=admin&method=homeAdmin" class="active">
+                <a href="/trabajoPreguntasYRespuestas/admin/homeAdmin" class="active">
                     <i class="fa fa-chart-line"></i> Dashboard
                 </a>
 
-                <a href="index.php?controller=admin&method=gestionUsuarios">
+                <a href="/trabajoPreguntasYRespuestas/admin/gestionUsuarios">
                     <i class="fa fa-users"></i> Gestión de Jugadores
                 </a>
-                <a href="index.php?controller=admin&method=informes">
+                <a href="/trabajoPreguntasYRespuestas/admin/informes">
                     <i class="fa fa-flag"></i> Informes de Editores
                 </a>
-                <a href="index.php?controller=admin&method=reportes">
+                <a href="/trabajoPreguntasYRespuestas/admin/reportes">
                     <i class="fa fa-exclamation-circle"></i> Reportes de Jugadores
                 </a>
             </nav>
@@ -135,6 +135,6 @@ if (!$usuario) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="public/js/adminDashboard.js"></script>
+    <script src="/trabajoPreguntasYRespuestas/public/js/adminDashboard.js"></script>
 
 <?php include("views/partials/footer.php"); ?>

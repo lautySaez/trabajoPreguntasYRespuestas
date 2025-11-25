@@ -2,7 +2,7 @@
 include(__DIR__ . "/../views/partials/header.php");
 ?>
 
-    <link rel="stylesheet" href="public/css/adminUsuarios.css">
+    <link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/adminUsuarios.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <?php
@@ -10,7 +10,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 $usuario = $_SESSION['usuario'] ?? null;
 
 if (!$usuario) {
-    header("Location: index.php?controller=LoginController&method=inicioSesion");
+    header("Location: /trabajoPreguntasYRespuestas/login");
     exit;
 }
 ?>
@@ -88,13 +88,13 @@ if (!$usuario) {
                             <td>
                                 <div class="action-buttons-group">
                                     <?php if ($estado === 'Activo'): ?>
-                                        <form method="POST" action="index.php?controller=admin&method=accionUsuario" onsubmit="return confirm('¿Está seguro de bloquear a <?= $nombre_usuario ?>?');">
+                                        <form method="POST" action="/trabajoPreguntasYRespuestas/admin/accionUsuario" onsubmit="return confirm('¿Está seguro de bloquear a <?= $nombre_usuario ?>?');">
                                             <input type="hidden" name="id" value="<?= $id ?>">
                                             <input type="hidden" name="accion" value="bloquear">
                                             <button type="submit" class="btn-action btn-block" title="Bloquear"><i class='fas fa-lock'></i></button>
                                         </form>
                                     <?php else: ?>
-                                        <form method="POST" action="index.php?controller=admin&method=accionUsuario" onsubmit="return confirm('¿Está seguro de desbloquear a <?= $nombre_usuario ?>?');">
+                                        <form method="POST" action="/trabajoPreguntasYRespuestas/admin/accionUsuario" onsubmit="return confirm('¿Está seguro de desbloquear a <?= $nombre_usuario ?>?');">
                                             <input type="hidden" name="id" value="<?= $id ?>">
                                             <input type="hidden" name="accion" value="desbloquear">
                                             <button type="submit" class="btn-action btn-unblock" title="Desbloquear"><i class='fas fa-unlock-alt'></i></button>
@@ -107,7 +107,7 @@ if (!$usuario) {
                                     $btn_icon = ($rol === 'Jugador') ? 'fa-user-tag' : 'fa-user-alt';
                                     $confirm_msg = "¿Está seguro de cambiar el rol de {$nombre_usuario} a {$new_rol_name}?";
                                     ?>
-                                    <form method="POST" action="index.php?controller=admin&method=accionUsuario" onsubmit="return confirm('<?= $confirm_msg ?>');">
+                                    <form method="POST" action="/trabajoPreguntasYRespuestas/admin/accionUsuario" onsubmit="return confirm('<?= $confirm_msg ?>');">
                                         <input type="hidden" name="id" value="<?= $id ?>">
                                         <input type="hidden" name="accion" value="cambiar_rol">
                                         <input type="hidden" name="current_rol" value="<?= $rol ?>">
@@ -116,7 +116,7 @@ if (!$usuario) {
                                         </button>
                                     </form>
 
-                                    <form method="POST" action="index.php?controller=admin&method=accionUsuario" onsubmit="return confirm('ADVERTENCIA: ¿Está seguro de ELIMINAR permanentemente a <?= $nombre_usuario ?>? Esta acción es irreversible.');">
+                                    <form method="POST" action="/trabajoPreguntasYRespuestas/admin/accionUsuario" onsubmit="return confirm('ADVERTENCIA: ¿Está seguro de ELIMINAR permanentemente a <?= $nombre_usuario ?>? Esta acción es irreversible.');">
                                         <input type="hidden" name="id" value="<?= $id ?>">
                                         <input type="hidden" name="accion" value="eliminar">
                                         <button type="submit" class="btn-action btn-delete" title="Eliminar"><i class='fas fa-trash'></i></button>
@@ -136,6 +136,6 @@ if (!$usuario) {
 
     </div>
 
-    <script src="public/js/adminUsuarios.js"></script>
+    <script src="/trabajoPreguntasYRespuestas/public/js/adminUsuarios.js"></script>
 
 <?php include(__DIR__ . "/../views/partials/footer.php"); ?>

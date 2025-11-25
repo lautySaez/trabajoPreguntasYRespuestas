@@ -1,7 +1,7 @@
 <?php include("views/partials/header.php"); ?>
 
-    <link rel="stylesheet" href="public/css/homeEditor.css">
-    <link rel="stylesheet" href="public/css/gestionarPreguntas.css">
+    <link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/homeEditor.css">
+    <link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/gestionarPreguntas.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <?php
@@ -62,7 +62,7 @@ verificarRol("Editor");
 
         </div>
 
-        <a href="editor/crearPregunta" class="btn-agregar">Agregar Nueva Pregunta</a>
+        <a href="/trabajoPreguntasYRespuestas/editor/crearPregunta" class="btn-agregar">Agregar Nueva Pregunta</a>
 
         <div class="tabla-container">
             <table class="tabla-preguntas">
@@ -142,6 +142,6 @@ verificarRol("Editor");
 
     </div>
 
-    <script src="public/js/gestionarPreguntas.js" defer></script>
+    <script src="/trabajoPreguntasYRespuestas/public/js/gestionarPreguntas.js" defer></script>
 
 <?php include("views/partials/footer.php"); ?>

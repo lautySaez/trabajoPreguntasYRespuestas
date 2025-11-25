@@ -4,13 +4,13 @@
 /** @var array $informes */
 ?>
 
-    <link rel="stylesheet" href="public/css/adminInformes.css">
+    <link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/adminInformes.css">
 
 <?php
 if (session_status() === PHP_SESSION_NONE) session_start();
 $usuario = $_SESSION['usuario'] ?? null;
 if (!$usuario) {
-    header("Location: index.php?controller=LoginController&method=inicioSesion");
+    header("Location: /trabajoPreguntasYRespuestas/login");
     exit;
 }
 ?>
@@ -64,7 +64,7 @@ if (!$usuario) {
             </div>
 
             <div class="back-link-container" style="text-align: right; margin-top: 20px;">
-                <a href="index.php?controller=admin&method=homeAdmin" class="btn btn-secondary">
+                <a href="/trabajoPreguntasYRespuestas/admin/homeAdmin" class="btn btn-secondary">
                     <i class="fa fa-arrow-left"></i> Volver
                 </a>
             </div>
@@ -90,6 +90,6 @@ if (!$usuario) {
         </div>
     </div>
 
-    <script src="public/js/adminInformes.js"></script>
+    <script src="/trabajoPreguntasYRespuestas/public/js/adminInformes.js"></script>
 
 <?php include("views/partials/footer.php"); ?>

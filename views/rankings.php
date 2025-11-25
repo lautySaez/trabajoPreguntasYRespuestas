@@ -1,7 +1,7 @@
 <?php include("views/partials/header.php"); ?>
 
-<link rel="stylesheet" href="public/css/rankings.css">
-<link rel="stylesheet" href="public/css/estilos.css">
+<link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/rankings.css">
+<link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/estilos.css">
 
 <?php
 $rankingJugadores = $rankingJugadores ?? [];
@@ -40,7 +40,7 @@ $rankingJugadores = $rankingJugadores ?? [];
                 <tbody>
                     <?php if (!empty($top3)): ?>
                         <?php foreach ($top3 as $i => $jugador): ?>
-                            <tr class="rank-fila" onclick="window.location.href='index.php?controller=UsuarioController&method=publico&username=<?= urlencode($jugador['nombre_usuario']) ?>'">
+                            <tr class="rank-fila" onclick="window.location.href='/trabajoPreguntasYRespuestas/usuario/publico/<?= urlencode($jugador['nombre_usuario']) ?>'">
                                 <td><?= $i + 1 ?></td>
                                 <td>
                                     <?php if (!empty($jugador["foto_perfil"])): ?>

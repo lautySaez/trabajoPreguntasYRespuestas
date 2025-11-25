@@ -1,7 +1,7 @@
 <?php include("views/partials/header.php"); ?>
 
-    <link rel="stylesheet" href="public/css/homeEditor.css">
-    <link rel="stylesheet" href="public/css/gestionarCategorias.css">
+    <link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/homeEditor.css">
+    <link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/gestionarCategorias.css">
 
 <?php
 $categorias = $categorias ?? [];
@@ -14,7 +14,7 @@ verificarRol("Editor");
 
         <h1>Gestión de Categorías</h1>
 
-        <a href="index.php?controller=editor&method=crearCategoria" class="btn-agregar-categoria">
+        <a href="/trabajoPreguntasYRespuestas/editor/crearCategoria" class="btn-agregar-categoria">
             ➕ Crear Nueva Categoría
         </a>
 
@@ -67,7 +67,7 @@ verificarRol("Editor");
             <p>¿Está seguro de que desea eliminar la categoría: <strong id="nombreCategoriaModal"></strong>?</p>
             <p class="warning-text">Esta acción **eliminará permanentemente** <strong id="preguntasAfectadasModal"></strong> asociadas.</p>
 
-            <form id="formBorrarCategoria" method="post" action="index.php?controller=editor&method=borrarCategoria">
+            <form id="formBorrarCategoria" method="post" action="/trabajoPreguntasYRespuestas/editor/borrarCategoria">
                 <input type="hidden" name="id" id="categoriaIdModal">
 
                 <div class="modal-buttons">
@@ -79,6 +79,6 @@ verificarRol("Editor");
     </div>
 
 
-    <script src="public/js/gestionarCategorias.js" defer></script>
+    <script src="/trabajoPreguntasYRespuestas/public/js/gestionarCategorias.js" defer></script>
 
 <?php include("views/partials/footer.php"); ?>

@@ -9,15 +9,15 @@ unset($_SESSION['flash_error']);
 <head>
     <meta charset="UTF-8">
     <title>Sugerir Pregunta</title>
-    <link rel="stylesheet" href="public/estilos.css" />
-    <link rel="stylesheet" href="public/sugerencias.css" />
+    <link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/estilos.css" />
+    <link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/sugerencias.css" />
 </head>
 
 <body>
     <div class="form-sugerencia">
         <h2>Sugerir Pregunta</h2>
         <?php if ($flash): ?><div class="flash-error"><?= htmlspecialchars($flash) ?></div><?php endif; ?>
-        <form method="post" action="index.php?controller=SugerenciaController&method=guardar">
+        <form method="post" action="/trabajoPreguntasYRespuestas/sugerencia/guardar">
             <label for="categoria_id">Categoría</label>
             <select name="categoria_id" id="categoria_id" required>
                 <option value="">-- Seleccione --</option>
@@ -41,7 +41,7 @@ unset($_SESSION['flash_error']);
             </div>
             <div class="botones">
                 <button type="submit">Enviar sugerencia</button>
-                <a href="index.php?controller=partida&method=mostrarRuleta">Cancelar</a>
+                <a href="/trabajoPreguntasYRespuestas/partida/mostrarRuleta">Cancelar</a>
             </div>
         </form>
     </div>

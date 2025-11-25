@@ -1,7 +1,7 @@
 <?php
 include("views/partials/header.php");
 ?>
-    <link rel="stylesheet" href="public/css/perfil.css">
+    <link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/perfil.css">
 
 <?php
 if (session_status() === PHP_SESSION_NONE) session_start();
@@ -17,7 +17,7 @@ if (isset($_SESSION["usuario"])) {
         $qr_api_url = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" . $data_to_encode;
     }
 } else {
-    header("Location: index.php?controller=LoginController&method=inicioSesion");
+    header("Location: /trabajoPreguntasYRespuestas/login");
     exit;
 }
 ?>
@@ -55,7 +55,7 @@ if (isset($_SESSION["usuario"])) {
             <h3 id="modalTitle">Confirmar contraseña</h3>
             <p>Para editar tu perfil, ingresa tu contraseña actual:</p>
 
-            <form id="formConfirmar" action="index.php?controller=UsuarioController&method=confirmarPassword" method="POST">
+            <form id="formConfirmar" action="/trabajoPreguntasYRespuestas/usuario/confirmarPassword" method="POST">
                 <input type="password" name="password_actual" placeholder="Contraseña actual" required autocomplete="current-password">
                 <div class="modal-buttons">
                     <button type="submit" class="boton-principal">Continuar</button>
@@ -86,6 +86,6 @@ if (isset($_SESSION["usuario"])) {
         </div>
     </div>
 
-    <script src="public/js/perfil.js" type="text/javascript"></script>
+    <script src="/trabajoPreguntasYRespuestas/public/js/perfil.js" type="text/javascript"></script>
 
 <?php include("views/partials/footer.php"); ?>
