@@ -41,10 +41,7 @@ class Usuario
     $stmt->bind_param("sssssssssssi", $nombre, $fecha_nacimiento, $sexo, $pais, $ciudad, $email, $passwordHash, $nombre_usuario, $rol, $foto_perfil, $estado_registro, $token_activacion);
 
         return $stmt->execute();
-    } // Registra un nuevo usuario.
-    // Primero verifica que el email y el nombre_usuario no existan.
-    // Si son únicos, encripta la contraseña, asigna el rol "jugador", establece el estado a "Inactivo"
-    // y guarda un token_activacion para la verificación posterior.
+    }
 
     public function login($nombre_usuario, $password)
     {
@@ -61,9 +58,7 @@ class Usuario
             }
         }
         return false;
-    } // Procesa el inicio de sesión.
-    // Busca al usuario por nombre_usuario y verifica la contraseña encriptada.
-    // Si las credenciales son correctas, devuelve el array del usuario; de lo contrario, devuelve false.
+    }
 
     public function actualizarAvatar($nombre_usuario, $foto_perfil)
     {
@@ -71,7 +66,7 @@ class Usuario
         $stmt = $this->conexion->prepare($sql);
         $stmt->bind_param("ss", $foto_perfil, $nombre_usuario);
         return $stmt->execute();
-    } // Actualiza únicamente la URL o ruta de la foto de perfil de un usuario.
+    }
 
     public function obtenerPorNombreUsuario($nombre_usuario)
     {
@@ -81,7 +76,7 @@ class Usuario
         $stmt->execute();
         $resultado = $stmt->get_result();
         return $resultado->fetch_assoc();
-    } // Obtiene todos los datos de un usuario buscando por su nombre de usuario único.
+    }
 
     public function validarRegistrarUsuario($nombre_usuario, $password, $token_activacion)
     {
@@ -100,9 +95,7 @@ class Usuario
                 return $stmt->execute();
             }
         }
-    } // Activa la cuenta del usuario.
-    // Verifica el nombre_usuario y la password (por seguridad),
-    // y si coinciden con el token_activacion, cambia el estado_registro del usuario a 'Activo'.
+    }
 
     public function actualizarPerfil($id, $nombre_usuario, $email, $password = null, $foto_perfil = null)
     {
@@ -142,9 +135,7 @@ class Usuario
         }
 
         return true;
-    } // Actualiza los datos básicos del perfil (nombre de usuario, email).
-    // Permite opcionalmente actualizar la contraseña (encriptándola) y/o la foto de perfil.
-    // Utiliza lógica dinámica para construir la consulta UPDATE solo con los campos proporcionados.
+    }
 
     public function obtenerPorId($id)
     {
@@ -154,7 +145,7 @@ class Usuario
         $stmt->execute();
         $resultado = $stmt->get_result();
         return $resultado->fetch_assoc();
-    } // Obtiene todos los datos de un usuario buscando por su ID único.
+    }
 
     public function obtenerTodosLosUsuarios()
     {
@@ -174,7 +165,8 @@ class Usuario
     }
 
     return $usuarios;
-    } //  // Recupera una lista básica de todos los usuarios (perfil, nombre, email, rol, estado de registro).
+    }
+
 
     public function obtenerPerfilPublico($username)
     {
@@ -199,14 +191,10 @@ class Usuario
         $stmt->bind_param("s", $username);
         $stmt->execute();
         return $stmt->get_result()->fetch_assoc();
-    } // Obtiene los datos de perfil para su visualización pública,
-    // incluyendo el cálculo del total de puntos (SUM(p.puntaje)) y el número de partidas jugadas,
-    // siempre y cuando la cuenta no esté 'Bloqueada'.
+    }
 
-    public function actualizarEstadisticasJugador(int $usuarioId, bool $acierto): void
-    {
+    public function actualizarEstadisticasJugador(int $usuarioId, bool $acierto): void {
         $this->conexion->begin_transaction();
-
         try {
             $stmt = $this->conexion->prepare("
                 UPDATE usuarios
@@ -226,11 +214,7 @@ class Usuario
             $this->conexion->rollback();
             error_log("Error actualizarEstadisticasJugador: " . $e->getMessage());
         }
-    } // Actualiza las estadísticas de juego del usuario dentro de una
-    // transacción de base de datos (para asegurar la atomicidad).
-    // 1. Incrementa total_vistas en 1.
-    // 2. Incrementa total_aciertos en 1 solo si $acierto es true.
-    // 3. Llama a recalcularNivelJugador().
+    }
 
     public function recalcularNivelJugador(int $usuarioId): void
     {
@@ -251,6 +235,7 @@ class Usuario
         $vistas = (int)($fila['total_vistas'] ?? 0);
         $aciertos = (int)($fila['total_aciertos'] ?? 0);
 
+        // Jugador nuevo: mantener 'Normal' por default
         if ($vistas === 0) {
             $nivel = 'Normal';
         } else {
@@ -264,13 +249,9 @@ class Usuario
         $stmt2->bind_param("si", $nivel, $usuarioId);
         $stmt2->execute();
         $stmt2->close();
-    } // Determina y actualiza el nivel_jugador basándose en el ratio de aciertos
-     // sobre el total de vistas (total_aciertos / total_vistas).
-    //* Newbie: Ratio < 0.3
-   //* Normal: 0.3 <= Ratio < 0.6
-  //* Pro: Ratio >= 0.6
+    }
 
-    public function obtenerNivelJugador(int $usuarioId): ? string
+    public function obtenerNivelJugador(int $usuarioId): ?string
     {
         $stmt = $this->conexion->prepare("SELECT nivel_jugador FROM usuarios WHERE id = ? LIMIT 1");
         $stmt->bind_param("i", $usuarioId);
@@ -279,5 +260,5 @@ class Usuario
         $fila = $res->fetch_assoc();
         $stmt->close();
         return $fila['nivel_jugador'] ?? null;
-    } // Devuelve el nivel de jugador (Newbie, Normal, Pro) asignado al usuario.
+    }
 }

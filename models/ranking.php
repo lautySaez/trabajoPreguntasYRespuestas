@@ -9,7 +9,6 @@ class Ranking {
         $this->conexion = $conexion;
     }
 
-    // Obtiene top N jugadores
     public function obtenerTopJugadores($limite = 5)
     {
         $sql = "
@@ -30,5 +29,10 @@ class Ranking {
 
         $resultado = $stmt->get_result();
         return $resultado->fetch_all(MYSQLI_ASSOC);
-    }
+    } // Calcula y devuelve la clasificación de los jugadores.
+    // La consulta suma el puntaje de todas las partidas jugadas por cada usuario (GROUP BY p.usuario_id).
+    // Luego, ordena el resultado por puntaje_total de forma descendente
+    // y limita la cantidad de resultados según el valor de $limite (por defecto,
+    // muestra los 5 mejores jugadores).
+    // Devuelve el nombre_usuario, foto_perfil y el puntaje_total de cada jugador del ranking.
 }

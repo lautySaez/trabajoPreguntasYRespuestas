@@ -117,6 +117,10 @@ class PartidaModel {
         $this->recalcularDificultad($preguntaId);
     } // Incrementa el contador veces_incorrecta de la pregunta y llama a recalcularDificultad.
 
+    public function registrarCorrectaPregunta($preguntaId) {
+        $this->recalcularDificultad($preguntaId);
+    }
+
     public function registrarPreguntaUsuario($usuarioId, $preguntaId, $correcta) {
         $stmt = $this->conexion->prepare("INSERT IGNORE INTO preguntas_usuarios (usuario_id, pregunta_id, correcta) VALUES (?,?,?)");
         $flag = $correcta ? 1 : 0;
