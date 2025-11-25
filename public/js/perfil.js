@@ -1,34 +1,49 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const modal = document.getElementById("modalPassword");
-    const abrir = document.getElementById("abrirModal");
-    const cerrar = document.getElementById("cerrarModal");
-    const cancelar = document.getElementById("cancelarModal");
+    const modalPassword = document.getElementById("modalPassword");
+    const modalQR = document.getElementById("modalQR"); // NUEVO MODAL QR
+    const abrirModalPassword = document.getElementById("abrirModal");
+    const cerrarModalPassword = document.getElementById("cerrarModal");
+    const cancelarModalPassword = document.getElementById("cancelarModal");
+    const abrirModalQR = document.getElementById("abrirModalQR"); // NUEVO BOTÓN
+    const cerrarModalQR = document.getElementById("cerrarModalQR");
+    const cerrarModalQR2 = document.getElementById("cerrarModalQR2"); // Botón 'Cerrar' dentro del modal
 
-    if (!modal || !abrir) return;
+    function abrirModal(modalElement) {
+        if (!modalElement) return;
+        modalElement.style.display = "flex";
+        modalElement.setAttribute("aria-hidden", "false");
 
-    function abrirModal() {
-        modal.style.display = "flex";
-        modal.setAttribute("aria-hidden", "false");
-
-        const input = modal.querySelector('input[name="password_actual"]');
-        if (input) input.focus();
+        if (modalElement === modalPassword) {
+            const input = modalElement.querySelector('input[name="password_actual"]');
+            if (input) input.focus();
+        }
     }
 
-    function cerrarModal() {
-        modal.style.display = "none";
-        modal.setAttribute("aria-hidden", "true");
+    function cerrarModal(modalElement) {
+        if (!modalElement) return;
+        modalElement.style.display = "none";
+        modalElement.setAttribute("aria-hidden", "true");
     }
+    if (abrirModalPassword) abrirModalPassword.addEventListener("click", () => abrirModal(modalPassword));
+    if (cerrarModalPassword) cerrarModalPassword.addEventListener("click", () => cerrarModal(modalPassword));
+    if (cancelarModalPassword) cancelarModalPassword.addEventListener("click", () => cerrarModal(modalPassword));
+    if (abrirModalQR) abrirModalQR.addEventListener("click", () => abrirModal(modalQR));
+    if (cerrarModalQR) cerrarModalQR.addEventListener("click", () => cerrarModal(modalQR));
+    if (cerrarModalQR2) cerrarModalQR2.addEventListener("click", () => cerrarModal(modalQR));
 
-    abrir.addEventListener("click", abrirModal);
-    if (cerrar) cerrar.addEventListener("click", cerrarModal);
-    if (cancelar) cancelar.addEventListener("click", cerrarModal);
-
-    window.addEventListener("click", function (e) {
-        if (e.target === modal) cerrarModal();
+    window.addEventListener("click", (e) => {
+        if (e.target === modalPassword) cerrarModal(modalPassword);
+        if (e.target === modalQR) cerrarModal(modalQR);
     });
 
-    window.addEventListener("keydown", function (e) {
-        if (e.key === "Escape" && modal.style.display === "flex") cerrarModal();
+    window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+            if (modalPassword && modalPassword.style.display === "flex") {
+                cerrarModal(modalPassword);
+            }
+            if (modalQR && modalQR.style.display === "flex") {
+                cerrarModal(modalQR);
+            }
+        }
     });
 });
-

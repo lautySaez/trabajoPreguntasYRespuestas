@@ -1,0 +1,50 @@
+ .form-sugerencia {
+            max-width: 640px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background: #fafafa;
+            border-radius: 8px;
+        }
+
+        .form-sugerencia h2 {
+            margin-top: 0;
+        }
+
+        .form-sugerencia label {
+            display: block;
+            margin-top: 12px;
+            font-weight: bold;
+        }
+
+        .form-sugerencia input[type=text],
+        .form-sugerencia select {
+            width: 100%;
+            padding: 8px;
+        }
+
+        .respuestas-grid {
+            display: grid;
+            grid-template-columns: 1fr 80px;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .flash-error {
+            background: #ffdddd;
+            color: #a00;
+            padding: 10px;
+            border: 1px solid #e5a2a2;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .botones {
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+        }
+
+        form input[type=radio] {
+            width: inherit !important;
+        }

@@ -3,16 +3,18 @@ stages:
 
 deploy_to_infinityfree:
   stage: deploy
-  image: alpine:latest
+  image: debian:stable-slim
   before_script:
-    - apk add --no-cache lftp
+    - apt-get update -qq
+    - apt-get install -y lftp
   script:
     - echo "Iniciando deploy a InfinityFree..."
-    - lftp -e "
+    - |
+      lftp -e "
       set ftp:ssl-allow no;
       open -u $FTP_USER,$FTP_PASS $FTP_HOST;
-      mirror -R ./ /htdocs/ --exclude .git* --exclude .gitlab-ci.yml;
+      mirror -R ./ /htdocs/ --exclude .git* --exclude .gitlab-ci.yml --exclude config/config.ini;
       bye
       "
   only:
-    - branches
+    - main

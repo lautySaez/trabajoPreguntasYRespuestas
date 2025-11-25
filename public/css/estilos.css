@@ -49,7 +49,6 @@ header {
     white-space: nowrap;
 }
 
-/* Estilos del usuario */
 .user-section {
     position: relative;
     display: flex;
@@ -132,7 +131,6 @@ header {
     transform: rotate(180deg);
 }
 
-/* Menú desplegable */
 .user-dropdown {
     position: absolute;
     top: 100%;
@@ -185,7 +183,6 @@ header {
     font-weight: 500;
 }
 
-/* Responsive para header */
 @media (max-width: 1024px) {
     .logo-section h1 {
         font-size: 1.4rem;
@@ -196,23 +193,23 @@ header {
     header {
         padding: 12px 15px;
     }
-    
+
     .header-container {
         height: 50px;
     }
-    
+
     .logo-section h1 {
         font-size: 1.2rem;
     }
-    
+
     .user-details {
         display: none;
     }
-    
+
     .user-dropdown {
         min-width: 180px;
     }
-    
+
     .user-info {
         height: 40px;
         padding: 6px 10px;
@@ -224,11 +221,11 @@ header {
     .logo-section h1 {
         font-size: 1rem;
     }
-    
+
     .header-container {
         height: 45px;
     }
-    
+
     .user-info {
         height: 35px;
         padding: 4px 8px;
@@ -251,11 +248,11 @@ h2 {
 }
 
 form {
-    /*background: none;*/
+    background: none;
     color: #222;
     padding: 40px 50px;
     border-radius: 12px;
-    /*box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);*/
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
     width: 100%;
     max-width: 950px;
 }
@@ -311,7 +308,7 @@ form label {
 
 form input,
 form select {
-    width: 100%;
+    /*width: 100%;*/
     padding: 8px 10px;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -351,7 +348,6 @@ a:hover {
     text-decoration: underline;
 }
 
-/* Footer compacto */
 .compact-footer {
     background: linear-gradient(135deg, #3B82F6 0%, #2563eb 100%);
     color: white;
@@ -379,7 +375,8 @@ a:hover {
     padding-bottom: 0;
 }
 
-.footer-left, .footer-right {
+.footer-left,
+.footer-right {
     display: flex;
     align-items: center;
     gap: 20px;
@@ -421,34 +418,35 @@ a:hover {
     transform: translateY(-1px);
 }
 
-.footer-left span, .footer-right span {
+.footer-left span,
+.footer-right span {
     color: rgba(255, 255, 255, 0.9);
     font-size: 0.9rem;
 }
 
-/* Responsive para footer compacto */
 @media (max-width: 768px) {
     .footer-container {
         padding: 15px 20px;
     }
-    
+
     .footer-line {
         flex-direction: column;
         gap: 10px;
         text-align: center;
         padding: 10px 0;
     }
-    
-    .footer-left, .footer-right {
+
+    .footer-left,
+    .footer-right {
         justify-content: center;
         gap: 15px;
     }
-    
+
     .developers {
         flex-direction: column;
         gap: 8px;
     }
-    
+
     .developers span {
         font-size: 0.85rem;
     }
@@ -458,21 +456,22 @@ a:hover {
     .footer-container {
         padding: 12px 15px;
     }
-    
-    .footer-left, .footer-right {
+
+    .footer-left,
+    .footer-right {
         flex-direction: column;
         gap: 8px;
     }
-    
+
     .app-name {
         font-size: 1rem;
     }
-    
+
     .university {
         font-size: 0.8rem;
         padding: 3px 8px;
     }
-    
+
     .developers span {
         font-size: 0.8rem;
     }
@@ -488,6 +487,7 @@ a:hover {
     form[action*="registrarUsuario"] {
         grid-template-columns: 1fr;
     }
+
     .full-width {
         text-align: center;
     }
@@ -497,13 +497,12 @@ a:hover {
     main {
         padding: 20px 3%;
     }
-    
+
     form {
         padding: 30px 25px;
     }
 }
 
-/* Botones Partida */
 .boton-partida {
     background-color: #4a90e2;
     color: white;
@@ -528,7 +527,6 @@ a:hover {
     right: 4em;
 }
 
-/* Contenedor de la partida */
 .partida-contenedor {
     display: flex;
     flex-direction: column;
@@ -540,22 +538,20 @@ a:hover {
     text-align: center;
 }
 
-/* Pregunta */
 .partida-contenedor h2 {
     font-size: 1.8rem;
     color: #fff;
 }
 
-/* Grid de respuestas */
+
 .respuestas-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 columnas */
-    gap: 20px; /* espacio entre botones */
-    max-width: 500px; /* opcional: para que no sea demasiado ancho */
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 500px;
     width: 100%;
 }
 
-/* Botones de respuesta */
 .respuestas-grid button {
     background-color: #4a90e2;
     color: white;
@@ -572,10 +568,9 @@ a:hover {
     background-color: #357ABD;
 }
 
-/* Botón flotante Terminar partida */
 .boton-flotante {
     position: fixed;
-    bottom: 2em;
+
     right: 2em;
     background-color: #e94a4a;
     color: #fff;
@@ -642,25 +637,24 @@ a:hover {
     background-color: #357ABD;
 }
 
-/* Botón flotante Reportar pregunta */
-.boton-reportar {
-    position: fixed;
-    bottom: 1em;
-    left: 1em;
-    background-color: #e94a4a;
-    color: #fff;
-    padding: 12px 25px;
+.main-menu {
+    margin-right: 1em;
+}
+
+.main-menu .menu-item {
+    font-size: 18px;
+    padding: 10px 15px;
+    background: #005fcc;
+    color: white;
     border-radius: 8px;
-    font-weight: bold;
-    font-size: 1rem;
     text-decoration: none;
-    text-align: center;
-    transition: 0.3s;
-    cursor: pointer;
-    border: none;
-    outline: none;
-    background: #e94a4a;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
+}
+
+.main-menu .menu-item:hover {
+    background: #003f8a;
+}
+
+/* timeout oculto en partida */
+#form-timeout {
+    display: none !important;
 }

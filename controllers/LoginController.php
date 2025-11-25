@@ -29,10 +29,14 @@ use PHPMailer\PHPMailer\Exception;
 class LoginController
 {
     private $usuarioModel;
+    private $partidaModel;  
 
     public function __construct($usuarioModel)
     {
+        require_once("models/PartidaModel.php");
         $this->usuarioModel = $usuarioModel;
+        $this->partidaModel = new PartidaModel();
+
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -144,7 +148,6 @@ class LoginController
             $estado_registro = "Inactivo";
             $token_activacion = random_int(100000, 999999);
 
-            // Validaciones
             if ($password !== $repassword) {
                 $error = "Las contraseñas no coinciden.";
             } elseif (!preg_match("/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,12}$/", $password)) {
@@ -182,7 +185,6 @@ class LoginController
                 );
 
                 if ($exito) {
-                    // Intentar enviar el mail, pero sin romper si falla
                     try {
                         if (class_exists('PHPMailer\PHPMailer\PHPMailer')) {
                             $mail = new PHPMailer(true);
@@ -207,7 +209,6 @@ class LoginController
                         error_log("Error al enviar email: " . $e->getMessage());
                     }
 
-                    // Mostrar página de éxito
                     include("views/registroExitoso.php");
                     return;
                 } else {
@@ -290,14 +291,45 @@ class LoginController
         }
     }
 
-    public function home()
-    {
+    public function home() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
         if (!isset($_SESSION["usuario"])) {
             include("views/inicioSesion.php");
             return;
         }
+
         $usuario = $_SESSION["usuario"];
-        include("views/home.php");
+        $ultimaPartida = null;
+
+        $rol = strtolower($usuario['rol'] ?? '');
+
+        if ($rol === 'jugador') {
+            $ultimasPartidas = $this->partidaModel->getUltimasPartidas($usuario['id'], 5);
+        }
+
+        $datos = [
+            'usuario' => $usuario,
+            'ultimasPartidas' => $ultimasPartidas
+        ];
+
+        extract($datos);
+        switch ($rol) {
+            case 'jugador':
+                include("views/home.php");
+                break;
+            case 'editor':
+                include("views/home_editor.php");
+                break;
+            case 'admin':
+                include("views/home_admin.php");
+                break;
+            default:
+                include("views/inicioSesion.php");
+                break;
+        }
     }
 
     public function homeAdmin()
@@ -309,9 +341,10 @@ class LoginController
 
         $usuario = $_SESSION["usuario"];
 
+        $config = parse_ini_file("config/config.ini");
         require_once("models/usuario.php");
         require_once("helper/MyConexion.php");
-        $conexion = new MyConexion("localhost", "root", "", "preguntas_respuestas");
+        $conexion = new MyConexion($config['server'], $config['user'], $config['pass'], $config['database']);
         $conn = $conexion->getConexion();
 
         $modelUsuario = new Usuario($conn);
@@ -336,8 +369,4 @@ class LoginController
         include("views/inicioSesion.php");
     }
 
-    public function iniciarNuevaPartida()
-    {
-
-    }
 }

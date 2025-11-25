@@ -1,8 +1,6 @@
 <?php
-// Archivo de prueba para verificar PHPMailer
 echo "=== VERIFICACION DE PHPMAILER ===\n";
 
-// Intentar cargar PHPMailer desde diferentes ubicaciones
 $autoload_paths = [
     __DIR__ . '/vendor/autoload.php',
     __DIR__ . '/../vendor/autoload.php',
@@ -20,7 +18,6 @@ foreach ($autoload_paths as $path) {
 }
 
 if (!$autoload_loaded) {
-    // Fallback: cargar PHPMailer directamente
     $direct_paths = [
         __DIR__ . '/vendor/phpmailer/phpmailer/src/PHPMailer.php',
         __DIR__ . '/vendor/phpmailer/phpmailer/src/SMTP.php',
@@ -51,15 +48,12 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 try {
-    // Verificar si la clase existe
     if (class_exists('PHPMailer\PHPMailer\PHPMailer')) {
         echo "✅ Clase PHPMailer encontrada correctamente.\n";
-        
-        // Crear instancia
+
         $mail = new PHPMailer(false);
         echo "✅ Instancia de PHPMailer creada exitosamente.\n";
-        
-        // Verificar constantes importantes
+
         $constants = [
             'PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS',
             'PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS'

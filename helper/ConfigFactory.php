@@ -2,10 +2,22 @@
 include_once("helper/MyConexion.php");
 include_once("helper/IncludeFileRenderer.php");
 include_once("helper/NewRouter.php");
+
+// controladores
 include_once("controllers/LoginController.php");
 include_once("controllers/PartidaController.php");
-include_once("models/usuario.php");
 include_once("controllers/UsuarioController.php");
+include_once("controllers/EditorController.php");
+include_once("controllers/AdminController.php");
+include_once("controllers/RankingController.php");
+include_once("controllers/SugerenciaController.php");
+
+// modelos
+include_once("models/usuario.php");
+include_once("models/editorModel.php");
+include_once("models/partidaModel.php");
+include_once("models/adminModel.php");
+include_once("models/ranking.php");
 
 class ConfigFactory
 {
@@ -25,10 +37,15 @@ class ConfigFactory
         );
 
         $usuarioModel = new Usuario($this->conexion->getConexion());
+        $rankingModel = new Ranking($this->conexion->getConexion());
 
         $this->objetos["LoginController"] = new LoginController($usuarioModel);
         $this->objetos["UsuarioController"] = new UsuarioController($usuarioModel);
         $this->objetos["PartidaController"] = new PartidaController();
+        $this->objetos["EditorController"] = new EditorController($this->conexion->getConexion());
+        $this->objetos["AdminController"] = new AdminController($this->conexion->getConexion());
+        $this->objetos["RankingController"] = new RankingController($rankingModel);
+        $this->objetos["SugerenciaController"] = new SugerenciaController();
 
         $this->objetos["router"] = new NewRouter($this, "LoginController", "inicioSesion");
     }

@@ -13,6 +13,12 @@ Options -Indexes
     RewriteCond %{REQUEST_FILENAME} !-d
 
     RewriteRule ^([^/]+)/([^/]+)/?(.*)$ index.php?controller=$1&method=$2&params=$3 [L,QSA]
+    RewriteRule ^rankings/?$ index.php?controller=RankingController&method=verRankings [L,QSA]
+    RewriteRule ^perfil/([^/]+)/?$ index.php?controller=UsuarioController&method=publico&username=$1 [L,QSA]
+    RewriteRule ^perfil/?$ index.php?controller=UsuarioController&method=perfil [L,QSA]
+    RewriteRule ^modo/?$ index.php?controller=PartidaController&method=mostrarModo [L,QSA]
+    RewriteRule ^reglas/?$ index.php?controller=PartidaController&method=mostrarReglas [L,QSA]
+    RewriteRule ^ruleta/?$ index.php?controller=PartidaController&method=mostrarRuleta [L,QSA]
 
     RewriteRule ^([^/]+)/?$ index.php?controller=$1 [L,QSA]
 </IfModule>

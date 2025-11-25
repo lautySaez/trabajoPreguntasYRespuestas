@@ -2,28 +2,37 @@
 
 <link rel="stylesheet" href="public/css/inicioSesion.css">
 
-<h2>Iniciar Sesión</h2>
+<main class="login-container">
+    <div class="login-card">
+        <h2>Iniciar Sesión</h2>
 
-<?php if (isset($error)): ?>
-    <p style="color:red;"><?= htmlspecialchars($error) ?></p>
-<?php endif; ?>
+        <?php if (isset($error)): ?>
+            <p class="error-message"><?= htmlspecialchars($error) ?></p>
+        <?php endif; ?>
 
-<form action="index.php?controller=LoginController&method=login" method="POST">
-    <label>Nombre de usuario:</label>
-    <input type="text" name="nombre_usuario" required><br>
+        <form action="index.php?controller=LoginController&method=login" method="POST">
+            <div class="form-group">
+                <label for="nombre_usuario">Nombre de usuario</label>
+                <input type="text" id="nombre_usuario" name="nombre_usuario" placeholder="Ingresa tu usuario" required>
+            </div>
 
-    <label>Contraseña:</label>
-    <input type="password" name="password" required><br>
+            <div class="form-group">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" placeholder="••••••••" required>
+            </div>
 
-    <button type="submit">Ingresar</button>
-</form>
+            <button type="submit" class="btn-login">Ingresar</button>
+        </form>
 
-<p>¿No tienes cuenta?
-    <a href="index.php?controller=LoginController&method=registro">Registrarse</a>
-</p>
+        <p class="register-link">
+            ¿No tienes cuenta?
+            <a href="index.php?controller=LoginController&method=registro">Regístrate</a>
+        </p>
+    </div>
+</main>
 
 <script src="public/js/inicioSesion.js" defer></script>
-
 <?php include("views/partials/footer.php"); ?>
+
 
 

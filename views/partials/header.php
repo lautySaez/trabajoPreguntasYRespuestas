@@ -18,12 +18,17 @@
     ?>
     
     <div class="header-container">
-        <!-- Logo a la izquierda -->
         <div class="logo-section">
-            <h1>AciertaYa - Juego de Preguntas</h1>
+            <h1><a href="index.php">AciertaYa</a>
+            </h1>
         </div>
-        
-        <!-- Usuario a la derecha -->
+
+        <div class="main-menu">
+            <a href="rankings" class="menu-item">
+                🏆 Rankings
+            </a>
+        </div>
+
         <?php if ($usuario): ?>
         <div class="user-section">
             <div class="user-info" onclick="toggleUserMenu()">
@@ -42,9 +47,13 @@
             </div>
             
             <div class="user-dropdown" id="userDropdown">
-                <a href="index.php?controller=UsuarioController&method=perfil" class="dropdown-item">
+                <a href="perfil" class="dropdown-item">
                     <i class="icon">⚙</i>
                     <span>Perfil</span>
+                </a>
+                <a href="modo" class="dropdown-item">
+                    <i class="icon">🎮</i>
+                    <span>Iniciar Partida</span>
                 </a>
                 <a href="index.php?controller=LoginController&method=logout" class="dropdown-item logout">
                     <i class="icon">🚪</i>
@@ -63,7 +72,6 @@
             }
         }
 
-        // Cerrar el menú si se hace clic fuera de él
         document.addEventListener('click', function(event) {
             if (!event.target.closest('.user-section')) {
                 const dropdown = document.getElementById('userDropdown');

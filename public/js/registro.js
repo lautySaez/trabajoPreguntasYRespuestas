@@ -7,7 +7,7 @@ var marker = L.marker([-34.61, -58.38], { draggable: true }).addTo(map);
 function updateCoordinates(lat, lng) {
     document.getElementById('latitud').value = lat;
     document.getElementById('longitud').value = lng;
-    getProvince(lat, lng);
+    getProvince(lat, lng);  
 }
 
 function getProvince(lat, lng) {

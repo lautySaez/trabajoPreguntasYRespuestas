@@ -14,18 +14,11 @@
         <?php endforeach; ?>
     </div>
 
-    <!-- Temporizador -->
-    <div id="temporizador" class="badge bg-danger fs-5 mt-2">
-    </div>
-    
-        <!-- boton reportar
-        <form method="POST" action="index.php?controller=partida&method=reportarPregunta" style="position: absolute; bottom: 0; left: 0;">
-            <input type="hidden" name="pregunta_id" value="<?= $preguntaActual["id"] ?>">
-            <button type="submit" class="boton-reportar">
-                Reportar
-            </button>
-        </form>
-    </div> -->
+    <div id="temporizador" class="badge bg-danger fs-5 mt-2"></div>
+
+    <form id="form-timeout" method="POST" action="index.php?controller=partida&method=responderPregunta">
+        <input type="hidden" name="respuesta" value="timeout">
+    </form>
 
 <?php else: ?>
     <p>No hay preguntas disponibles para esta categoría.</p>
@@ -33,10 +26,10 @@
 
 </div>
 
-<a href="index.php?controller=partida&method=terminarPartida" class="boton-flotante">
-    Terminar partida
-</a>
+<a href="index.php?controller=partida&method=terminarPartida" class="boton-flotante">Terminar partida</a>
 
-<script src="public/js/temporizador.js"></script>
+<?php $ts = time(); ?>
+<script>window.tiempoRestante = <?= isset($tiempoRestante) ? (int)$tiempoRestante : 10 ?>;</script>
+<script src="public/js/temporizador.js?v=<?= $ts ?>"></script>
 
 <?php include("views/partials/footer.php"); ?>

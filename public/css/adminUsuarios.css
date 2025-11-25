@@ -1,0 +1,180 @@
+.content {
+    flex: 1;
+    padding: 20px;
+    background-color: #f7f9fc;
+    min-height: calc(100vh - 80px);
+}
+
+.topbar h1 {
+    margin-bottom: 20px;
+}
+
+.action-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.table-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    overflow-x: auto;
+}
+
+.user-list-card table {
+    width: 100%;
+    min-width: 800px;
+    border-collapse: collapse;
+}
+
+.user-list-card table thead th,
+.user-list-card table tbody td {
+    padding: 12px 10px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.user-list-card table thead th {
+    background-color: #eef1f5;
+    color: #475569;
+    border-bottom: 2px solid #cfd7e3;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.user-list-card table tbody td {
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 14px;
+    background-color: #fff;
+    color: #333;
+}
+
+.user-list-card table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+
+.avatar-small {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: inline-block;
+    vertical-align: middle;
+}
+.avatar-small.placeholder {
+    background: #64748b;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.user-status, .user-role {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.status-active {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.status-blocked {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.role-editor {
+    background-color: #ffedd5;
+    color: #9a3412;
+}
+
+.role-jugador {
+    background-color: #e0f2fe;
+    color: #0369a1;
+}
+
+.action-buttons-group {
+    display: flex;
+    gap: 5px;
+    white-space: nowrap;
+}
+
+.btn-action {
+    padding: 6px 10px;
+    font-size: 14px;
+    line-height: 1;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.btn-block {
+    background-color: #f59e0b;
+}
+.btn-block:hover {
+    background-color: #d97706;
+}
+
+.btn-unblock {
+    background-color: #10b981;
+}
+.btn-unblock:hover {
+    background-color: #059669;
+}
+
+.btn-delete {
+    background-color: #ef4444;
+}
+.btn-delete:hover {
+    background-color: #dc2626;
+}
+
+.filter-group {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.filter-group input[type="text"],
+.filter-group select {
+    padding: 8px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 200px;
+    transition: border-color 0.2s;
+    background-color: #fff;
+    color: #333;
+}
+
+.btn-promote {
+    background-color: #3b82f6;
+}
+.btn-promote:hover {
+    background-color: #2563eb;
+}
+
+.btn-demote {
+    background-color: #9333ea;
+}
+.btn-demote:hover {
+    background-color: #7e22ce;
+}
