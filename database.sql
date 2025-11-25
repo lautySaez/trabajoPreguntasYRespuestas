@@ -16,7 +16,7 @@ CREATE TABLE usuarios (
     rol ENUM('Jugador', 'Administrador', 'Editor') DEFAULT 'Jugador',
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     estado_registro ENUM('Activo', 'Inactivo', 'Bloqueado') DEFAULT 'Inactivo',
-    token_verificacion INT DEFAULT NULL
+    token_verificacion INT DEFAULT NULL,
     total_vistas INT NOT NULL DEFAULT 0,
     total_aciertos INT NOT NULL DEFAULT 0,
     nivel_jugador ENUM('Newbie','Normal','Pro') NOT NULL DEFAULT 'Normal'
@@ -63,7 +63,7 @@ CREATE TABLE categorias (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO categorias (nombre, color, icono, descripcion) VALUES 
+INSERT INTO categorias (nombre, color, icono, descripcion) VALUES
 ('Deporte', '#FF6B35', '⚽', 'Preguntas sobre deportes, atletas y competiciones'),
 ('Entretenimiento', '#F7931E', '🎬', 'Cine, música, televisión y espectáculos'),
 ('Historia', '#8B4513', '📚', 'Eventos históricos, personajes y civilizaciones'),
