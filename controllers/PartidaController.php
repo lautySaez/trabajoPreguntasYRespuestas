@@ -158,7 +158,7 @@ class PartidaController
         }
 
         if ($respuestaSeleccionada === "timeout") {
-            $esCorrecta = -1;
+            $esCorrecta = 0;
         }
 
         $pregunta = $preguntas[$indice];

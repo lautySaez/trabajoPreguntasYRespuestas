@@ -46,7 +46,7 @@ verificarRol("Editor");
                     <a href="index.php?controller=editor&method=preguntasReportadas" class="nav-item">
                         <span class="icon"><i class="fa-solid fa-triangle-exclamation"></i></span> Reportes
                     </a>
-                    <a href="index.php?controller=SugerenciaController&method=pendientes" class="nav-item">
+                    <a href="index.php?controller=SugerenciaController&method=pendientes" class="nav-item create-btn">
                         <span class="icon"><i class="fa-solid fa-lightbulb"></i></span> Sugerencias Pendientes
                     </a>
                 </nav>

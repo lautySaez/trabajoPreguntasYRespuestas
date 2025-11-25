@@ -1,7 +1,6 @@
 .content {
     flex: 1;
     padding: 20px;
-    background-color: #f7f9fc;
     min-height: calc(100vh - 80px);
 }
 

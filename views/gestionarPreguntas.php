@@ -19,15 +19,14 @@ verificarRol("Editor");
 
         <h1>Gestión de Preguntas</h1>
 
-        <div class="filtros-container">
-
-            <form method="get" class="filtro-form">
+        <div class="filtros-container filtros-linea">
+            <form method="get" class="filtro-form filtro-inline">
                 <input type="hidden" name="controller" value="editor">
                 <input type="hidden" name="method" value="gestionarPreguntas">
                 <input type="hidden" name="filtro_reportes" value="<?= htmlspecialchars($filtro_reportes) ?>"> <input type="hidden" name="buscar_id" value="<?= htmlspecialchars($buscar_id) ?>">
 
-                <label for="categoria_id">Categoría:</label>
-                <select name="categoria_id" id="categoria_id" onchange="this.form.submit()">
+                <label for="categoria_id">Categoría</label>
+                <select name="categoria_id" id="categoria_id" onchange="this.form.submit()" class="input-inline">
                     <option value="">Todas las categorías</option>
                     <?php foreach ($categorias as $cat): ?>
                         <option value="<?= $cat['id'] ?>" <?= ($cat['id'] == $categoria_id) ? 'selected' : '' ?>>
@@ -37,33 +36,33 @@ verificarRol("Editor");
                 </select>
             </form>
 
-            <form method="get" class="filtro-reportes-form">
+            <form method="get" class="filtro-reportes-form filtro-inline">
                 <input type="hidden" name="controller" value="editor">
                 <input type="hidden" name="method" value="gestionarPreguntas">
                 <input type="hidden" name="categoria_id" value="<?= htmlspecialchars($categoria_id) ?>"> <input type="hidden" name="buscar_id" value="<?= htmlspecialchars($buscar_id) ?>">
 
-                <label for="filtro_reportes">Estado:</label>
-                <select name="filtro_reportes" id="filtro_reportes" onchange="this.form.submit()">
+                <label for="filtro_reportes">Estado</label>
+                <select name="filtro_reportes" id="filtro_reportes" onchange="this.form.submit()" class="input-inline">
                     <option value="todas" <?= ($filtro_reportes === 'todas') ? 'selected' : '' ?>>Todas las preguntas</option>
                     <option value="reportadas" <?= ($filtro_reportes === 'reportadas') ? 'selected' : '' ?>>Reportadas</option>
                     <option value="no_reportadas" <?= ($filtro_reportes === 'no_reportadas') ? 'selected' : '' ?>>No Reportadas</option>
                 </select>
             </form>
 
-            <form method="get" class="buscar-form">
+            <form method="get" class="buscar-form filtro-inline">
                 <input type="hidden" name="controller" value="editor">
                 <input type="hidden" name="method" value="gestionarPreguntas">
                 <input type="hidden" name="filtro_reportes" value="<?= htmlspecialchars($filtro_reportes) ?>">
                 <input type="hidden" name="categoria_id" value="<?= htmlspecialchars($categoria_id) ?>">
 
-                <label for="buscar_id">Buscar por ID:</label>
-                <input type="number" name="buscar_id" id="buscar_id" value="<?= htmlspecialchars($buscar_id) ?>" placeholder="Ingrese ID">
-                <button type="submit">Buscar</button>
+                <label for="buscar_id">ID</label>
+                <input type="number" name="buscar_id" id="buscar_id" value="<?= htmlspecialchars($buscar_id) ?>" placeholder="Ingrese ID" class="input-inline">
+                <button type="submit" class="btn-inline">Buscar</button>
             </form>
 
         </div>
 
-        <a href="index.php?controller=editor&method=crearPregunta" class="btn-agregar">Agregar Nueva Pregunta</a>
+        <a href="editor/crearPregunta" class="btn-agregar">Agregar Nueva Pregunta</a>
 
         <div class="tabla-container">
             <table class="tabla-preguntas">
@@ -110,7 +109,7 @@ verificarRol("Editor");
                             <td class="editable" data-field="correcta"><?= htmlspecialchars($p['respuesta_correcta']) ?></td>
                             <td class="acciones">
                                 <?php if ($esReportada): ?>
-                                    <a href="index.php?controller=editor&method=preguntasReportadas&id=<?= $p['id'] ?>" class="btn-reporte-info">
+                                    <a href="editor/preguntasReportadas?id=<?= $p['id'] ?>" class="btn-reporte-info">
                                         Reporte (<?= $p['reportes_count'] ?>)
                                     </a>
                                 <?php endif; ?>
