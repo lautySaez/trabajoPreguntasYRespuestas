@@ -162,69 +162,83 @@ class PartidaController
 
     public function responderPregunta() {
         $respuestaSeleccionada = $_POST["respuesta"] ?? null;
-        $indice = $_SESSION["pregunta_actual"] ?? 0;
+        $indice = $_SESSION["pregunta_actual"] ?? null;
         $preguntas = $_SESSION["preguntas"] ?? [];
         $partidaId = $_SESSION["partida_id"] ?? null;
         $usuarioId = $_SESSION['usuario']['id'] ?? null;
 
-        if ($respuestaSeleccionada === null || !$preguntas || !$partidaId) {
+        if ($respuestaSeleccionada === null || $indice === null || empty($preguntas) || !$partidaId) {
             header("Location: /trabajoPreguntasYRespuestas/partida/mostrarRuleta");
             exit();
         }
 
-        if ($respuestaSeleccionada === "timeout") {
-            $esCorrecta = 0;
-        }
+        $isTimeout = ($respuestaSeleccionada === "timeout");
 
         $pregunta = $preguntas[$indice];
-        $correcta = $pregunta["respuesta_correcta"];
+        $correcta = (int)$pregunta["respuesta_correcta"];
 
-        // Verificación servidor del tiempo transcurrido (anti-manipulación del temporizador cliente)
         if ($usuarioId && isset($pregunta['id']) && $this->partidaModel->excedioTiempo($usuarioId, $pregunta['id'], 10)) {
-            // Tratar como timeout real
             $this->tiempoAgotado();
             return;
         }
 
-        $esCorrecta = ($respuestaSeleccionada == $correcta);
-        if ($esCorrecta) {
-            $_SESSION["puntaje"] += 2;
-            // Fin de ronda por respuesta correcta: limpiar preguntas para permitir nuevo giro
-            unset($_SESSION["preguntas"]);
-            unset($_SESSION["pregunta_actual"]);
-            unset($_SESSION["categoria_ronda"]);
+        if ($isTimeout) {
+            $esCorrecta = false;
         } else {
+            $esCorrecta = ((int)$respuestaSeleccionada === $correcta);
+        }
+
+        if ($esCorrecta) {
+            $_SESSION["puntaje"] = ($_SESSION["puntaje"] ?? 0) + 2;
+        } else {
+            $_SESSION["puntaje"] = ($_SESSION["puntaje"] ?? 0);
+        }
+
+        if (!$esCorrecta) {
             $_SESSION["partida_finalizada"] = true;
-            if (isset($pregunta['id'])) {
+        }
+
+        if (isset($pregunta['id'])) {
+            if (!$esCorrecta) {
                 $this->partidaModel->registrarIncorrectaPregunta($pregunta['id']);
+            } else {
+                if (method_exists($this->partidaModel, 'registrarCorrectaPregunta')) {
+                    $this->partidaModel->registrarCorrectaPregunta($pregunta['id']);
+                } else {
+                    $this->partidaModel->recalcularDificultad($pregunta['id']);
+                }
             }
-            // Limpiar preguntas al finalizar por error
-            unset($_SESSION["preguntas"]);
-            unset($_SESSION["pregunta_actual"]);
-            unset($_SESSION["categoria_ronda"]);
         }
 
-        if (isset($_SESSION['usuario']['id']) && isset($pregunta['id'])) {
-            $this->partidaModel->registrarPreguntaUsuario($_SESSION['usuario']['id'], $pregunta['id'], $esCorrecta);
-            // Cerrar tracking de tiempo
-            $this->partidaModel->cerrarPreguntaTiempo($_SESSION['usuario']['id'], $pregunta['id'], $esCorrecta ? 'correcta' : 'incorrecta');
+        if ($usuarioId && isset($pregunta['id'])) {
+            $this->partidaModel->registrarPreguntaUsuario($usuarioId, $pregunta['id'], $esCorrecta);
+
+            if (method_exists($this->partidaModel, 'cerrarPreguntaTiempo')) {
+                $this->partidaModel->cerrarPreguntaTiempo($usuarioId, $pregunta['id'], $esCorrecta ? 'correcta' : ($isTimeout ? 'timeout' : 'incorrecta'));
+            }
         }
 
-        if (isset($_SESSION['usuario']['id'])) {
-            $usuarioId = $_SESSION['usuario']['id'];
-
+        if ($usuarioId) {
+            require_once("models/usuario.php");
             $usuarioModel = new Usuario($this->partidaModel->getConexion());
 
-            $usuarioModel->actualizarEstadisticasJugador($usuarioId, $esCorrecta);
+            if (method_exists($usuarioModel, 'actualizarEstadisticasJugador')) {
+                $usuarioModel->actualizarEstadisticasJugador($usuarioId, $esCorrecta);
+            }
         }
 
-        $this->partidaModel->actualizarPuntaje($partidaId, $_SESSION["puntaje"]);
+        if ($partidaId) {
+            $this->partidaModel->actualizarPuntaje($partidaId, $_SESSION["puntaje"]);
+        }
 
-        // Ya no se avanza a siguiente pregunta en misma ronda.
+        unset($_SESSION["preguntas"]);
+        unset($_SESSION["pregunta_actual"]);
+        unset($_SESSION["categoria_ronda"]);
 
         $preguntaActual = $pregunta;
-        $respuestaSeleccionadaId = (int)$respuestaSeleccionada;
+        $respuestaSeleccionadaId = ($isTimeout ? 0 : (int)$respuestaSeleccionada);
         $respuestaCorrectaId = (int)$correcta;
+
         include("views/partida_feedback.php");
     }
 
@@ -359,15 +373,27 @@ class PartidaController
         }
         $pregunta = $preguntas[$indice];
         $correcta = $pregunta["respuesta_correcta"];
-        $_SESSION["puntaje"] = ($_SESSION["puntaje"] ?? 0) - 1;
+        $_SESSION["puntaje"] = ($_SESSION["puntaje"] ?? 0);
         $_SESSION["partida_finalizada"] = true;
         $_SESSION["tiempo_agotado"] = true;
+
         if (isset($_SESSION['usuario']['id']) && isset($pregunta['id'])) {
+            $usuarioId = $_SESSION['usuario']['id'];
+
             $this->partidaModel->registrarIncorrectaPregunta($pregunta['id']);
-            $this->partidaModel->registrarPreguntaUsuario($_SESSION['usuario']['id'], $pregunta['id'], false);
+            $this->partidaModel->registrarPreguntaUsuario($usuarioId, $pregunta['id'], false);
             // Cerrar tracking de tiempo con resultado timeout
-            $this->partidaModel->cerrarPreguntaTiempo($_SESSION['usuario']['id'], $pregunta['id'], 'timeout');
+            if (method_exists($this->partidaModel, 'cerrarPreguntaTiempo')) {
+                $this->partidaModel->cerrarPreguntaTiempo($usuarioId, $pregunta['id'], 'timeout');
+            }
+
+            require_once("models/usuario.php");
+            $usuarioModel = new Usuario($this->partidaModel->getConexion());
+            if (method_exists($usuarioModel, 'actualizarEstadisticasJugador')) {
+                $usuarioModel->actualizarEstadisticasJugador($usuarioId, false);
+            }
         }
+
         if ($partidaId) {
             $this->partidaModel->actualizarPuntaje($partidaId, $_SESSION["puntaje"]);
         }

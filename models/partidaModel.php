@@ -114,6 +114,10 @@ class PartidaModel {
         $this->recalcularDificultad($preguntaId);
     }
 
+    public function registrarCorrectaPregunta($preguntaId) {
+        $this->recalcularDificultad($preguntaId);
+    }
+
     public function registrarPreguntaUsuario($usuarioId, $preguntaId, $correcta) {
         $stmt = $this->conexion->prepare("INSERT IGNORE INTO preguntas_usuarios (usuario_id, pregunta_id, correcta) VALUES (?,?,?)");
         $flag = $correcta ? 1 : 0;

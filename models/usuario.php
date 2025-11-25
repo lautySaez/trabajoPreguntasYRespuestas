@@ -193,11 +193,8 @@ class Usuario
         return $stmt->get_result()->fetch_assoc();
     }
 
-    /*Estadísticas y nivel de jugador*/
-    public function actualizarEstadisticasJugador(int $usuarioId, bool $acierto): void
-    {
+    public function actualizarEstadisticasJugador(int $usuarioId, bool $acierto): void {
         $this->conexion->begin_transaction();
-
         try {
             $stmt = $this->conexion->prepare("
                 UPDATE usuarios
@@ -219,17 +216,6 @@ class Usuario
         }
     }
 
-    /**
-     * Recalcula y guarda el nivel del jugador según su win-rate:
-     * ratio = total_aciertos / total_vistas
-     *
-     * - ratio < 0.3 -> Newbie
-     * - 0.3 <= ratio < 0.6 -> Normal
-     * - ratio >= 0.6 -> Pro
-     *
-     * param int $usuarioId
-     * return void
-     */
     public function recalcularNivelJugador(int $usuarioId): void
     {
         $stmt = $this->conexion->prepare("
@@ -265,12 +251,6 @@ class Usuario
         $stmt2->close();
     }
 
-    /**
-     * Devuelve el nivel actual del jugador.
-     *
-     * param int $usuarioId
-     * return string|null  ('Newbie','Normal','Pro') o null si no existe
-     */
     public function obtenerNivelJugador(int $usuarioId): ?string
     {
         $stmt = $this->conexion->prepare("SELECT nivel_jugador FROM usuarios WHERE id = ? LIMIT 1");
