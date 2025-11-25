@@ -12,7 +12,14 @@ $rankingJugadores = $rankingJugadores ?? [];
 
     <div class="listado-categorias">
         <div class="header-row">
-        <h2>📊 Los Mas Rankeados</h2>
+        <h2>
+            <?php if (($tipo ?? '') === 'mejores'): ?>
+                🏆 Mejores Puntajes en una Partida
+            <?php else: ?>
+                🐐 Los GOAT (Puntaje Acumulado)
+            <?php endif; ?>
+        </h2>
+
         <!-- Filtro -->
             <div class="filtros-container">
                 <form method="GET" class="filtro-form">
@@ -20,9 +27,12 @@ $rankingJugadores = $rankingJugadores ?? [];
                     <input type="hidden" name="method" value="verRankings">
 
                     <select name="tipo" class="filter-select" onchange="this.form.submit()">
-                        <option value="invierno" <?= ($_GET["tipo"] ?? "invierno") === "invierno" ? "selected" : "" ?>>Temporada Invierno</option>
-                        <option value="verano" <?= ($_GET["tipo"] ?? "") === "verano" ? "selected" : "" ?>>Temporada Verano</option>
-                        <option value="goat" <?= ($_GET["tipo"] ?? "") === "goat" ? "selected" : "" ?>>GOAT</option>
+                        <option value="goat" <?= ($_GET["tipo"] ?? "goat") === "goat" ? "selected" : "" ?>>
+                            Los GOAT
+                        </option>
+                        <option value="mejores" <?= ($_GET["tipo"] ?? "") === "mejores" ? "selected" : "" ?>>
+                            Mejores Partidas
+                        </option>
                     </select>
                 </form>
             </div>
@@ -51,7 +61,13 @@ $rankingJugadores = $rankingJugadores ?? [];
                                     <?php endif; ?>
                                 </td>
                                 <td><?= htmlspecialchars($jugador["nombre_usuario"]) ?></td>
-                                <td><?= htmlspecialchars($jugador["puntaje_total"]) ?></td>
+                                <td>
+                                    <?php if (($tipo ?? '') === 'mejores'): ?>
+                                        <?= htmlspecialchars($jugador["mejor_partida"]) ?>
+                                    <?php else: ?>
+                                        <?= htmlspecialchars($jugador["puntaje_total"]) ?>
+                                    <?php endif; ?>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
