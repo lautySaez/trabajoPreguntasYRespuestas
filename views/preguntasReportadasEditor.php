@@ -110,7 +110,7 @@ verificarRol("Editor");
                                 <td class="reportes-count"><?= $reporte['total_reportes'] ?></td>
                                 <td><?= date('d/m/Y H:i', strtotime($reporte['ultimo_reporte'])) ?></td>
                                 <td class="acciones">
-                                    <a href="/trabajoPreguntasYRespuestas/editor/preguntasReportadas/<?= $reporte['pregunta_id'] ?>" class="btn-detalles">
+                                    <a href="/trabajoPreguntasYRespuestas/editor/preguntasReportadas?id=<?= $reporte['pregunta_id'] ?>" class="btn-detalles">
                                         <i class="fa-solid fa-eye"></i> Ver Detalles
                                     </a>
                                     <a href="/trabajoPreguntasYRespuestas/editor/gestionarPreguntas?filtro_reportes=reportadas&buscar_id=<?= $reporte['pregunta_id'] ?>"

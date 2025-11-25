@@ -43,7 +43,8 @@ class UsuarioController
     }
 
     public function publico() {
-        $username = $_GET['username'] ?? null;
+        // Compatibilidad: aceptar username desde 'username' o desde 'extra' (ruta /usuario/publico/{username})
+        $username = $_GET['username'] ?? ($_GET['extra'] ?? null);
 
         if (!$username) {
             $this->render('errorView', ['mensaje' => 'Usuario no especificado.']);

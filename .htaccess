@@ -16,6 +16,9 @@ Options -Indexes
     RewriteCond %{THE_REQUEST} \s/index\.php\?controller=([^&\s]+) [NC]
     RewriteRule ^index\.php$ /trabajoPreguntasYRespuestas/%1? [R=301,L]
 
+    # Legacy perfil público path (/usuario/publico/username) -> new /perfil/username
+    RewriteRule ^usuario/publico/([^/]+)/?$ /trabajoPreguntasYRespuestas/perfil/$1 [R=301,L]
+
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
 

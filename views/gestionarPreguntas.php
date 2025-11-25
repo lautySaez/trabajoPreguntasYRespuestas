@@ -57,7 +57,7 @@ verificarRol("Editor");
 
                 <label for="buscar_id">ID</label>
                 <input type="number" name="buscar_id" id="buscar_id" value="<?= htmlspecialchars($buscar_id) ?>" placeholder="Ingrese ID" class="input-inline">
-                <button type="submit" class="btn-inline">Buscar</button>
+                <!--<button type="submit" class="btn-inline">Buscar</button>-->
             </form>
 
         </div>
