@@ -10,14 +10,14 @@ class EditorModel {
         $stmt = $this->conexion->prepare("SELECT * FROM categorias");
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-    }
+    } // Recupera todas las categorías de la base de datos (SELECT * FROM categorias)
 
     public function obtenerCategoriaPorId($id) {
         $stmt = $this->conexion->prepare("SELECT * FROM categorias WHERE id = ? LIMIT 1");
         $stmt->bind_param("i", $id);
         $stmt->execute();
         return $stmt->get_result()->fetch_assoc();
-    }
+    } //Obtiene una única categoría basándose en su ID
 
     public function crearCategoria($nombre, $color = '#FFFFFF', $icono = '❓', $descripcion = '', $activa = 1) {
         $stmt = $this->conexion->prepare("
@@ -27,14 +27,15 @@ class EditorModel {
         $stmt->bind_param("ssssi", $nombre, $color, $icono, $descripcion, $activa);
         $stmt->execute();
         return $this->conexion->insert_id;
-    }
+    } // Inserta una nueva categoría en la BD con sus atributos
+    // (nombre, color, icono, etc.) y devuelve el ID recién creado
 
     public function borrarCategoria($id) {
         $stmt = $this->conexion->prepare("DELETE FROM categorias WHERE id = ?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
         return $stmt->affected_rows > 0;
-    }
+    } // Elimina una categoría por su ID y retorna true si se eliminó alguna fila
 
     public function contarPreguntasPorCategoria($categoria_id) {
         $stmt = $this->conexion->prepare("SELECT COUNT(*) as total FROM preguntas WHERE categoria_id = ?");
@@ -42,7 +43,7 @@ class EditorModel {
         $stmt->execute();
         $resultado = $stmt->get_result()->fetch_assoc();
         return $resultado['total'] ?? 0;
-    }
+    } // Devuelve el número total de preguntas asociadas a una categoría específica
 
     public function obtenerPreguntasPorCategoria($categoria_id = null, $solo_reportadas = null) {
         $sql = "SELECT p.*, c.nombre as categoria_nombre, COUNT(r.id) as reportes_count_activos
@@ -126,7 +127,9 @@ class EditorModel {
         }
 
         return $resultado;
-    }
+    } //Recupera preguntas, opcionalmente filtradas por categoría y/o si tienen reportes activos.
+    // Une con la tabla reportes para mostrar el conteo de reportes activos.
+    // Al final, estructura las respuestas (r1 a r4) en un array de respuestas.
 
     public function obtenerPreguntaPorId($id) {
         $stmt = $this->conexion->prepare("SELECT p.*, c.nombre as categoria_nombre FROM preguntas p
@@ -146,7 +149,8 @@ class EditorModel {
         }
 
         return $pregunta;
-    }
+    } // Obtiene una única pregunta por su ID, incluyendo el nombre de la categoría,
+    // y formatea las cuatro posibles respuestas.
 
     public function editarPregunta($id, $categoria_id, $pregunta, $respuesta_1, $respuesta_2, $respuesta_3, $respuesta_4, $respuesta_correcta) {
         $stmt = $this->conexion->prepare("
@@ -156,13 +160,14 @@ class EditorModel {
         ");
         $stmt->bind_param("isssssii", $categoria_id, $pregunta, $respuesta_1, $respuesta_2, $respuesta_3, $respuesta_4, $respuesta_correcta, $id);
         $stmt->execute();
-    }
+    } // Actualiza los datos de una pregunta existente
+   // (categoría, texto de la pregunta y las cuatro respuestas) basándose en su ID
 
     public function borrarPregunta($id) {
         $stmt = $this->conexion->prepare("DELETE FROM preguntas WHERE id = ?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
-    }
+    } // Elimina una pregunta de la base de datos por su ID
 
     public function registrarInforme($pregunta_id, $tipo_accion, $motivo, $pregunta_data = null) {
         $editor_id = $_SESSION['usuario']['id'] ?? null;
@@ -189,7 +194,8 @@ class EditorModel {
         );
 
         $stmt->execute();
-    }
+    } // Registra una acción de auditoría en la tabla InformePreguntas. Guarda quién lo hizo (editor_id),
+    // el tipo de acción, el motivo, y una copia de los datos de la pregunta, incluso si son nulos o vacíos.
 
     public function crearPregunta($categoria_id, $pregunta, $respuesta_1, $respuesta_2, $respuesta_3, $respuesta_4, $respuesta_correcta) {
         $stmt = $this->conexion->prepare("
@@ -199,7 +205,9 @@ class EditorModel {
         $stmt->bind_param("isssssi", $categoria_id, $pregunta, $respuesta_1, $respuesta_2, $respuesta_3, $respuesta_4, $respuesta_correcta);
         $stmt->execute();
         return $this->conexion->insert_id;
-    }
+    } // Inserta una nueva pregunta completa (texto, respuestas, respuesta correcta y categoría)
+    // y devuelve el ID recién creado
+
 
     public function contarReportesPorPregunta($pregunta_id) {
         $stmt = $this->conexion->prepare("SELECT COUNT(*) AS total FROM reportes WHERE pregunta_id = ? AND estado = 'Activo'");
@@ -207,7 +215,7 @@ class EditorModel {
         $stmt->execute();
         $resultado = $stmt->get_result()->fetch_assoc();
         return $resultado['total'] ?? 0;
-    }
+    } // Devuelve el número de reportes que están en estado 'Activo' para una pregunta específica.
 
     public function obtenerReportesAgrupados($estado = 'Activo') {
         $sql = "
@@ -228,7 +236,9 @@ class EditorModel {
         $stmt->bind_param("s", $estado);
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-    }
+    } //Obtiene una lista de preguntas que han sido reportadas,
+    // agrupándolas para mostrar cuántos reportes tiene cada pregunta y cuándo fue el último reporte.
+    // Permite filtrar por estado (por defecto, 'Activo')
 
     public function obtenerReportesDetalladosPorPregunta($pregunta_id) {
         $sql = "
@@ -246,7 +256,8 @@ class EditorModel {
         $stmt->bind_param("i", $pregunta_id);
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-    }
+    } // Recupera el detalle de cada reporte individual para una pregunta,
+    // mostrando el motivo, la fecha y el usuario que lo reportó.
 
     public function marcarReporteComoResuelto($pregunta_id, $motivo_resolucion = null) {
         $stmt = $this->conexion->prepare("
@@ -265,5 +276,6 @@ class EditorModel {
                 ['pregunta' => '', 'r1' => '', 'r2' => '', 'r3' => '', 'r4' => '', 'correcta' => 0, 'categoria_id' => 0]
             );
         }
-    }
+    } //Cambia el estado de todos los reportes activos de una pregunta específica a 'Resuelto'.
+    // Llama a registrarInforme para auditar la acción de resolución
 }

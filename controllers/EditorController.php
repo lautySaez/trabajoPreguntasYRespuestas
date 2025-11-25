@@ -24,13 +24,13 @@ class EditorController
         $categorias = $this->model->obtenerCategorias();
 
         include(__DIR__ . "/../views/gestionarCategorias.php");
-    }
+    } // Muestra la vista de gestión de categorías.
+    // Obtiene todas las categorías de la BD y pasa esos datos a la vista para su visualización.
 
     public function crearCategoria()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-            // 1. Crear la Categoría
             $nombre = $_POST['nombre'] ?? '';
             $color = $_POST['color'] ?? '#FFFFFF';
             $icono = $_POST['icono'] ?? '❓';
@@ -59,7 +59,10 @@ class EditorController
         }
 
         include(__DIR__ . "/../views/crearCategorias.php");
-    }
+    } // Maneja la creación de una nueva categoría y sus preguntas iniciales.
+    // Si es una petición POST, crea la categoría, y si se enviaron preguntas de ejemplo (hasta 3),
+    // las crea y las asocia a la nueva categoría.
+    // Redirige a la gestión de categorías. Si es GET, muestra el formulario de creación
 
     public function borrarCategoria()
     {
@@ -71,7 +74,8 @@ class EditorController
 
         header("Location: /trabajoPreguntasYRespuestas/editor/gestionarCategorias");
         exit();
-    }
+    } // Elimina una categoría por ID (a través de una petición POST).
+    // Llama al modelo para borrarla y redirige a la vista de gestión.
 
     public function gestionarPreguntas()
     {
@@ -89,7 +93,9 @@ class EditorController
         $preguntas = $this->model->obtenerPreguntasPorCategoria($categoria_id, $solo_reportadas);
 
         include(__DIR__ . "/../views/gestionarPreguntas.php");
-    }
+    } // Muestra la vista de gestión de preguntas. Obtiene categorías y preguntas.
+    // Permite filtrar las preguntas por categoria_id y por el estado de sus reportes
+    // ('reportadas', 'no_reportadas' o 'todas').
 
     public function editarPregunta()
     {
@@ -127,7 +133,10 @@ class EditorController
             header("Location: /trabajoPreguntasYRespuestas/editor/gestionarPreguntas");
             exit();
         }
-    }
+    } // Procesa la edición de una pregunta. //
+     //1. Actualiza la pregunta en la BD con los nuevos datos recibidos por POST.
+    //2. Registra la acción en InformePreguntas con tipo_accion = 'Edición' (con los datos nuevos).
+   //3. Marca los reportes de esa pregunta como resueltos.
 
     public function borrarPregunta()
     {
@@ -153,7 +162,11 @@ class EditorController
         }
 
         header("Location: /trabajoPreguntasYRespuestas/editor/gestionarPreguntas");
-    }
+    } //Procesa la eliminación de una pregunta.
+    // 1. Obtiene los datos de la pregunta antes de borrarla.
+   // 2. Registra la acción en InformePreguntas con tipo_accion = 'Eliminación'
+    // (guardando una copia de la pregunta borrada).
+  // 3. Elimina la pregunta de la BD.
 
     public function preguntasReportadas()
     {
@@ -170,7 +183,10 @@ class EditorController
         }
 
         include(__DIR__ . "/../views/preguntasReportadasEditor.php");
-    }
+    } // Muestra la vista para revisar las preguntas reportadas.
+    //Obtiene la lista de reportes agrupados (por defecto, solo los 'Activos').
+    // Si se proporciona un pregunta_id, obtiene también los reportes detallados
+    // y la información de la pregunta para mostrarlos
 
     public function resolverReporte()
     {
@@ -185,7 +201,11 @@ class EditorController
             exit();
         }
         header("Location: /trabajoPreguntasYRespuestas/editor/preguntasReportadas");
-    }
+    } // Marca todos los reportes de una pregunta como resueltos.
+    // Recibe el pregunta_id y un motivo por POST.
+    // Llama al modelo para cambiar el estado de los reportes a 'Resuelto'
+    // y, a través de marcarReporteComoResuelto,
+    // se registra una acción de auditoría. Redirige a la lista de reportes activos.
 
     public function crearPregunta()
     {
@@ -206,7 +226,9 @@ class EditorController
         }
 
         include(__DIR__ . "/../views/crearPregunta.php");
-    }
+    } // Maneja la creación de una única pregunta.
+    // Si es POST, llama al modelo para insertarla y redirige.
+    // Si es GET, muestra el formulario de creación.
 
     public function index()
     {

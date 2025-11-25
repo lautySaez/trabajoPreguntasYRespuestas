@@ -35,14 +35,19 @@ class AdminController {
         ];
 
         $this->render('homeAdmin', $data);
-    }
+    } // Muestra la vista de inicio del administrador (Dashboard).
+    // Recopila los Key Performance Indicators (KPIs) principales:
+    // total de usuarios, total de preguntas y total de partidas.
+    // También obtiene una lista reciente de usuarios y pasa toda esta información a la vista.
 
     public function gestionUsuarios() {
         $usuarios = $this->model->obtenerUsuarios(500);
         $this->render('adminUsuarios', ['usuarios' => $usuarios]);
-    }
+    } // Muestra la vista completa de gestión de usuarios.
+    // Obtiene la lista de usuarios (limitado a 500) y la pasa a la vista para su visualización y gestión.
 
-    public function accionUsuario() {
+    public function accionUsuario()
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_POST['id'] ?? null;
             $accion = $_POST['accion'] ?? null;
@@ -67,7 +72,9 @@ class AdminController {
         http_response_code(400);
         echo "Acción inválida o datos faltantes.";
         exit;
-    }
+    } // Procesa las acciones enviadas por POST para modificar un usuario.
+    // Recibe un id y una accion (bloquear, desbloquear, eliminar o cambiar_rol).
+    // Ejecuta la acción correspondiente a través del modelo y luego redirige a la vista de gestión.
 
     protected function render($viewName, $data = []) {
         extract($data);
@@ -79,7 +86,8 @@ class AdminController {
         } else {
             echo "Error: Vista no encontrada.";
         }
-    }
+    } // Metodo protected de utilidad que se encarga de cargar la vista PHP especificada ($viewName)
+    // e inyectarle los datos ($data) para su renderizado.
 
     public function statsJson() {
         ini_set('display_errors', 0);
@@ -120,17 +128,23 @@ class AdminController {
         }
 
         exit;
-    }
+    } // Endpoint de la API que proporciona todas las estadísticas en formato JSON.
+    // Recopila todos los datos analíticos del modelo
+    // (preguntas por categoría, top jugadores, distribución de edades y género, informes de editor, etc.)
+    // y los codifica en una única respuesta JSON.
 
     public function informes() {
         $informes = $this->model->obtenerInformes(500);
         include(__DIR__ . "/../views/adminInformes.php");
-    }
+    } // Muestra la vista de auditoría de acciones de editores.
+    // Obtiene la lista de registros de la tabla informePreguntas (acciones de edición/eliminación)
+    // y la presenta en la vista para su revisión.
 
     public function reportes() {
         $reportes = $this->model->obtenerReportesJugadores(500);
         include(__DIR__ . "/../views/adminReportes.php");
-    }
+    } // Muestra la vista de reportes de jugadores.
+    // Obtiene la lista de reportes generados por los jugadores y la presenta en la vista.
 
     public function obtenerDetalleReporte() {
         if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
@@ -151,7 +165,10 @@ class AdminController {
             echo json_encode(['error' => 'Reporte no encontrado.']);
         }
         exit;
-    }
+    } // Endpoint de la API que devuelve los detalles de un reporte específico.
+    // Recibe un id por GET y devuelve la información completa del reporte
+    // (incluyendo la pregunta afectada y sus respuestas) en formato JSON,
+    // generalmente para mostrar un modal o vista detallada.
 
     public function accionReporte() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -168,5 +185,7 @@ class AdminController {
                 exit;
             }
         }
-    }
+    } // Procesa las acciones sobre los reportes de jugadores.
+    // Solo maneja la acción de eliminar un reporte de la tabla reportes por su ID.
+
 }
