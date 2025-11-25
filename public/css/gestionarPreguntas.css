@@ -33,7 +33,7 @@
 
 .gestionar-preguntas-page .filtros-container {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: inherit;
     justify-content: flex-start;
     gap: 20px;
     align-items: flex-end;
