@@ -150,7 +150,8 @@
 }
 .modal-buttons {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
     gap: 15px;
     margin-top: 20px;
 }
@@ -187,4 +188,11 @@
     border: 1px solid #eee;
     padding: 5px;
     border-radius: 5px;
+}
+
+.modal-content p {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    max-width: 100%;
 }

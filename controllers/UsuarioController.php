@@ -31,7 +31,7 @@ class UsuarioController
 
         $datos_perfil = $this->usuarioModel->obtenerPerfilPublico($usuario['nombre_usuario']);
 
-        $url_publica = $this->base_url . "/index.php?controller=UsuarioController&method=publico&username=" . urlencode($usuario['nombre_usuario']);
+        $url_publica = $this->base_url . "usuario/publico/" . urlencode($usuario['nombre_usuario']);
 
         $data = [
             'usuario' => $usuario,
