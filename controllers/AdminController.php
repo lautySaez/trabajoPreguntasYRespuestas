@@ -8,6 +8,11 @@ class AdminController {
 
     public function __construct($conexion) {
         $this->db = $conexion;
+        
+        if (method_exists($this->db, 'set_charset')) {
+            $this->db->set_charset("utf8mb4"); 
+        }
+        
         $this->model = new adminModel($conexion);
 
         if (session_status() === PHP_SESSION_NONE) {
@@ -60,7 +65,7 @@ class AdminController {
                     $this->model->actualizarRolUsuario($id, $nuevoRol);
                 }
 
-                header("Location: /trabajoPreguntasYRespuestas/admin/gestionUsuarios");
+                header("Location: /admin/gestionUsuarios");
                 exit;
             }
         }
@@ -120,8 +125,8 @@ class AdminController {
         }
 
         exit;
-    }
-
+    } 
+    
     public function informes() {
         $informes = $this->model->obtenerInformes(500);
         include(__DIR__ . "/../views/adminInformes.php");
@@ -164,7 +169,7 @@ class AdminController {
                     $stmt->bind_param("i", $id);
                     $stmt->execute();
                 }
-                header("Location: /trabajoPreguntasYRespuestas/admin/reportes");
+                header("Location: /admin/reportes");
                 exit;
             }
         }

@@ -33,7 +33,7 @@ class LoginController
 
     public function __construct($usuarioModel)
     {
-        require_once("models/PartidaModel.php");
+        require_once("models/partidaModel.php");
         $this->usuarioModel = $usuarioModel;
         $this->partidaModel = new PartidaModel();
 
@@ -120,7 +120,7 @@ class LoginController
         include("views/registro.php");
     }
 
-    public function registrarUsuario()
+  public function registrarUsuario()
     {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $error = null;
@@ -167,9 +167,9 @@ class LoginController
                     $email,
                     $password,
                     $nombre_usuario,
-                    $foto_perfil,
                     $estado_registro,
-                    $token_activacion
+                    $token_activacion,
+                    $foto_perfil
                 );
 
                 if ($exito) {
@@ -189,7 +189,7 @@ class LoginController
 
                             $mail->isHTML(true);
                             $mail->Subject = 'Bienvenido a AciertaYaa';
-                            $mail->Body    = '<h1>Bienvenido a AciertaYaa!</h1><p>Por favor, ingresá el siguiente código para confirmar tu registro: <strong>' . $token_activacion . '</strong></p>';
+                            $mail->Body    = '<h1>Bienvenido a AciertaYaa!</h1><p>Por favor, ingrese el siguiente identificador para confirmar tu registro: <strong>' . $token_activacion . '</strong></p>';
 
                             $mail->send();
                         }
@@ -211,6 +211,8 @@ class LoginController
         include("views/registro.php");
     }
 
+
+
     public function validarRegistrarUsuario()
     {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -229,7 +231,7 @@ class LoginController
                 );
 
                 if ($exito) {
-                    header("Location: /trabajoPreguntasYRespuestas/login/elegirAvatar?usuario=" . urlencode($nombre_usuario));
+                    header("Location: /login/elegirAvatar?usuario=" . urlencode($nombre_usuario));
                     exit();
                 } else {
                     $error = "El usuario o el email ya existen.";
@@ -246,7 +248,7 @@ class LoginController
         $usuario = $_SESSION['usuario'] ?? null;
 
         if (!$usuario) {
-            header("Location: /trabajoPreguntasYRespuestas/login");
+            header("Location: /login");
             exit();
         }
 
@@ -261,7 +263,7 @@ class LoginController
             $usuario = $_SESSION['usuario'] ?? null;
 
             if (!$usuario) {
-                header("Location: /trabajoPreguntasYRespuestas/login");
+                header("Location: /login");
                 exit();
             }
 
@@ -274,7 +276,7 @@ class LoginController
                 $_SESSION['usuario']['foto_perfil'] = $foto_perfil;
             }
 
-            header("Location: /trabajoPreguntasYRespuestas/home");
+            header("Location: /home");
             exit();
         }
     }
@@ -364,7 +366,7 @@ class LoginController
         }
         session_destroy();
         // Redirigir a la ruta limpia de login
-        header("Location: /trabajoPreguntasYRespuestas/login");
+        header("Location: /login");
         exit;
     }
 

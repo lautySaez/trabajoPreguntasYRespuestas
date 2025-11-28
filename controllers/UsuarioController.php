@@ -2,7 +2,7 @@
 class UsuarioController
 {
     private $usuarioModel;
-    private $base_url = "http://localhost/trabajoPreguntasYRespuestas/";
+    private $base_url = "/";
 
     public function __construct($usuarioModel)
     {
@@ -25,13 +25,14 @@ class UsuarioController
         $usuario = $_SESSION['usuario'] ?? null;
 
         if (!$usuario) {
-            header("Location: /trabajoPreguntasYRespuestas/login");
+            header("Location: /login");
             exit;
         }
 
         $datos_perfil = $this->usuarioModel->obtenerPerfilPublico($usuario['nombre_usuario']);
 
-        $url_publica = $this->base_url . "usuario/publico/" . urlencode($usuario['nombre_usuario']);
+        $dominio = "https://aciertaya.gamer.gd/";
+        $url_publica = $dominio . "perfil/" . urlencode($usuario['nombre_usuario']);
 
         $data = [
             'usuario' => $usuario,
@@ -64,7 +65,7 @@ class UsuarioController
     public function confirmarPassword()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header("Location: /trabajoPreguntasYRespuestas/usuario/perfil");
+            header("Location: /usuario/perfil");
             exit;
         }
 
@@ -73,7 +74,7 @@ class UsuarioController
         $usuarioSesion = $_SESSION['usuario'] ?? null;
         if (!$usuarioSesion) {
 
-            header("Location: /trabajoPreguntasYRespuestas/login");
+            header("Location: /login");
             exit;
         }
 
@@ -83,17 +84,17 @@ class UsuarioController
 
         if (!$usuarioBD) {
             $_SESSION['error'] = "Usuario no encontrado.";
-            header("Location: /trabajoPreguntasYRespuestas/usuario/perfil");
+            header("Location: /usuario/perfil");
             exit;
         }
 
         if (password_verify($password, $usuarioBD['password'])) {
             $_SESSION['permitir_configuracion'] = true;
-            header("Location: /trabajoPreguntasYRespuestas/usuario/configurarPerfil");
+            header("Location: /usuario/configurarPerfil");
             exit;
         } else {
             $_SESSION['error'] = "Contraseña actual incorrecta.";
-            header("Location: /trabajoPreguntasYRespuestas/usuario/perfil");
+            header("Location: /usuario/perfil");
             exit;
         }
     }
@@ -101,7 +102,7 @@ class UsuarioController
     public function configurarPerfil()
     {
         if (empty($_SESSION['permitir_configuracion'])) {
-            header("Location: /trabajoPreguntasYRespuestas/usuario/perfil");
+            header("Location: /usuario/perfil");
             exit;
         }
 
@@ -122,7 +123,7 @@ class UsuarioController
 
             if ($password && $password !== $repassword) {
                 $_SESSION['error'] = "Las contraseñas no coinciden.";
-                header("Location: /trabajoPreguntasYRespuestas/usuario/configurarPerfil");
+                header("Location: /usuario/configurarPerfil");
                 exit;
             }
 
@@ -140,7 +141,7 @@ class UsuarioController
             $_SESSION['usuario'] = $this->usuarioModel->obtenerPorId($id);
 
             unset($_SESSION['permitir_configuracion']);
-            header("Location: /trabajoPreguntasYRespuestas/usuario/perfil");
+            header("Location: /usuario/perfil");
             exit;
         }
     }
@@ -148,7 +149,7 @@ class UsuarioController
     public function elegirAvatar()
     {
         if (empty($_SESSION['permitir_configuracion'])) {
-            header("Location: /trabajoPreguntasYRespuestas/usuario/perfil");
+            header("Location: /usuario/perfil");
             exit;
         }
 
@@ -167,7 +168,7 @@ class UsuarioController
                 $_SESSION['usuario'] = $this->usuarioModel->obtenerPorId($usuario['id']);
             }
 
-            header("Location: /trabajoPreguntasYRespuestas/usuario/configurarPerfil");
+            header("Location: /usuario/configurarPerfil");
             exit;
         }
 

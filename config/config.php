@@ -4,7 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 define("BASE_PATH", dirname(__DIR__) . "/");
-define("URL_BASE", "/trabajoPreguntasYRespuestas/");
+define("URL_BASE", "/");
 
 $config = parse_ini_file(BASE_PATH . "config/config.ini");
 
@@ -16,5 +16,3 @@ define("DB_SERVER", $config["server"]);
 define("DB_USER", $config["user"]);
 define("DB_PASS", $config["pass"]);
 define("DB_NAME", $config["database"]);
-
-
