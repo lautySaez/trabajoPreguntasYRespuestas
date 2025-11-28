@@ -1,7 +1,7 @@
 <?php include("views/partials/header.php"); ?>
 
-    <link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/homeEditor.css">
-    <link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/crearCategorias.css">
+    <link rel="stylesheet" href="/public/css/homeEditor.css">
+    <link rel="stylesheet" href="/public/css/crearCategorias.css">
 
 <?php
 require_once("helper/VerificacionDeRoles.php");
@@ -12,7 +12,7 @@ verificarRol("Editor");
 
         <h1>Crear Nueva Categoría y Preguntas Base</h1>
 
-        <form method="POST" action="/trabajoPreguntasYRespuestas/editor/crearCategoria" class="form-completo">
+        <form method="POST" action="/editor/crearCategoria" class="form-completo">
 
             <fieldset class="categoria-data">
                 <legend>Datos de la Categoría</legend>
@@ -55,11 +55,11 @@ verificarRol("Editor");
 
             <div class="submit-container">
                 <button type="submit" class="btn-confirmar">Crear Categoría y Preguntas</button>
-                <a href="/trabajoPreguntasYRespuestas/editor/gestionarCategorias" class="btn-cancelar">Volver</a>
+                <a href="/editor/gestionarCategorias" class="btn-cancelar">Volver</a>
             </div>
         </form>
     </div>
 
-    <script src="/trabajoPreguntasYRespuestas/public/js/crearCategorias.js" defer></script>
+    <script src="/public/js/crearCategorias.js" defer></script>
 
 <?php include("views/partials/footer.php"); ?>

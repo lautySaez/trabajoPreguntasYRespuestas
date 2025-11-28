@@ -1,6 +1,6 @@
 <?php include("views/partials/header.php"); ?>
 
-<link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/homeAdmin.css">
+<link rel="stylesheet" href="../public/css/homeAdmin.css">
 
 <?php
 if (session_status() === PHP_SESSION_NONE) session_start();
@@ -8,7 +8,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 if (isset($_SESSION["usuario"])) {
     $usuario = $_SESSION["usuario"];
 } else {
-    header("Location: /trabajoPreguntasYRespuestas/login");
+    header("Location: /login");
     exit;
 }
 

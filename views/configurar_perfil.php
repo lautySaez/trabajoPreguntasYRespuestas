@@ -6,11 +6,11 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 if (isset($_SESSION["usuario"])) {
     $usuario = $_SESSION["usuario"];
 } else {
-    header("Location: /trabajoPreguntasYRespuestas/login");
+    header("Location: /login");
     exit;
 }
 ?>
-<link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/configurar_perfil.css">
+<link rel="stylesheet" href="/public/css/configurar_perfil.css">
 
 <div class="contenedor-principal">
     <div class="perfil-card">
@@ -21,7 +21,7 @@ if (isset($_SESSION["usuario"])) {
             <?php unset($_SESSION['error']); ?>
         <?php endif; ?>
 
-        <form action="/trabajoPreguntasYRespuestas/usuario/actualizarPerfil"
+        <form action="/usuario/actualizarPerfil"
               method="POST" enctype="multipart/form-data">
 
             <div class="form-group">
@@ -48,7 +48,7 @@ if (isset($_SESSION["usuario"])) {
 
             <div class="form-group avatar-group">
                 <label>Avatar actual:</label><br>
-                <a href="/trabajoPreguntasYRespuestas/usuario/elegirAvatar">
+                <a href="/usuario/elegirAvatar">
                     <img src="<?= htmlspecialchars($usuario['foto_perfil'] ?: 'public/img/default_avatar.JPG') ?>"
                          class="perfil-avatar" title="Cambiar avatar">
                 </a>
@@ -59,6 +59,6 @@ if (isset($_SESSION["usuario"])) {
     </div>
 </div>
 
-<script src="/trabajoPreguntasYRespuestas/public/js/configurar_perfil.js" defer></script>
+<script src="/public/js/configurar_perfil.js" defer></script>
 
 <?php include("views/partials/footer.php"); ?>

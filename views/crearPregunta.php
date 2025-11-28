@@ -1,7 +1,7 @@
 <?php include("views/partials/header.php"); ?>
 
-    <link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/homeEditor.css">
-    <link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/crearPregunta.css">
+    <link rel="stylesheet" href="/public/css/homeEditor.css">
+    <link rel="stylesheet" href="/public/css/crearPregunta.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <?php
 $categorias = $categorias ?? [];
@@ -13,7 +13,7 @@ verificarRol("Editor");
     <div class="crear-pregunta-page">
         <h1>Agregar Nueva Pregunta</h1>
 
-        <form method="post" action="/trabajoPreguntasYRespuestas/editor/crearPregunta" class="form-crear-pregunta">
+        <form method="post" action="/editor/crearPregunta" class="form-crear-pregunta">
 
             <label for="categoria_id">Categoría:</label>
             <select name="categoria_id" id="categoria_id" required>
@@ -41,7 +41,7 @@ verificarRol("Editor");
 
             <div class="form-buttons">
                 <button type="submit" class="btn-guardar">Guardar Pregunta</button>
-                <a href="/trabajoPreguntasYRespuestas/editor/gestionarPreguntas" class="btn-cancelar">Cancelar</a>
+                <a href="/editor/gestionarPreguntas" class="btn-cancelar">Cancelar</a>
             </div>
         </form>
     </div>

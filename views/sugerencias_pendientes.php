@@ -1,7 +1,7 @@
 <?php if (session_status() === PHP_SESSION_NONE) session_start(); ?>
 <?php include("views/partials/header.php"); ?>
-<link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/homeEditor.css">
-<link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/gestionarPreguntas.css">
+<link rel="stylesheet" href="/public/css/homeEditor.css">
+<link rel="stylesheet" href="/public/css/gestionarPreguntas.css">
 <style>
   .sug-page {
     max-width: 1200px;
@@ -168,7 +168,7 @@
       <span style="font-size:.85rem;color:#a0aec0;">Revisa y modera los aportes de la comunidad.</span>
     </div>
     <div class="actions">
-      <a class="btn-volver" href="/trabajoPreguntasYRespuestas/editor/gestionarPreguntas">Volver a Preguntas</a>
+      <a class="btn-volver" href="/editor/gestionarPreguntas">Volver a Preguntas</a>
     </div>
   </div>
   <?php if (!empty($flashOk)): ?><div class="flash-ok"><?= htmlspecialchars($flashOk) ?></div><?php endif; ?>
@@ -207,11 +207,11 @@
               <td><?= (int)$p['respuesta_correcta'] ?></td>
               <td><?= htmlspecialchars($p['fecha_sugerida']) ?></td>
               <td class="acciones">
-                <form method="post" action="/trabajoPreguntasYRespuestas/sugerencia/aprobar">
+                <form method="post" action="/sugerencia/aprobar">
                   <input type="hidden" name="id" value="<?= (int)$p['id'] ?>">
                   <button type="submit" class="btn-accion">Aprobar</button>
                 </form>
-                <form method="post" action="/trabajoPreguntasYRespuestas/sugerencia/rechazar">
+                <form method="post" action="/sugerencia/rechazar">
                   <input type="hidden" name="id" value="<?= (int)$p['id'] ?>">
                   <button type="submit" class="btn-accion btn-rechazar">Rechazar</button>
                 </form>

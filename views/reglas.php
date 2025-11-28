@@ -1,6 +1,6 @@
 <?php include("views/partials/header.php"); ?>
 
-<link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/reglas.css">
+<link rel="stylesheet" href="/public/css/reglas.css">
 
     <div class="reglas-container">
     <h2>Reglas del Juego</h2>

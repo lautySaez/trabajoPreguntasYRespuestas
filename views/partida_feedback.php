@@ -1,5 +1,5 @@
 <?php include("views/partials/header.php"); ?>
-<link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/feedback.css">
+<link rel="stylesheet" href="/public/css/feedback.css">
 <?php
 // Cargar categorías activas para el popup de sugerencia
 require_once("models/SugerenciaModel.php");
@@ -51,12 +51,12 @@ $__categoriasActivas = $__sugModel->obtenerCategoriasActivas();
             </div>
             <!-- Sin botón de ruleta al fallar o expirar tiempo -->
         <?php else: ?>
-            <a href="/trabajoPreguntasYRespuestas/partida/mostrarRuleta" class="btn btn-ruleta">Girar ruleta</a>
+            <a href="/partida/mostrarRuleta" class="btn btn-ruleta">Girar ruleta</a>
         <?php endif; ?>
         <!-- Sugerir nueva pregunta -->
         <button type="button" id="btnAbrirSugerencia" class="btn btn-sugerir">Sugerir pregunta</button>
         <!-- Reportar -->
-        <form method="POST" action="/trabajoPreguntasYRespuestas/partida/reportarPregunta" class="form-reportar">
+        <form method="POST" action="/partida/reportarPregunta" class="form-reportar">
             <input type="hidden" name="id_pregunta" value="<?= $preguntaActual["id"] ?>">
             <button type="button" class="boton-reportar" onclick="abrirModalReporte()">
                 Reportar</button>
@@ -66,7 +66,7 @@ $__categoriasActivas = $__sugModel->obtenerCategoriasActivas();
             <div class="modal-contenido">
                 <h3>Reportar pregunta</h3>
 
-                <form id="formReporte" method="POST" action="/trabajoPreguntasYRespuestas/partida/reportarPregunta">
+                <form id="formReporte" method="POST" action="/partida/reportarPregunta">
                     <input type="hidden" name="id_pregunta" value="<?= $preguntaActual["id"] ?>">
 
                     <label for="motivo">Motivo del reporte:</label>
@@ -80,7 +80,7 @@ $__categoriasActivas = $__sugModel->obtenerCategoriasActivas();
             </div>
         </div>
         <!-- Terminar -->
-        <a href="/trabajoPreguntasYRespuestas/partida/terminarPartida" class="btn btn-terminar">Terminar partida</a>
+        <a href="/partida/terminarPartida" class="btn btn-terminar">Terminar partida</a>
     </div>
 
     <div class="puntaje-actual">
@@ -112,7 +112,7 @@ $__categoriasActivas = $__sugModel->obtenerCategoriasActivas();
         <?php if ($flashSugError): ?>
             <div class="sug-error"><?= htmlspecialchars($flashSugError) ?></div>
         <?php endif; ?>
-        <form id="formSugerencia" method="post" action="/trabajoPreguntasYRespuestas/sugerencia/guardar">
+        <form id="formSugerencia" method="post" action="/sugerencia/guardar">
             <label for="categoria_id">Categoría</label>
             <select name="categoria_id" id="categoria_id" required>
                 <option value="">-- Seleccione --</option>
@@ -324,5 +324,5 @@ $__categoriasActivas = $__sugModel->obtenerCategoriasActivas();
         }
     })();
 </script>
-<script src="/trabajoPreguntasYRespuestas/public/js/feedback.js" defer></script>
+<script src="/public/js/feedback.js" defer></script>
 <?php include("views/partials/footer.php"); ?>

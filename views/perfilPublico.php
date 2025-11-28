@@ -1,7 +1,7 @@
 <?php
 include(__DIR__ . "/partials/header.php");
 ?>
-    <link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/perfilPublico.css">
+    <link rel="stylesheet" href="/public/css/perfilPublico.css">
 
     <div class="perfil-publico-container">
 
@@ -38,7 +38,7 @@ include(__DIR__ . "/partials/header.php");
         </div>
 
         <div class="volver">
-            <a href="/trabajoPreguntasYRespuestas/home">Volver al Inicio</a>
+            <a href="/home">Volver al Inicio</a>
         </div>
     </div>
 

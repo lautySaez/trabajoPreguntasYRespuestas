@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Preguntas y Respuestas</title>
-    <link rel="stylesheet" href="/trabajoPreguntasYRespuestas/public/css/estilos.css">
+    <link rel="stylesheet" href="/public/css/estilos.css">
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -19,12 +19,12 @@
     
     <div class="header-container">
         <div class="logo-section">
-            <h1><a href="/trabajoPreguntasYRespuestas/home">AciertaYa</a>
+            <h1><a href="/home">AciertaYa</a>
             </h1>
         </div>
 
         <div class="main-menu">
-            <a href="/trabajoPreguntasYRespuestas/rankings" class="menu-item">
+            <a href="/rankings" class="menu-item">
                 🏆 Rankings
             </a>
         </div>
@@ -47,15 +47,11 @@
             </div>
             
             <div class="user-dropdown" id="userDropdown">
-                <a href="/trabajoPreguntasYRespuestas/perfil" class="dropdown-item">
+                <a href="/perfil" class="dropdown-item">
                     <i class="icon">⚙</i>
                     <span>Perfil</span>
                 </a>
-                <a href="/trabajoPreguntasYRespuestas/modo" class="dropdown-item">
-                    <i class="icon">🎮</i>
-                    <span>Iniciar Partida</span>
-                </a>
-                <a href="/trabajoPreguntasYRespuestas/login/logout" class="dropdown-item logout">
+                <a href="/login/logout" class="dropdown-item logout">
                     <i class="icon">🚪</i>
                     <span>Cerrar Sesión</span>
                 </a>
