@@ -122,7 +122,6 @@ class EditorController
             ];
 
             $this->model->registrarInforme($id, 'Edición', $motivo, $pregunta_para_informe);
-            $this->model->marcarReporteComoResuelto($id, "Resuelto al corregir la pregunta: " . $motivo);
 
             header("Location: /editor/gestionarPreguntas");
             exit();
