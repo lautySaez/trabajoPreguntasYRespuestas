@@ -168,7 +168,7 @@ class EditorModel {
         $editor_id = $_SESSION['usuario']['id'] ?? null;
 
         $stmt = $this->conexion->prepare("
-        INSERT INTO informepreguntas 
+        INSERT INTO InformePreguntas 
         (pregunta_id, editor_id, tipo_accion, motivo, pregunta, r1, r2, r3, r4, correcta, categoria_id)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ");
@@ -249,6 +249,8 @@ class EditorModel {
     }
 
     public function marcarReporteComoResuelto($pregunta_id, $motivo_resolucion = null) {
+        $pregunta = $this->obtenerPreguntaPorId($pregunta_id);
+        
         $stmt = $this->conexion->prepare("
             UPDATE reportes 
             SET estado = 'Resuelto' 
@@ -257,12 +259,18 @@ class EditorModel {
         $stmt->bind_param("i", $pregunta_id);
         $stmt->execute();
 
-        if ($motivo_resolucion) {
+        if ($motivo_resolucion && $pregunta) {
             $this->registrarInforme(
                 $pregunta_id,
                 'Reporte Resuelto',
                 $motivo_resolucion,
-                ['pregunta' => '', 'r1' => '', 'r2' => '', 'r3' => '', 'r4' => '', 'correcta' => 0, 'categoria_id' => 0]
+                ['pregunta' => $pregunta['pregunta'],
+                'r1' => $pregunta['respuesta_1'],
+                'r2' => $pregunta['respuesta_2'],
+                'r3' => $pregunta['respuesta_3'],
+                'r4' => $pregunta['respuesta_4'],
+                'correcta' => $pregunta['respuesta_correcta'],
+                'categoria_id' => $pregunta['categoria_id']]
             );
         }
     }

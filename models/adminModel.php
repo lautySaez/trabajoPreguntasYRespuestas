@@ -157,7 +157,7 @@ class adminModel {
 
     public function obtenerInformes($limit = 200) {
         $sql = "SELECT ip.id, ip.pregunta_id, ip.editor_id, u.nombre AS editor_nombre, ip.tipo_accion, ip.motivo, ip.fecha, ip.pregunta AS pregunta_texto, ip.r1, ip.r2, ip.r3, ip.r4, ip.correcta, ip.categoria_id
-                FROM informePreguntas ip
+                FROM InformePreguntas ip
                 LEFT JOIN usuarios u ON u.id = ip.editor_id
                 ORDER BY ip.fecha DESC
                 LIMIT ?";
