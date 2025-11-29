@@ -174,7 +174,7 @@ class EditorModel {
         ");
 
         $stmt->bind_param(
-            "iissssssiii",
+            "iisssssssii",
             $pregunta_id,
             $editor_id,
             $tipo_accion,
