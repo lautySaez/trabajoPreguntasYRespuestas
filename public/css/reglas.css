@@ -11,7 +11,6 @@
 
 .reglas-container h2 {
     font-size: 2.5em;
-    
     font-weight: 800;
     text-shadow: 0 2px 6px rgba(30, 58, 138, 0.15);
     letter-spacing: 1px;
@@ -32,7 +31,6 @@
     line-height: 1.9;
     font-size: 1.1em;
     color: #2d3748;
-    position: relative;
     transition: all 0.3s ease;
 }
 
@@ -88,4 +86,38 @@
     transform: translateY(-4px) scale(1.03);
     background: linear-gradient(135deg, #1e40af, #1d4ed8);
     box-shadow: 0 10px 25px rgba(29, 78, 216, 0.4);
+}
+
+@media (max-width: 768px) {
+    .reglas-container {
+        padding: 30px 15px;
+        gap: 20px;
+        min-height: auto;
+    }
+
+    .reglas-container h2 {
+        font-size: 1.8em;
+    }
+
+    .reglas-container ul {
+        padding: 25px 25px;
+        font-size: 1em;
+        line-height: 1.6;
+    }
+
+    .reglas-container li {
+        padding-left: 28px;
+        font-size: 0.95em;
+    }
+
+    .reglas-container li::before {
+        font-size: 1em;
+        top: 1px;
+    }
+
+    .boton-partida {
+        width: 100%;
+        padding: 12px 0;
+        font-size: 1.1em;
+    }
 }

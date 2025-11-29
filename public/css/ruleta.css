@@ -189,3 +189,84 @@ h2 {
         transform: scale(1);
     }
 }
+
+@media (max-width: 768px) {
+
+    h2 {
+        font-size: 1.6em;
+        margin-bottom: 25px;
+        padding: 0 20px;
+    }
+
+    .ruleta-wrapper {
+        transform: scale(0.8);
+    }
+
+    #ruleta {
+        width: 280px !important;
+        height: 280px !important;
+        border-width: 6px;
+    }
+
+    .flecha {
+        top: -20px;
+        border-left-width: 12px;
+        border-right-width: 12px;
+        border-top-width: 24px;
+    }
+
+    #boton-girar {
+        margin-top: 30px;
+        padding: 12px 30px;
+        font-size: 1.1em;
+        border-radius: 10px;
+    }
+
+    /* ==== MODAL RESULTADO ==== */
+    .resultado-card {
+        width: 85%;
+        padding: 30px 25px;
+    }
+
+    #categoria-elegida {
+        font-size: 1.4em;
+    }
+
+    .boton-iniciar {
+        padding: 12px 30px;
+        font-size: 1.05em;
+    }
+}
+
+@media (max-width: 480px) {
+
+    h2 {
+        font-size: 1.45em;
+        margin-bottom: 18px;
+    }
+
+    .ruleta-wrapper {
+        transform: scale(0.65);
+    }
+
+    #boton-girar {
+        width: 90%;
+        font-size: 1.05em;
+    }
+
+    .resultado-card {
+        width: 90%;
+        padding: 25px 20px;
+    }
+
+    #categoria-elegida {
+        font-size: 1.3em;
+    }
+
+    .boton-iniciar {
+        width: 90%;
+        padding: 12px 0;
+        display: block;
+        margin: 0 auto;
+    }
+}

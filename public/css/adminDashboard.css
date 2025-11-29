@@ -135,6 +135,33 @@
     font-size: 18px;
 }
 
+/* <<<<<<<<<<<<<<< INICIO DE LA MODIFICACIÓN CLAVE >>>>>>>>>>>>>>> */
+
+/* Estilos para el avatar dentro de la tabla (el "avatar-small" que faltaba) */
+.avatar-small {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    vertical-align: middle;
+}
+
+.avatar-small.placeholder {
+    width: 36px;
+    height: 36px;
+    background: #a0c4ff;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 50%;
+}
+/* <<<<<<<<<<<<<<< FIN DE LA MODIFICACIÓN CLAVE >>>>>>>>>>>>>>> */
+
+
 .kpi-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));

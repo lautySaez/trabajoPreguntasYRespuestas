@@ -91,3 +91,54 @@ body {
         transform: translateY(0);
     }
 }
+
+@media (max-width: 768px) {
+
+    .modo-container {
+        margin: 60px 20px;
+        padding: 30px 20px;
+    }
+
+    .modo-container h2 {
+        font-size: 1.8em;
+    }
+
+    .modo-container p {
+        font-size: 1em;
+        margin-bottom: 30px;
+    }
+
+    .modo-boton {
+        width: 100%;
+        padding: 15px 0;
+        font-size: 1.1em;
+    }
+
+    .volver {
+        margin-top: 25px;
+        padding: 8px 20px;
+        font-size: 0.95em;
+    }
+}
+
+/* Extra responsive – celulares pequeños */
+@media (max-width: 480px) {
+
+    .modo-container {
+        margin: 40px 15px;
+        padding: 25px 18px;
+    }
+
+    .modo-container h2 {
+        font-size: 1.6em;
+    }
+
+    .modo-container p {
+        font-size: 0.95em;
+    }
+
+    .modo-boton {
+        font-size: 1em;
+        padding: 13px 0;
+    }
+}

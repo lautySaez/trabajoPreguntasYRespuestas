@@ -196,3 +196,86 @@
     white-space: normal;
     max-width: 100%;
 }
+
+@media (max-width: 768px) {
+
+    .contenedor-principal {
+        padding: 25px 15px;
+        min-height: auto;
+    }
+
+    .perfil-card {
+        padding: 30px 20px;
+        max-width: 340px;
+    }
+
+    .perfil-avatar {
+        width: 100px;
+        height: 100px;
+    }
+
+    .perfil-card h2 {
+        font-size: 1.5rem;
+    }
+
+    .perfil-card .email,
+    .perfil-card .password {
+        font-size: 0.9rem;
+    }
+
+    .boton-principal,
+    .boton-secundario {
+        font-size: 0.9rem;
+        padding: 10px 25px;
+    }
+
+    .modal-content {
+        padding: 25px 20px;
+        width: 90%;
+    }
+
+    .modal-content input {
+        width: 100%;
+    }
+
+    .modal-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .modal-buttons .boton-principal,
+    .modal-buttons .boton-secundario {
+        width: 100%;
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .perfil-card {
+        padding: 25px 18px;
+        max-width: 300px;
+    }
+
+    .perfil-avatar {
+        width: 80px;
+        height: 80px;
+    }
+
+    .perfil-card h2 {
+        font-size: 1.3rem;
+    }
+
+    .estadisticas-resumen p {
+        font-size: 0.85rem;
+    }
+
+    .modal-content {
+        padding: 20px 15px;
+    }
+
+    .qr-code-display img {
+        max-width: 70%;
+    }
+}
+

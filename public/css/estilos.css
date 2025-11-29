@@ -250,7 +250,6 @@ h2 {
 form {
     background: none;
     color: #222;
-    
     border-radius: 12px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
     width: 100%;
@@ -258,7 +257,6 @@ form {
 }
 
 form[action*="login"] {
-    /*max-width: 420px;*/
     padding: 35px 40px;
 }
 
@@ -308,7 +306,6 @@ form label {
 
 form input,
 form select {
-    /*width: 100%;*/
     padding: 8px 10px;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -425,6 +422,7 @@ a:hover {
 }
 
 @media (max-width: 768px) {
+
     .footer-container {
         padding: 15px 20px;
     }
@@ -478,6 +476,7 @@ a:hover {
 }
 
 @media (max-width: 992px) {
+    
     form[action*="registrarUsuario"] {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -494,6 +493,7 @@ a:hover {
 }
 
 @media (max-width: 600px) {
+
     main {
         padding: 20px 3%;
     }
@@ -543,7 +543,6 @@ a:hover {
     color: #fff;
 }
 
-
 .respuestas-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -570,7 +569,6 @@ a:hover {
 
 .boton-flotante {
     position: fixed;
-
     right: 2em;
     background-color: #e94a4a;
     color: #fff;
@@ -654,7 +652,6 @@ a:hover {
     background: #003f8a;
 }
 
-/* timeout oculto en partida */
 #form-timeout {
     display: none !important;
 }

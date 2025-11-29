@@ -14,6 +14,7 @@ class MyConexion
         }
         
         $this->conexion->set_charset("utf8mb4");
+        $this->conexion->query("SET time_zone = '-03:00'");
     }
 
     public function getConexion()

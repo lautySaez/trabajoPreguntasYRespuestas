@@ -1,0 +1,84 @@
+.resultado-partida {
+    background: #f4f7f8;
+    min-height: calc(100vh - 160px);
+    padding: 60px 20px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+}
+
+.resultado-partida h1 {
+    font-size: 2.4em;
+    font-weight: 800;
+    color: #2c3e50;
+    text-shadow: 0 2px 6px rgba(30, 58, 138, 0.15);
+    margin-bottom: 10px;
+}
+
+.resultado-partida p {
+    font-size: 1.3em;
+    color: #34495e;
+    background: #ffffff;
+    padding: 20px 35px;
+    border-radius: 14px;
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.1),
+        inset 0 0 10px rgba(52, 152, 219, 0.05);
+    max-width: 450px;
+    width: 100%;
+    margin: 0;
+}
+
+.resultado-partida p strong {
+    color: #6a11cb;
+    font-size: 1.2em;
+    font-weight: 700;
+}
+
+.boton-partida {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 14px 45px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: #fff;
+    font-size: 1.2em;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.3);
+}
+
+.boton-partida:hover {
+    transform: translateY(-4px) scale(1.03);
+    background: linear-gradient(135deg, #1e40af, #1d4ed8);
+    box-shadow: 0 10px 25px rgba(29, 78, 216, 0.4);
+}
+
+@media (max-width: 768px) {
+    .resultado-partida {
+        padding: 40px 15px !important;
+        gap: 18px;
+    }
+
+    .resultado-partida h1 {
+        font-size: 1.9em;
+    }
+
+    .resultado-partida p {
+        font-size: 1.1em;
+        padding: 18px 25px;
+    }
+
+    .resultado-partida p strong {
+        font-size: 1.1em;
+    }
+
+    .boton-partida {
+        width: 100%;
+        padding: 13px 0;
+        font-size: 1.1em;
+    }
+}
